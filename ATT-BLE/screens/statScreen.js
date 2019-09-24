@@ -10,4 +10,9 @@ const StatScreen = props => {
         </View>
     )
 }
+StatScreen.navigationOptions = navData => {
+    return{
+        headerTitle:'Select Subject to View Stat'
+    }
+}
 export default StatScreen
