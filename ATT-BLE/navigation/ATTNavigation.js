@@ -20,8 +20,8 @@ const defaultStackNavOptions = {
         backgroundColor: Colors.primaryColor,
     },
     headerTitleStyle: {
-        fontFamily: 'TH-sarabun',
-        fontSize: 20
+        fontFamily: 'TH-sarabun-bold',
+        fontSize: 30
     },
     headerTintColor: '#FFFFFF',
 };
