@@ -8,7 +8,8 @@ import MainNavigator from './navigation/ATTNavigation'
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'TH-sarabun': require('./assets/fonts/THSarabunNew.ttf')
+    'TH-sarabun': require('./assets/fonts/THSarabunNew.ttf'),
+    'TH-sarabun-bold': require('./assets/fonts/THSarabunNew-Bold.ttf')
   })
 }
 export default function App() {
