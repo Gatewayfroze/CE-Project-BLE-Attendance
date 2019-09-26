@@ -1,5 +1,5 @@
 import React from 'react'
-import { createAppContainer, } from 'react-navigation';
+import { createAppContainer,createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { View, Text, StyleSheet } from 'react-native'
@@ -12,6 +12,7 @@ import LeaveScreen from '../screens/leaveScreen'
 import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
 import InputLeave from '../screens/inputLeaveScreen'
+import LoginScreen from '../screens/loginScreen'
 // const HomeNavigator =createStackNavigator({
 //     Select
 // })
@@ -25,6 +26,7 @@ const defaultStackNavOptions = {
     },
     headerTintColor: '#FFFFFF',
 };
+
 //================= stack screen ========================
 const checkInNavigator = createStackNavigator({
     checkIn: CheckInScreen
@@ -33,7 +35,7 @@ const checkInNavigator = createStackNavigator({
 
 const leaveNavigator = createStackNavigator({
     checkIn: LeaveScreen,
-    inputLeave:InputLeave
+    inputLeave: InputLeave
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 
@@ -98,16 +100,19 @@ const tabScreenConfig = {
 }
 const tabNavigation = createBottomTabNavigator(
     tabScreenConfig, {
-    tabBarOptions: {
-        style: {
-            paddingTop: 7,
-        },
-        labelStyle: {
-            fontFamily: 'TH-sarabun',
-            fontSize: 18
-        },
-        activeTintColor: '#303030'
-    }
+        tabBarOptions: {
+            style: {
+                paddingTop: 7,
+            },
+            labelStyle: {
+                fontFamily: 'TH-sarabun',
+                fontSize: 18
+            },
+            activeTintColor: '#303030'
+        }
+    })
+const appNavigator = createSwitchNavigator({
+    login: LoginScreen,
+    inApp: tabNavigation
 })
-
-export default createAppContainer(tabNavigation)
+export default createAppContainer(appNavigator)

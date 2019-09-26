@@ -24,7 +24,11 @@ const ProfileScreen = props => {
                     <Text style={styles.detailText}>23</Text>
                 </View>
             </View>
-            <Button style={styles.buttonSize} click={()=>console.log("Test LogoutClick")}>
+            <Button style={styles.buttonSize} click={
+                ()=> props.navigation.navigate({
+                    routeName:'login'
+                })
+                }>
                 <Text style={{ color: 'white', fontFamily: 'TH-sarabun', fontSize: 25 }}>
                     Logout
                 </Text>
