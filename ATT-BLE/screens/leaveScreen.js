@@ -1,28 +1,41 @@
 import React from 'react'
-import {View,Text,StyleSheet} from 'react-native'
+import { View, Button, Text, ScrollView, StyleSheet, TouchableHighlight } from 'react-native'
 
-const LeaveScreen =props=>{
-    return  (
-        <View>
-            <Text>หีๆๆๆ </Text>
+import SubjectLeave from '../components/subjectLeave'
+const LeaveScreen = props => {
+    return (
+        <View style={styles.screen}>
+
+            <ScrollView>
+
+                <SubjectLeave title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' onClick={() => {
+                    props.navigation.navigate({
+                        routeName: 'inputLeave'
+                    })
+                }} />
+                <SubjectLeave title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+                <SubjectLeave title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+                <SubjectLeave title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+                <SubjectLeave title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+            </ScrollView>
         </View>
     )
 }
 LeaveScreen.navigationOptions = navData => {
-    return{
-        headerTitle:'Select Subject to Leave'
+    return {
+        headerTitle: 'Select Subject to Leave'
     }
 }
 const styles = StyleSheet.create({
-    container: {
-      fontFamily:'TH-sarabun',
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+    screen: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        padding: 10
     },
-    text:{
-      fontFamily:'TH-sarabun'
+    text: {
+        fontFamily: 'TH-sarabun'
     },
-  });
+
+});
 export default LeaveScreen

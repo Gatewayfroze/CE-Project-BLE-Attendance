@@ -12,6 +12,12 @@ const CheckInScreen = props => {
         <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
         <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
         <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+        <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+        <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+        <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+        <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+        <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+        <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
       </ScrollView>
     </View>
   )
