@@ -9,6 +9,7 @@
 import React, {Component} from 'react';
 import {BleManager} from 'react-native-ble-plx';
 import {View, Text} from 'react-native';
+import { db } from "./firebase";
 
 export default class App extends Component {
   constructor() {
@@ -17,7 +18,6 @@ export default class App extends Component {
     this.state = {info: '', values: {}};
     this.prefixUUID = 'f000aa';
     this.suffixUUID = '-0451-4000-b000-000000000000';
-    
   }
   serviceUUID(num) {
     return this.prefixUUID + num + '0' + this.suffixUUID;
@@ -45,7 +45,6 @@ export default class App extends Component {
   scanAndConnect() {
     this.manager.startDeviceScan(null, null, (error, device) => {
       this.info('Scanning...');
-      
 
       if (error) {
         this.error(error.message);
@@ -67,7 +66,7 @@ export default class App extends Component {
           // })
           .then(
             () => {
-              this.info('Listening...'+device.name);
+              this.info('Listening...' + device.name);
             },
             error => {
               this.error(error.message);
@@ -76,24 +75,31 @@ export default class App extends Component {
       }
     });
   }
+  componentWillMount() {
+    db.collection('users')
+      .doc('aSrBUTvzlJMktOnQ5BqA')
+      .set({
+        name: 'panot',
+        surname: 'sodsri',
+      })
+      .then(function() {
+        console.log('Document successfully written!');
+      })
+      .catch(function(error) {
+        console.error('Error writing document: ', error);
+      });
+  }
 
-  
   componentDidMount() {
-    
-    this.scanAndConnect()   
+    // this.scanAndConnect()
     // this.manager.startDeviceScan(null, null, (error, device) => {
     //   this.info(device.name);
     // })
-    
   }
 
   render() {
-    
-   
     return (
       <View>
-         <Text>kuy ble</Text>
-        <Text>{this.state.info}</Text>
         
       </View>
     );
