@@ -7,10 +7,10 @@ import {Container,FormGroup,Button,Input,Label} from 'reactstrap'
 //Functional Component 
 const MainPage = () => {
     return (
-        <div className='page' >
+        <div className='page-login' >
             <div>
                 <h1 className='LogoApp'>Logo Website</h1>
-                <div className='box' >
+                <div className='boxx' >
                     <Container>
                         <FormGroup>
                             <Label>Username</Label>
