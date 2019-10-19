@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import {BleManager} from 'react-native-ble-plx';
 import {View, Text} from 'react-native';
-import { db } from "./firebase";
+import {db} from './firebase';
 
 export default class App extends Component {
   constructor() {
@@ -43,64 +43,79 @@ export default class App extends Component {
   }
 
   scanAndConnect() {
+    // console.log('55555555555555555555555555')
     this.manager.startDeviceScan(null, null, (error, device) => {
-      this.info('Scanning...');
-
       if (error) {
         this.error(error.message);
         return;
       }
 
       if (device.name === 'espino') {
-        this.info('Connecting to TI Sensor');
+        this.info('Connecting');
         this.manager.stopDeviceScan();
         device
           .connect()
           .then(device => {
-            this.info('Discovering services and characteristics');
+            console.log(device.id);
             return device.discoverAllServicesAndCharacteristics();
           })
-          // .then(device => {
-          //   this.info('Setting notifications');
-          //   return this.setupNotifications(device);
-          // })
-          .then(
-            () => {
-              this.info('Listening...' + device.name);
-            },
-            error => {
-              this.error(error.message);
-            },
-          );
+          .then(device => {
+            return device.services();
+          })
+          .then(ss => {
+            //console.log(dd)
+            console.log(device.serviceUUIDs);
+            console.log(ss[2])
+
+            return ss[2].characteristics()
+          })
+          .then(cc => {
+            console.log(cc);
+          })
+          .catch(error => {
+            console.log(error.message);
+            // ADD THIS THROW error
+            throw error;
+          });
       }
     });
   }
-  componentWillMount() {
-    db.collection('users')
-      .doc('aSrBUTvzlJMktOnQ5BqA')
-      .set({
-        name: 'panot',
-        surname: 'sodsri',
-      })
-      .then(function() {
-        console.log('Document successfully written!');
-      })
-      .catch(function(error) {
-        console.error('Error writing document: ', error);
-      });
-  }
+  // componentWillMount() {
+  // db.collection('users')
+  //   .doc('aSrBUTvzlJMktOnQ5BqA')
+  //   .set({
+  //     name: 'panot',s
+  //     surname: 'sodsri',
+  //   })
+  //   .then(function() {
+  //     console.log('Document successfully written!');
+  //   })
+  //   .catch(function(error) {
+  //     console.error('Error writing document: ', error);
+  //   });
+  // }
 
   componentDidMount() {
-    // this.scanAndConnect()
+    this.scanAndConnect();
     // this.manager.startDeviceScan(null, null, (error, device) => {
-    //   this.info(device.name);
-    // })
+    //   // console.log(device.serviceUUIDs);
+    //   if(device != null){
+    //     this.manager.stopDeviceScan()
+    //     device.connect().then((device)=>{
+    //         console.log(device.serviceUUIDs)
+    //     })
+
+    //   }else{
+    //     console.log('kuy')
+    //   }
+
+    // });
   }
 
   render() {
     return (
       <View>
-        
+        <Text>{this.state.info}</Text>
       </View>
     );
   }
