@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text,TouchableHighlight, StyleSheet } from 'react-native'
+import { View, Text, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../constants/Colors'
 
 const SubjectCheckIn = props => {
@@ -16,12 +16,15 @@ const SubjectCheckIn = props => {
                 }} />
                 <View style={styles.subjectDetail}>
                     <Text>{props.detail}</Text>
+                    <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={() => console.log("view stat eiei")}>
+                        <Text style={{ fontSize: 15, color: 'orange' }}>เวลาเรียน 1/10 </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableHighlight style={styles.buttonCircle} onPress={()=>console.log('checkIn'+props.title)}>
-                    <Text style={{ fontSize: 22, color: 'white' }}>Click</Text>
-                </TouchableHighlight> 
+                <TouchableHighlight style={styles.buttonCircle} onPress={() => console.log('checkIn' + props.title)}>
+                    <Text style={{ fontSize: 22, color: 'white' }}>Check</Text>
+                </TouchableHighlight>
             </View>
         </View>
     )
@@ -49,12 +52,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     buttonCircle: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        backgroundColor: Colors.highLigthColor,
-        justifyContent: "center",
-        alignItems: "center"
+        width: '85%',
+        height: '45%',
+        borderRadius: 20,
+        // width: 80,
+        // height: 80,
+        // borderRadius: 40,
+        // backgroundColor: Colors.highLigthColor,
+        // justifyContent: "center",
+        // alignItems: "center"
     },
     subjectDetailContainer: {
         flexDirection: 'column',
@@ -67,7 +73,9 @@ const styles = StyleSheet.create({
     },
     subjectDetail: {
         flex: 2,
-        marginVertical: 10
+        marginVertical: 10,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     textTitle: {
         fontSize: 25,

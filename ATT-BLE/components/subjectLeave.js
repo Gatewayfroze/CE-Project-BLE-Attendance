@@ -7,7 +7,7 @@ const SubjectLeave = props => {
         <View style={styles.itemSubject}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={styles.textTitle}>{props.title}</Text>
+                    <Text style={styles.textTitle}>{props.title} : {props.subject}</Text>
                 </View>
                 <View style={{
                     flex: 1,
@@ -20,7 +20,7 @@ const SubjectLeave = props => {
             </View>
             <View style={styles.buttonContainer}>
                 <Button style={styles.button} click={props.onClick}>
-                    <Text style={{ fontSize: 18, color: 'white' }}>Leave</Text>
+                    <Text style={{ fontSize: 18, color: 'white' }}>Detail</Text>
                 </Button>
             </View>
         </View>

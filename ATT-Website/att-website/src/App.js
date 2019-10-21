@@ -12,6 +12,8 @@ import GenPage from "./Pages/genPage";
 import EnrollPage from './Pages/enrollPage'
 import ManageStd from './Pages/viewStd'
 import ManageSub from './Pages/viewSub'
+import LeavePage from './Pages/leavePage'
+import CreateSubPage from './Pages/createSubPage'
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
     <Route exact path="/enroll" component={EnrollPage} />
     <Route exact path="/viewStd" component={ManageStd} />
     <Route exact path="/viewSub" component={ManageSub} />
+    <Route exact path="/leave" component={LeavePage} />
+    <Route exact path="/createSub" component={CreateSubPage} />
    </Router>
   );
 }

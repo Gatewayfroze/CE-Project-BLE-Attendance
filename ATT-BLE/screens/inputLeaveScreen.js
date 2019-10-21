@@ -9,7 +9,19 @@ const InputLeaveScreen = props => {
                 กรอกเหตุผลในการลา พร้อมอัพโหลดหลักฐาน
             </Text>
             <View style={styles.leaveInputContainer}>
+                <View style={styles.titleContainer}>
+                    <Text>หัวข้อการลา</Text>
+                    <TextInput style={{
+                        borderColor: '#e3e3e3',
+                        borderWidth: 1,
+                        padding: 5,
+                        width: 200,
+                        marginHorizontal:10
+                    }} />
+                </View>
+
                 <View style={styles.textAreaContainer} >
+
                     <TextInput
                         style={styles.textArea}
                         underlineColorAndroid="transparent"
@@ -20,8 +32,8 @@ const InputLeaveScreen = props => {
                     />
 
                 </View>
-                <Button style={{ height: 50, width: '30%' ,marginBottom:20,borderRadius:40}}>
-                    <Text style={{fontSize:30 ,color:'white', fontFamily:'TH-sarabun'}}>Send</Text>
+                <Button style={{ height: 50, width: '30%', marginBottom: 20, borderRadius: 40 }}>
+                    <Text style={{ fontSize: 30, color: 'white', fontFamily: 'TH-sarabun' }}>Send</Text>
                 </Button>
             </View>
 
@@ -39,7 +51,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     leaveInputContainer: {
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         width: '80%',
         borderRadius: 20,
         alignContent: 'center',
@@ -55,7 +67,7 @@ const styles = StyleSheet.create({
 
     },
     textAreaContainer: {
-        margin: 15,
+        margin: 10,
         borderColor: '#e3e3e3',
         borderWidth: 1,
         padding: 5
@@ -64,6 +76,12 @@ const styles = StyleSheet.create({
         height: 150,
         width: 300,
         justifyContent: "flex-start"
+    },
+    titleContainer:{
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'center',
+        marginVertical:10
     }
 })
 export default InputLeaveScreen
