@@ -13,6 +13,8 @@ import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
 import InputLeave from '../screens/inputLeaveScreen'
 import LoginScreen from '../screens/loginScreen'
+
+import StatDetail from '../screens/detailStatScreen'
 // const HomeNavigator =createStackNavigator({
 //     Select
 // })
@@ -29,7 +31,8 @@ const defaultStackNavOptions = {
 
 //================= stack screen ========================
 const checkInNavigator = createStackNavigator({
-    checkIn: CheckInScreen
+    checkIn: CheckInScreen,
+    statDetail:StatDetail
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 
@@ -40,7 +43,8 @@ const leaveNavigator = createStackNavigator({
 )
 
 const statNavigator = createStackNavigator({
-    checkIn: StatScreen
+    checkIn: StatScreen,
+    statDetail:StatDetail
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 

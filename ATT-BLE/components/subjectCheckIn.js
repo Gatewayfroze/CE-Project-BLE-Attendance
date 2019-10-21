@@ -16,7 +16,7 @@ const SubjectCheckIn = props => {
                 }} />
                 <View style={styles.subjectDetail}>
                     <Text>{props.detail}</Text>
-                    <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={() => console.log("view stat eiei")}>
+                    <TouchableOpacity style={{justifyContent:'center',alignItems:'center',marginLeft:10}} onPress={props.onClick}>
                         <Text style={{ fontSize: 15, color: 'orange' }}>เวลาเรียน 1/10 </Text>
                     </TouchableOpacity>
                 </View>
@@ -52,15 +52,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     buttonCircle: {
-        width: '85%',
-        height: '45%',
-        borderRadius: 20,
-        // width: 80,
-        // height: 80,
-        // borderRadius: 40,
-        // backgroundColor: Colors.highLigthColor,
-        // justifyContent: "center",
-        // alignItems: "center"
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: Colors.highLigthColor,
+        justifyContent: "center",
+        alignItems: "center"
     },
     subjectDetailContainer: {
         flexDirection: 'column',
@@ -75,7 +72,7 @@ const styles = StyleSheet.create({
         flex: 2,
         marginVertical: 10,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems:'center'
     },
     textTitle: {
         fontSize: 25,

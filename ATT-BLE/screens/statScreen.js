@@ -6,7 +6,11 @@ const StatScreen = props => {
     return (
         <View style={styles.screen}>
             <ScrollView>
-                <SubjectStat title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
+                <SubjectStat title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' onClick={() => {
+                    props.navigation.navigate({
+                        routeName: 'statDetail'
+                    })
+                }}/>
                 <SubjectStat title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
                 <SubjectStat title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />
                 <SubjectStat title='Data structure and algorithm' detail='เวลาเรียน: 07:30-12:00 น.' />

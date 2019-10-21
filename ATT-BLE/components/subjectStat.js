@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text,TouchableHighlight, StyleSheet } from 'react-native'
+import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
 import Colors from '../constants/Colors'
 import Button from '../components/button'
 const StatSubject = props => {
@@ -19,9 +19,9 @@ const StatSubject = props => {
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <Button style={styles.button} click={()=>console.log('checkIn'+props.title)}>
+                <Button style={styles.button} click={props.onClick}>
                     <Text style={{ fontSize: 15, color: 'white' }}>View Stat</Text>
-                </Button> 
+                </Button>
             </View>
         </View>
     )
