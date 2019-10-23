@@ -29,8 +29,9 @@ export default function App() {
     }
   };
 
-  signUpUser = (em, pass) => {
-    // pass = Math.random().toString(36).slice(2)
+  signUpUser = em => {
+    var pass = 'kuy' + em + 'kuy';
+    console.log(pass);
     try {
       firebase.auth().createUserWithEmailAndPassword(em, pass);
     } catch (error) {
@@ -89,7 +90,7 @@ export default function App() {
         <Button title="Log in" onPress={() => this.loginUser(mail, password)}>
           {' '}
         </Button>
-        <Button title="Sign Up" onPress={() => this.signUpUser(mail, password)}>
+        <Button title="Sign Up" onPress={() => this.signUpUser(mail)}>
           {' '}
         </Button>
       </View>
