@@ -1,49 +1,44 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {BleManager} from 'react-native-ble-plx';
-import {View, Text} from 'react-native';
-import {db} from './firebase';
+import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import {config} from './firebase';
+import * as firebase from 'firebase';
 
-export default class App extends Component {
-  constructor() {
-    super();
-    this.manager = new BleManager();
-    this.state = {info: '', values: {}};
-    this.prefixUUID = 'f000aa';
-    this.suffixUUID = '-0451-4000-b000-000000000000';
-  }
-  serviceUUID(num) {
-    return this.prefixUUID + num + '0' + this.suffixUUID;
-  }
+firebase.initializeApp(config);
+db = firebase.firestore();
 
-  notifyUUID(num) {
-    return this.prefixUUID + num + '1' + this.suffixUUID;
-  }
+export default function App() {
+  manager = new BleManager();
 
-  writeUUID(num) {
-    return this.prefixUUID + num + '2' + this.suffixUUID;
-  }
-  info(message) {
-    this.setState({info: message});
-  }
+  const [mail, setemail] = useState('');
+  const [password, setpassword] = useState('');
 
-  error(message) {
-    this.setState({info: 'ERROR: ' + message});
-  }
+  loginUser = (em, pass) => {
+    console.log('logged');
+    try {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(em, pass)
+        .then(user => {
+          profile = firebase.auth().currentUser;
+          alert('Welcome ' + profile.email);
+        });
+    } catch (error) {
+      console.log(error.toString());
+      alert(error.toString());
+    }
+  };
 
-  updateValue(key, value) {
-    this.setState({values: {...this.state.values, [key]: value}});
-  }
+  signUpUser = (em, pass) => {
+    // pass = Math.random().toString(36).slice(2)
+    try {
+      firebase.auth().createUserWithEmailAndPassword(em, pass);
+    } catch (error) {
+      console.log(error, toString());
+    }
+  };
 
-  scanAndConnect() {
-    // console.log('55555555555555555555555555')
+  scanAndConnect = () => {
     this.manager.startDeviceScan(null, null, (error, device) => {
       if (error) {
         this.error(error.message);
@@ -51,8 +46,7 @@ export default class App extends Component {
       }
 
       if (device.name === 'espino') {
-        this.info('Connecting');
-        this.manager.stopDeviceScan();
+        manager.stopDeviceScan();
         device
           .connect()
           .then(device => {
@@ -63,60 +57,59 @@ export default class App extends Component {
             return device.services();
           })
           .then(ss => {
-            //console.log(dd)
             console.log(device.serviceUUIDs);
-            console.log(ss[2])
+            console.log(ss[2]);
 
-            return ss[2].characteristics()
+            return ss[2].characteristics();
           })
           .then(cc => {
             console.log(cc);
           })
           .catch(error => {
             console.log(error.message);
-            // ADD THIS THROW error
+
             throw error;
           });
       }
     });
-  }
-  // componentWillMount() {
-  // db.collection('users')
-  //   .doc('aSrBUTvzlJMktOnQ5BqA')
-  //   .set({
-  //     name: 'panot',s
-  //     surname: 'sodsri',
-  //   })
-  //   .then(function() {
-  //     console.log('Document successfully written!');
-  //   })
-  //   .catch(function(error) {
-  //     console.error('Error writing document: ', error);
-  //   });
-  // }
+  };
 
-  componentDidMount() {
-    this.scanAndConnect();
-    // this.manager.startDeviceScan(null, null, (error, device) => {
-    //   // console.log(device.serviceUUIDs);
-    //   if(device != null){
-    //     this.manager.stopDeviceScan()
-    //     device.connect().then((device)=>{
-    //         console.log(device.serviceUUIDs)
-    //     })
+  return (
+    <View style={styles.container}>
+      <Text>Email</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={em => setemail(em)}></TextInput>
+      <Text>Password</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={pass => setpassword(pass)}></TextInput>
 
-    //   }else{
-    //     console.log('kuy')
-    //   }
-
-    // });
-  }
-
-  render() {
-    return (
-      <View>
-        <Text>{this.state.info}</Text>
+      <View style={styles.butt}>
+        <Button title="Log in" onPress={() => this.loginUser(mail, password)}>
+          {' '}
+        </Button>
+        <Button title="Sign Up" onPress={() => this.signUpUser(mail, password)}>
+          {' '}
+        </Button>
       </View>
-    );
-  }
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    width: '70%',
+  },
+
+  butt: {
+    flexDirection: 'row',
+  },
+});
