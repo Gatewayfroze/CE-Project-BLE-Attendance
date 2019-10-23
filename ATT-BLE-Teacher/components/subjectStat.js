@@ -2,12 +2,12 @@ import React from 'react'
 import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
 import Colors from '../constants/Colors'
 import Button from '../components/button'
-const SubjectLeave = props => {
+const StatSubject = props => {
     return (
         <View style={styles.itemSubject}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={styles.textTitle}>{props.title} : {props.subject}</Text>
+                    <Text style={styles.textTitle}>{props.title}</Text>
                 </View>
                 <View style={{
                     flex: 1,
@@ -15,14 +15,12 @@ const SubjectLeave = props => {
                     borderBottomWidth: 2,
                 }} />
                 <View style={styles.subjectDetail}>
-                    <Text>{props.detail}  </Text>
-                    <Text>สถานะ: </Text>
-                    <Text style={{color:'orange'}}>รออนุมัติ</Text>
+                    <Text>{props.detail}</Text>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
                 <Button style={styles.button} click={props.onClick}>
-                    <Text style={{ fontSize: 18, color: 'white' }}>Detail</Text>
+                    <Text style={{ fontSize: 15, color: 'white' }}>View Stat</Text>
                 </Button>
             </View>
         </View>
@@ -66,9 +64,7 @@ const styles = StyleSheet.create({
     },
     subjectDetail: {
         flex: 2,
-        marginVertical: 10,
-        flexDirection: 'row',
-        alignItems: 'center'
+        marginVertical: 10
     },
     textTitle: {
         fontSize: 25,
@@ -76,4 +72,4 @@ const styles = StyleSheet.create({
         color: Colors.highLigthColor
     }
 })
-export default SubjectLeave
+export default StatSubject

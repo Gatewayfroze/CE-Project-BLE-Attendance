@@ -11,7 +11,7 @@ const DetailStatScreen= props=>{
 }
 DetailStatScreen.navigationOptions = navData => {
     return {
-        headerTitle: 'รายละเอียดการเข้าเรียน'
+        headerTitle: 'รายระเอียดการเข้าเรียน'
     }
 }
 const styles=StyleSheet.create({

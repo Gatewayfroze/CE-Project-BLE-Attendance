@@ -1,29 +1,28 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
+import { View, Text, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../constants/Colors'
-import Button from '../components/button'
-const SubjectLeave = props => {
+
+const SubjectCheckIn = props => {
     return (
         <View style={styles.itemSubject}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={styles.textTitle}>{props.title} : {props.subject}</Text>
+                    <Text style={styles.textTitle}>ECC-801</Text>
                 </View>
+                {/* ดเสเ่หกสาเ่สากดห่ส่ */}
                 <View style={{
-                    flex: 1,
+                    backgroundColor:'red',
                     borderBottomColor: Colors.brigthCOlor,
                     borderBottomWidth: 2,
                 }} />
                 <View style={styles.subjectDetail}>
-                    <Text>{props.detail}  </Text>
-                    <Text>สถานะ: </Text>
-                    <Text style={{color:'orange'}}>รออนุมัติ</Text>
+                    <Text>asdasd</Text>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <Button style={styles.button} click={props.onClick}>
-                    <Text style={{ fontSize: 18, color: 'white' }}>Detail</Text>
-                </Button>
+                <TouchableHighlight style={styles.buttonCircle} onPress={() => console.log('checkIn' + props.title)}>
+                    <Text style={{ fontSize: 22, color: 'white' }}>Check</Text>
+                </TouchableHighlight>
             </View>
         </View>
     )
@@ -50,10 +49,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    button: {
-        width: '85%',
-        height: '45%',
-        borderRadius: 20,
+    buttonCircle: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: Colors.highLigthColor,
+        justifyContent: "center",
+        alignItems: "center"
     },
     subjectDetailContainer: {
         flexDirection: 'column',
@@ -65,15 +67,15 @@ const styles = StyleSheet.create({
         flex: 2,
     },
     subjectDetail: {
-        flex: 2,
-        marginVertical: 10,
+        flex: 1,
+        marginVertical: 3,
         flexDirection: 'row',
         alignItems: 'center'
     },
     textTitle: {
-        fontSize: 25,
+        fontSize: 50,
         fontFamily: 'TH-sarabun-bold',
         color: Colors.highLigthColor
     }
 })
-export default SubjectLeave
+export default SubjectCheckIn

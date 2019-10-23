@@ -6,7 +6,7 @@ const CheckInScreen = props => {
   return (
     <View style={styles.screen} navigation={props.navigation}>
       <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>กดปุ่ม CheckIn เพื่อทำการเช็คชื่อในรายวิชาที่เลือก</Text>
+        <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
       </View>
       {/* โชว์ status ที่กำลังเรียนอยู่ปัจจุบัน */}
       {/* <CurrentSubject/> */}
