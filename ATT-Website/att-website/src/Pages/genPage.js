@@ -1,4 +1,8 @@
 import React from 'react'
+import csv from 'csv'
+import Dropzone from 'react-dropzone'
+import Papa from "papaparse"
+
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
 
@@ -6,8 +10,20 @@ import { Button } from 'react-bulma-components/dist';
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
 
+const onDrop = (e) => {
+    const reader = new FileReader();
+    reader.readAsText(e[0]);
+    reader.onload = () => {
+        Papa.parse(e[0], {
+            header: true,
+            complete: function (results) {
+                console.log('=====test=====')
+                console.log(results.data);
+            }
+        });
+    };
+}
 const GenPage = () => {
-
     return (
         // <div style={{ height: '100vh', backgroundColor: '#f0fff0' }}>
         <div class='page' style={{ height: '100vh' }}>
@@ -18,6 +34,18 @@ const GenPage = () => {
                     <div style={styles.container}>
                         <h1>Generate Account Student</h1>
                         <div class='box'>
+
+                            <Dropzone onDrop={onDrop}>
+                                {({ getRootProps, getInputProps }) => (
+                                    <section>
+                                        <div {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <p>Drag 'n' drop some files here, or click to select files</p>
+                                        </div>
+                                    </section>
+                                )}
+                            </Dropzone>
+
                             <div class="field is-grouped">
                                 <div class='control'>
                                     <div class="file has-name ">
@@ -76,6 +104,21 @@ const styles = {
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '60%'
+    },
+    baseStyle: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        borderWidth: 2,
+        borderRadius: 2,
+        borderColor: '#eeeeee',
+        borderStyle: 'dashed',
+        backgroundColor: '#fafafa',
+        color: '#bdbdbd',
+        outline: 'none',
+        transition: 'border .24s ease-in-out'
     }
 }
 export default GenPage
