@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
 import {config} from './firebase';
 import * as firebase from 'firebase';
 
+
 firebase.initializeApp(config);
 db = firebase.firestore();
 
@@ -12,6 +13,7 @@ export default function App() {
 
   const [mail, setemail] = useState('');
   const [password, setpassword] = useState('');
+  const [mac,setmac]=useState('none')
 
   loginUser = (em, pass) => {
     console.log('logged');
@@ -38,6 +40,55 @@ export default function App() {
       console.log(error, toString());
     }
   };
+
+  calculateDistance =rssi => {
+  
+    var txPower = -59 //hard coded power value. Usually ranges between -59 to -65
+    
+    if (rssi == 0) {
+      return -1.0; 
+    }
+  
+    var ratio = rssi*1.0/txPower;
+    if (ratio < 1.0) {
+      return Math.pow(ratio,10);
+    }
+    else {
+      var distance =  (0.89976)*Math.pow(ratio,7.7095) + 0.111;    
+      return distance;
+    }
+  } 
+  scanMC =() => {
+    this.manager.startDeviceScan(null, null, (error, device) => {
+      if (error) {
+        this.error(error.message);
+        return;
+      }
+      if (device.name === 'espino') {
+        
+        this.manager.stopDeviceScan()
+        console.log(device.id)
+        console.log(firebase.firestore.Timestamp.fromDate(new Date()))
+        check(device.id)
+        // let distance = Math.pow(10,(-59-device.rssi)/(10))
+        // console.log(calculateDistance(device.rssi))
+        //setmac(distance)
+      }
+  })
+}
+
+check = mc=>{
+   
+  //console.log(scanMC())
+  db.collection("transaction").add({
+    mac:mc,
+    time:firebase.firestore.Timestamp.fromDate(new Date())
+}).then(()=>{
+  setmac(mc)
+})
+
+
+}
 
   scanAndConnect = () => {
     this.manager.startDeviceScan(null, null, (error, device) => {
@@ -77,23 +128,28 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Email</Text>
-      <TextInput
+      {/* <Text>Email</Text> */}
+      {/* <TextInput
         style={styles.input}
         onChangeText={em => setemail(em)}></TextInput>
       <Text>Password</Text>
       <TextInput
         style={styles.input}
-        onChangeText={pass => setpassword(pass)}></TextInput>
+        onChangeText={pass => setpassword(pass)}></TextInput> */}
 
       <View style={styles.butt}>
-        <Button title="Log in" onPress={() => this.loginUser(mail, password)}>
+        <Button title="CHK" onPress={() => this.scanMC()}>
           {' '}
         </Button>
-        <Button title="Sign Up" onPress={() => this.signUpUser(mail)}>
+        {/* <Button title="Sign Up" onPress={() => this.signUpUser(mail)}>
           {' '}
-        </Button>
+        </Button> */}
       </View>
+
+          <View>
+            <Text>{mac}</Text>
+          </View>
+      
     </View>
   );
 }
