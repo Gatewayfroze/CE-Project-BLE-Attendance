@@ -13,6 +13,7 @@ import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
 import DetailLeaveScreen from '../screens/detailLeaveScreen'
 import LoginScreen from '../screens/loginScreen'
+import SettingScreen from '../screens/settingBLEScreen'
 
 import StatDetail from '../screens/detailStatScreen'
 // const HomeNavigator =createStackNavigator({
@@ -32,7 +33,7 @@ const defaultStackNavOptions = {
 //================= stack screen ========================
 const checkInNavigator = createStackNavigator({
     checkIn: StartSessionScreen,
-    statDetail:StatDetail
+    settingBLE:SettingScreen,
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 

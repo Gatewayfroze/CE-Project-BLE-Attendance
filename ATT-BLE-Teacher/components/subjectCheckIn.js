@@ -7,21 +7,21 @@ const SubjectCheckIn = props => {
         <View style={styles.itemSubject}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={styles.textTitle}>ECC-801</Text>
+                    <Text style={styles.textTitle}>{props.title}</Text>
                 </View>
                 {/* ดเสเ่หกสาเ่สากดห่ส่ */}
                 <View style={{
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     borderBottomColor: Colors.brigthCOlor,
                     borderBottomWidth: 2,
                 }} />
                 <View style={styles.subjectDetail}>
-                    <Text>asdasd</Text>
+                    <Text>MAC: {props.MAC}</Text>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableHighlight style={styles.buttonCircle} onPress={() => console.log('checkIn' + props.title)}>
-                    <Text style={{ fontSize: 22, color: 'white' }}>Check</Text>
+                <TouchableHighlight style={styles.buttonCircle} onPress={props.onClick}>
+                    <Text style={{ fontSize: 18, color: 'white' }}>BLE_Data</Text>
                 </TouchableHighlight>
             </View>
         </View>

@@ -1,23 +1,34 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Picker } from 'react-native'
 import Color from '../constants/Colors'
 import Button from '../components/button'
 const InputLeaveScreen = props => {
     return (
         <View style={styles.screen}>
-            <Text>
-                กรอกเหตุผลในการลา พร้อมอัพโหลดหลักฐาน
-            </Text>
+            <View style={{ flexDirection: 'row', height: '10%', width: '80%' ,marginVertical:20}}>
+                <View style={{
+                    flex: 1,
+                    justifyContent: "space-between",
+                    width: '100%',
+                    height: '100%'
+                }}>
+                    <Text>เลือกวิชา</Text>
+                    <Text>ลาวันที่</Text>
+                </View>
+                <View style={{
+                    flex: 2,
+                    justifyContent: "space-between",
+                    width: '100%',
+                    height: '100%'
+                }}>
+                    <TextInput style={styles.textInput} />
+                    <TextInput style={styles.textInput} />
+                </View>
+            </View>
             <View style={styles.leaveInputContainer}>
                 <View style={styles.titleContainer}>
                     <Text>หัวข้อการลา</Text>
-                    <TextInput style={{
-                        borderColor: '#e3e3e3',
-                        borderWidth: 1,
-                        padding: 5,
-                        width: 200,
-                        marginHorizontal:10
-                    }} />
+                    <TextInput style={styles.textInput} />
                 </View>
 
                 <View style={styles.textAreaContainer} >
@@ -55,7 +66,6 @@ const styles = StyleSheet.create({
         width: '80%',
         borderRadius: 20,
         alignContent: 'center',
-        marginVertical: 20,
         alignItems: 'center',
         // ===========================
         shadowColor: 'black',
@@ -77,11 +87,24 @@ const styles = StyleSheet.create({
         width: 300,
         justifyContent: "flex-start"
     },
-    titleContainer:{
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
-        marginVertical:10
+    titleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 10
+    },
+    selectSubContainer: {
+        flexDirection: 'row'
+    },
+    selectTimeContainer: {
+        flexDirection: 'row'
+    },
+    textInput: {
+        borderColor: '#e3e3e3',
+        borderWidth: 1,
+        padding: 5,
+        width: 200,
+        marginHorizontal: 10
     }
 })
 export default InputLeaveScreen

@@ -9,19 +9,13 @@ const ProfileScreen = props => {
             <View style={styles.profileContainer}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>ชื่อ</Text>
-                    <Text style={styles.titleText}>รหัสนักศึกษา</Text>
-                    <Text style={styles.titleText}>คณะ</Text>
-                    <Text style={styles.titleText}>สาขา</Text>
-                    <Text style={styles.titleText}>ชั้นปี</Text>
-                    <Text style={styles.titleText}>อายุ</Text>
+                    <Text style={styles.titleText}>รหัสอาจารย์</Text>
+                    {/* <Text style={styles.titleText}>คณะ</Text> */}
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.detailText}>นิตินนท์ เพ็งเลา</Text>
                     <Text style={styles.detailText}>5910734</Text>
-                    <Text style={styles.detailText}>วิศวกรรมศาสตร์</Text>
-                    <Text style={styles.detailText}>คอมพิวเตอร์</Text>
-                    <Text style={styles.detailText}>4</Text>
-                    <Text style={styles.detailText}>23</Text>
+                    {/* <Text style={styles.detailText}>วิศวกรรมศาสตร์</Text> */}
                 </View>
             </View>
             <Button style={styles.buttonSize} click={
@@ -51,9 +45,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '50%',
+        height: '30%',
         width: '80%',
-        paddingVertical: 30,
+        paddingVertical: 50,
         paddingLeft: '10%',
         borderRadius: 20,
         marginVertical: 20,
@@ -72,7 +66,6 @@ const styles = StyleSheet.create({
         // backgroundColor: 'red',
         width: '100%',
         height: '100%',
-
     },
     detailContainer: {
         flex: 2,

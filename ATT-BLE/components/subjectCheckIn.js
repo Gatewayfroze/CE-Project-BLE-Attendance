@@ -4,25 +4,32 @@ import Colors from '../constants/Colors'
 
 const SubjectCheckIn = props => {
     return (
-        <View style={styles.itemSubject}>
+        <View style={props.status? {...styles.itemSubject,backgroundColor:'white'}:{...styles.itemSubject,backgroundColor:'#d1d1d1'}}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={styles.textTitle}>{props.title}</Text>
+                    <Text style={props.status?{...styles.textTitle,color: Colors.highLigthColor}:{...styles.textTitle,color: 'gray'}}>{props.title}</Text>
                 </View>
-                <View style={{
+                <View style={props.status?{
                     flex: 1,
                     borderBottomColor: Colors.brigthCOlor,
+                    borderBottomWidth: 2,
+                }:{
+                    flex: 1,
+                    borderBottomColor: 'gray',
                     borderBottomWidth: 2,
                 }} />
                 <View style={styles.subjectDetail}>
                     <Text>{props.detail}</Text>
-                    <TouchableOpacity style={{justifyContent:'center',alignItems:'center',marginLeft:10}} onPress={props.onClick}>
+                    <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={props.onClick}>
                         <Text style={{ fontSize: 15, color: 'orange' }}>เวลาเรียน 1/10 </Text>
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableHighlight style={styles.buttonCircle} onPress={() => console.log('checkIn' + props.title)}>
+                <TouchableHighlight style={props.status ?
+                    { ...styles.buttonCircle, backgroundColor: Colors.highLigthColor } :
+                    { ...styles.buttonCircle, backgroundColor: 'gray' }}
+                    onPress={() => console.log('checkIn' + props.title)}>
                     <Text style={{ fontSize: 22, color: 'white' }}>Check</Text>
                 </TouchableHighlight>
             </View>
@@ -43,7 +50,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
         shadowOpacity: 0.26,
-        backgroundColor: 'white',
         elevation: 8,
     },
     buttonContainer: {
@@ -55,7 +61,14 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: Colors.highLigthColor,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    buttonCircle: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: 'gray',
         justifyContent: "center",
         alignItems: "center"
     },
@@ -72,12 +85,12 @@ const styles = StyleSheet.create({
         flex: 2,
         marginVertical: 10,
         flexDirection: 'row',
-        alignItems:'center'
+        alignItems: 'center'
     },
     textTitle: {
         fontSize: 25,
         fontFamily: 'TH-sarabun-bold',
-        color: Colors.highLigthColor
+        
     }
 })
 export default SubjectCheckIn

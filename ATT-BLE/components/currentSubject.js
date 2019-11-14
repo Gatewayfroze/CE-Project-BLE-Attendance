@@ -1,12 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Colors from '../constants/Colors'
 const CurrentSubject = props => {
+    const [curTime, setTime] = useState(
+        new Date().toLocaleTimeString()
+    )
+    useEffect(() => {
+        setInterval(() => {
+            setTime(new Date().toLocaleTimeString())
+        }, 1000)
+    })
     return (
         <View style={styles.currentSubjectContainer}>
             <Text style={styles.title}>วิชา Data Mining</Text>
-            <Text style={styles.time}>12:00</Text>
-            <Text>หมดเวลา ..... </Text>
+            <Text style={styles.time}>{curTime}</Text>
+            <Text>หมดเวลา 12:00</Text>
         </View>
     )
 }
@@ -16,10 +24,10 @@ const styles = StyleSheet.create({
     },
     time: {
         fontSize: 40,
-        color:Colors.highLigthColor
+        color: Colors.highLigthColor
     },
     currentSubjectContainer: {
-        height: 300,
+        height: 200,
         borderRadius: 15,
         padding: 10,
         marginVertical: 10,

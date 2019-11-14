@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import Dropzone from 'react-dropzone'
+import Papa from "papaparse"
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
 
@@ -7,6 +9,27 @@ import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
 
 const Enrollpage = () => {
+    const [data, setJson] = useState([])
+
+    const deleteStudent = stdIndex => {
+        const stdTemp = [...data];
+        stdTemp.splice(stdIndex, 1);
+        setJson(stdTemp)
+    };
+
+    const onDrop = (e) => {
+        const reader = new FileReader();
+        reader.readAsText(e[0]);
+        reader.onload = () => {
+            Papa.parse(e[0], {
+                header: true,
+                complete: function (results) {
+                    results.data.pop()
+                    setJson(results.data)
+                }
+            });
+        };
+    }
     return (
         <div class='page'>
             <Navbar />
@@ -14,51 +37,52 @@ const Enrollpage = () => {
                 <Sidebar />
                 <div class='column' >
                     <div style={styles.container}>
+                        <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Enroll Student</h1>
                         <div class='box'>
-                            <p>เลือกวิชาที่ต้องการลงทะเบียนในนักศึกษา</p>
-                            <input class='input' placeholder='รหัสวิชา,ชื่อวิชา'></input>
-                            <p>upload ข้อมูลของนักศึกษาที่ต้องการลงทะเบียน</p>
+                            <p>Enter Subject</p>
+                            <input class='input' placeholder='subject_id,subjectName'></input>
+                            <p>Upload .CSV File</p>
                             <div class="field is-grouped">
-                                <div class='control'>
-                                    <div class="file has-name ">
-                                        <label class="file-label">
-                                            <input class="file-input" type="file" name="resume" />
-                                            <span class="file-cta">
-                                                <span class="file-icon">
-                                                    <i class="fas fa-upload"></i>
-                                                </span>
-                                                <span class="file-label">
-                                                    Choose a file…
-                                        </span>
-                                            </span>
-                                            <span class="file-name">
-                                                Screen Shot 2017-07-29 at 15.54.25.png
-                                </span>
-                                        </label>
-                                    </div>
+                                <div style={{ borderStyle: 'solid', borderColor: 'black', borderWidth: 1, width: '80%', height: 40 }}>
+                                    <Dropzone onDrop={onDrop}>
+                                        {({ getRootProps, getInputProps }) => (
+                                            <section>
+                                                <div {...getRootProps()}>
+                                                    <input {...getInputProps()} />
+                                                    <p>Click here to upload file .CSV</p>
+                                                </div>
+                                            </section>
+                                        )}
+                                    </Dropzone>
                                 </div>
-
                             </div>
 
                         </div>
-                        <h1>คุณต้องการลงทะเบียนวิชา .... ให้กันนักศึกษาเหล่านี้ใช่หรือไม่</h1>
                         <table class='table'>
                             <thead>
                                 <tr>
-                                    <th>student_id</th>
+                                    <th>id</th>
                                     <th>Name-Surname</th>
+                                    <th>faculty</th>
+                                    <th>year</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>59010734</td>
-                                    <td>นิตินนท์ เพ็งเลา</td>
-                                    <td><Button class='button is-danger'>Delete</Button></td>
-                                </tr>
+                                {data.map((person, index) => {
+                                    return (
+                                        <tr key={person.id}>
+                                            <td>{person.id}</td>
+                                            <td>{person.name} {person.surname}</td>
+                                            <td>{person.faculty}</td>
+                                            <td>{person.year}</td>
+                                            <td onClick={() => deleteStudent(index)}><button class='button is-danger' >Delete</button></td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
-                        <Button class='button'>Enroll</Button>
+                        <Button class='button is-primary'>Enroll</Button>
                     </div>
                 </div>
             </div>

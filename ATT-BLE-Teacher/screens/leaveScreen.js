@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Button, Text, ScrollView, StyleSheet, TouchableHighlight,TouchableOpacity } from 'react-native'
+import { View, Button, Text, ScrollView, StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native'
 import { Ionicons, MaterialIcons, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 import SubjectLeave from '../components/subjectLeave'
@@ -15,12 +15,15 @@ const LeaveScreen = props => {
                 <Entypo name="new-message" size={22} color='white' />
                 <Text style={{ color: 'white' }}>New Leave</Text>
             </TouchableOpacity> */}
+            <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>เลือกดูรายละเอียดการลาเพื่ออนุมัติหรือปฎิเสธการลา</Text>
+            </View>
             <ScrollView>
                 <SubjectLeave title='ป่วยครับ' subject='Data Mining' detail='ไม่สบายน้ำมูกไหล' onClick={() => {
-                props.navigation.navigate({
-                    routeName: 'detailLeave'
-                })
-            }} />
+                    props.navigation.navigate({
+                        routeName: 'detailLeave'
+                    })
+                }} />
             </ScrollView>
         </View>
     )

@@ -6,11 +6,12 @@ import Colors from '../constants/Colors'
 const LoginScreen = props => {
     return (
         <View style={styles.screen}>
-            <Text>
-                ATT BLE
+            <Text style={{fontSize:40,fontWeight:'bold',color:Colors.primaryColor}}>
+                ATTENDA 
             </Text>
+            <Text style={{fontSize:25,color:Colors.highLigthColor}}>TCHR</Text>
             <TextInput style={{ height: '3%',backgroundColor:'#f7f7f7', width: '35%', marginVertical: 15, borderBottomColor:Colors.primaryColor ,borderBottomWidth:2}} 
-            placeholder="Username"
+            placeholder="Email"
             placeholderTextColor="grey"/>
             <TextInput style={{ height: '3%',backgroundColor:'#f7f7f7', width: '35%', marginVertical: 15, borderBottomColor:Colors.primaryColor ,borderBottomWidth:2 }} 
             placeholder="Password"

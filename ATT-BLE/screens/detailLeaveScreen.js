@@ -8,13 +8,7 @@ const DetailLeaveScreen = props => {
         <View style={styles.screen}>
             <View style={styles.leaveDetailContainder}>
                 <Text style={styles.title}>ป่วยครับ :Data Mining 10/09/62</Text>
-                <Text style={{color:Colors.highLigthColor}}>นิตินนท์ เพ็งเลา</Text>
-                <Text>ไม่สบายเป็นไข้หวัดใหญ่ น้ำมูกไหล ตัวร้อน</Text>
-                <View style={styles.buttonContainer}>
-                    <Button color='green' title='Accept' onPress={()=>
-                    props.navigation.pop()}/>
-                    <Button color='red'   title='Decline' />
-                </View>
+                <Text style={styles.detail}>ไม่สบายเป็นไข้หวัดใหญ่ น้ำมูกไหล ตัวร้อน</Text>
             </View>
         </View>
     )
@@ -33,6 +27,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 10,
         marginHorizontal: 20,
+        paddingVertical:20,
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
@@ -47,11 +42,11 @@ const styles = StyleSheet.create({
         marginHorizontal:30,
     },
     title:{
-        fontSize:27,
+        fontSize:22,
         color:Colors.highLigthColor
     },
     detail:{
-        fontSize:20,
+        fontSize:15,
     }
 })
 export default DetailLeaveScreen

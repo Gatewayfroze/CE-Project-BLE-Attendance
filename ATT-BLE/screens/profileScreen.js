@@ -11,17 +11,13 @@ const ProfileScreen = props => {
                     <Text style={styles.titleText}>ชื่อ</Text>
                     <Text style={styles.titleText}>รหัสนักศึกษา</Text>
                     <Text style={styles.titleText}>คณะ</Text>
-                    <Text style={styles.titleText}>สาขา</Text>
                     <Text style={styles.titleText}>ชั้นปี</Text>
-                    <Text style={styles.titleText}>อายุ</Text>
                 </View>
                 <View style={styles.detailContainer}>
                     <Text style={styles.detailText}>นิตินนท์ เพ็งเลา</Text>
                     <Text style={styles.detailText}>5910734</Text>
                     <Text style={styles.detailText}>วิศวกรรมศาสตร์</Text>
-                    <Text style={styles.detailText}>คอมพิวเตอร์</Text>
                     <Text style={styles.detailText}>4</Text>
-                    <Text style={styles.detailText}>23</Text>
                 </View>
             </View>
             <Button style={styles.buttonSize} click={
@@ -51,7 +47,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '50%',
+        height: '40%',
         width: '80%',
         paddingVertical: 30,
         paddingLeft: '10%',
@@ -91,7 +87,6 @@ const styles = StyleSheet.create({
     },
     detailText: {
         fontFamily: 'TH-sarabun',
-        // color:Colors.highLigthColor,
         fontSize: 28
     },
     buttonSize: {

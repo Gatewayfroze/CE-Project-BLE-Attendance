@@ -17,7 +17,11 @@ const LeaveScreen = props => {
                 <Text style={{ color: 'white' }}>New Leave</Text>
             </TouchableOpacity>
             <ScrollView>
-                <SubjectLeave title='ป่วยครับ' subject='Data Mining' detail='ไม่สบายน้ำมูกไหล' />
+                <SubjectLeave title='ป่วยครับ' subject='Data Mining' detail='ไม่สบายน้ำมูกไหล' onClick={() => {
+                props.navigation.navigate({
+                    routeName: 'detailLeave'
+                })
+            }}/>
             </ScrollView>
         </View>
     )

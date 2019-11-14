@@ -14,18 +14,21 @@ const Enrollpage = () => {
                 <Sidebar />
                 <div class='column' >
                     <div style={styles.container}>
+                        <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>View Subject</h1>
                         <div class='box'>
-                            <h1>พิมพ์เพื่อค้นหารายวิชา</h1>
+                            <h1>Enter Subject Data</h1>
                             <div class="field is-grouped">
-                                <input class='input is-primary' placeholder='รหัส,ชื่อวิชา' />
-                                <Button>Search</Button>
+                                <input class='input is-primary' placeholder='Subject_id,Subject_Name' />
+                                <div className='control'>
+                                    <Button>Search</Button>
+                                </div>
                             </div>
                             <table class='table'>
                                 <thead>
                                     <tr>
                                         <th>subject_id</th>
                                         <th>Subject Name</th>
-                                        <th>detail</th>
+                                        <th>Export Schedule</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -34,7 +37,7 @@ const Enrollpage = () => {
                                     <tr>
                                         <td>232423</td>
                                         <td>HCI</td>
-                                        <td><Button class='button is-warning'>View</Button></td>
+                                        <td><Button class='button is-warning'>Export</Button></td>
                                         <td><Button class='button is-link'>View</Button></td>
                                         <td><Button class='button is-danger'>Delete</Button></td>
                                     </tr>
@@ -42,12 +45,54 @@ const Enrollpage = () => {
                             </table>
                         </div>
                         <div class='box'>
-                            graph ข้อมูลต่างๆนานา
+                            <div className="field">
+                                <label className='label'>Subject Name</label>
+                                <input class='input' value='HCI'></input>
+                            </div>
+                            <div className="field">
+                                <label className='label'>Subject Detail</label>
+                                <textarea class='textarea' value='asdsadsadsd'></textarea>
+                            </div>
+                            <div className="field is-grouped">
+                                <div className='control'>
+                                    <label className='label'>Schedule</label>
+                                </div>
+
+                            </div>
+                            <div className='field is-grouped'>
+                                <div className='control'>
+                                    <input className='input' placeholder='date' />
+                                </div>
+                                <div className='control'>
+                                    <input className='input' placeholder='start time' />
+                                </div>
+                                <div className='control'>
+                                    <input className='input' placeholder='end time' />
+                                </div>
+                                <div className='control'>
+                                    <button className='button is-danger'>Delete</button>
+                                </div>
+                            </div>
+                            <div className='field is-grouped'>
+
+                                <div className='control'>
+                                    <input className='input' placeholder='date' />
+                                </div>
+                                <div className='control'>
+                                    <input className='input' placeholder='start time' />
+                                </div>
+                                <div className='control'>
+                                    <input className='input' placeholder='end time' />
+                                </div>
+                                <div className='control'>
+                                    <button className='button is-danger'>Delete</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 const styles = {

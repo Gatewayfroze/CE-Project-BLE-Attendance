@@ -13,6 +13,7 @@ import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
 import InputLeave from '../screens/inputLeaveScreen'
 import LoginScreen from '../screens/loginScreen'
+import detailLeave from '../screens/detailLeaveScreen'
 
 import StatDetail from '../screens/detailStatScreen'
 // const HomeNavigator =createStackNavigator({
@@ -38,7 +39,8 @@ const checkInNavigator = createStackNavigator({
 
 const leaveNavigator = createStackNavigator({
     checkIn: LeaveScreen,
-    inputLeave: InputLeave
+    inputLeave: InputLeave,
+    detailLeave:detailLeave
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 

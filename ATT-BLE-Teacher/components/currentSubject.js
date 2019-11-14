@@ -5,8 +5,8 @@ const CurrentSubject = props => {
     return (
         <View style={styles.currentSubjectContainer}>
             <Text style={styles.title}>วิชา Data Mining</Text>
-            <Text style={styles.time}>12:00</Text>
-            <Text>หมดเวลา ..... </Text>
+            <Text style={styles.countStd}>จำนวนนักเรียน 25 คน</Text>
+            <Text>หมดเวลา 12:00 </Text>
         </View>
     )
 }
@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30
     },
-    time: {
-        fontSize: 40,
+    countStd: {
+        fontSize: 35,
         color:Colors.highLigthColor
     },
     currentSubjectContainer: {
