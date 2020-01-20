@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {BleManager} from 'react-native-ble-plx';
 import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
 import {config} from './firebase';
@@ -14,6 +14,10 @@ export default function App() {
   const [mail, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [mac,setmac]=useState('none')
+
+  useEffect(() => {
+    scanMC()
+  });
 
   loginUser = (em, pass) => {
     console.log('logged');
@@ -68,8 +72,8 @@ export default function App() {
         
         this.manager.stopDeviceScan()
         console.log(device.id)
-        console.log(firebase.firestore.Timestamp.fromDate(new Date()))
-        check(device.id)
+        setmac(device.id)        
+        
         // let distance = Math.pow(10,(-59-device.rssi)/(10))
         // console.log(calculateDistance(device.rssi))
         //setmac(distance)
@@ -77,14 +81,12 @@ export default function App() {
   })
 }
 
-check = mc=>{
+check = ()=>{
    
   //console.log(scanMC())
   db.collection("transaction").add({
-    mac:mc,
+    mac:mac,
     time:firebase.firestore.Timestamp.fromDate(new Date())
-}).then(()=>{
-  setmac(mc)
 })
 
 
@@ -138,7 +140,7 @@ check = mc=>{
         onChangeText={pass => setpassword(pass)}></TextInput> */}
 
       <View style={styles.butt}>
-        <Button title="CHK" onPress={() => this.scanMC()}>
+        <Button title="CHK" onPress={() => this.check()}>
           {' '}
         </Button>
         {/* <Button title="Sign Up" onPress={() => this.signUpUser(mail)}>
