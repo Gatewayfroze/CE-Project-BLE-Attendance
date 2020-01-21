@@ -143,7 +143,7 @@ check = ()=>{
         <Button title="CHK" onPress={() => this.check()}>
           {' '}
         </Button>
-        {/* <Button title="Sign Up" onPress={() => this.signUpUser(mail)}>
+        {/* <Button title="Sign Up" onPress={() => this.sign UpUser(mail)}>
           {' '}
         </Button> */}
       </View>
