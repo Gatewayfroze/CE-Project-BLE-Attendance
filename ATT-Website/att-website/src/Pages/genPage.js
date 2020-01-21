@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import Papa from "papaparse"
+import API from '../api'
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
@@ -8,7 +9,6 @@ import { Button } from 'react-bulma-components/dist';
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
-
 
 const GenPage = () => {
     const [data, setJson] = useState([])
@@ -18,7 +18,26 @@ const GenPage = () => {
         stdTemp.splice(stdIndex, 1);
         setJson(stdTemp)
     };
-
+    const printData = () => {
+        for(let i=0;i<data.length;i++){
+            createAccount(data[i])
+        }
+    }
+    const createAccount = (dataStd) => {
+        const dataStudent={
+            email:dataStd.id+'@kmitl.ac.th',
+            name:dataStd.name,
+            surname:dataStd.surname
+        }
+        console.log(dataStudent)
+        API.post('createAccount/', dataStudent)
+            .then(function (response) {
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
     const onDrop = (e) => {
         const reader = new FileReader();
         reader.readAsText(e[0]);
@@ -88,7 +107,7 @@ const GenPage = () => {
                                 })}
                             </tbody>
                         </table>
-                        <Button class='button is-primary'>Save</Button>
+                        <button className='button is-primary' onClick={printData}>Save</button>
                     </div>
                 </div>
             </div>
