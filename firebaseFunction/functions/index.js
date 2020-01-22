@@ -19,7 +19,7 @@ const firebaseConfig = {
 };
 
 app.use(cors);
-app.use(bodyParser)
+// app.use(bodyParser)
 exports.webApi = functions.https.onRequest(app);
 
 firebase.initializeApp(firebaseConfig)  
@@ -33,11 +33,21 @@ app.post('/createSubject',(req,res)=>{
 
 })
 
+// app.post('/createe',(req,res) => {
+//   pass = req.body.email+'test'
+//   firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).catch(error=>{
+//      console.log(error, toString());
+//    })
+//    res.end()
+// })
+
+
 app.post('/createAccount',(req,res)=>{
 
-  pass = req.body.email+'test'
-  
-    firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).then(createdUser => {
+  pass = req.body.email+'test'   
+
+    
+  firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).then(createdUser => {
        return db.collection('users').doc(createdUser.user.uid).set({
         email:req.body.email,
         name:req.body.name,
@@ -47,10 +57,7 @@ app.post('/createAccount',(req,res)=>{
       })
     }).catch(error=>{
       console.log(error, toString());
-    })
-  
-
-  
+    })  
   res.end()
 
 })
@@ -86,8 +93,13 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate(user => {
   return sendWelcomeEmail(email);
 });
 
+
+
 async function sendWelcomeEmail(email) {
+
   const decrypted = email+'test'
+
+ 
   const mailOptions = {
     from: `${APP_NAME} <noreply@firebase.com>`,
     to: email

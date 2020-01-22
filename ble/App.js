@@ -36,7 +36,7 @@ export default function App() {
   };
 
   signUpUser = em => {
-    var pass = 'kuy' + em + 'kuy';
+    var pass = em +'TEST';
     console.log(pass);
     try {
       firebase.auth().createUserWithEmailAndPassword(em, pass);
