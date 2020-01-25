@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone'
 import Papa from "papaparse"
+import axios from 'axios'
 import API from '../api'
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
@@ -9,29 +10,51 @@ import { Button } from 'react-bulma-components/dist';
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
+import { generate } from 'csv'
 
 const GenPage = () => {
     const [data, setJson] = useState([])
-
+    const [tableBody, setTableBody] = useState(<tr><td colSpan="2">Empty</td></tr>)
+    useEffect(() => {
+        console.log(data.length)
+        if (data.length!=0) {
+            setTableBody(data.map((person, index) => {
+                return (
+                    <tr key={person.id}>
+                        <td>{person.id}</td>
+                        <td>{person.name} {person.surname}</td>
+                        <td>{person.faculty}</td>
+                        <td>{person.year}</td>
+                        <td onClick={() => deleteStudent(index)}><button class='button is-danger' >Delete</button></td>
+                    </tr>
+                );
+            }))
+        } else {
+            setTableBody(<tr><td colSpan="2">Empty</td></tr>)
+            console.log("eiei")
+        }
+    }, [data])
     const deleteStudent = stdIndex => {
         const stdTemp = [...data];
         stdTemp.splice(stdIndex, 1);
         setJson(stdTemp)
     };
-    const printData = () => {
-        for(let i=0;i<data.length;i++){
-            createAccount(data[i])
-        }
+    const generateAccount = () => {
+        data.forEach((dataStudent, i) => {
+            setTimeout(() => {
+                createAccount(dataStudent)
+            }, i * 1500);
+        })
     }
     const createAccount = (dataStd) => {
-        const dataStudent={
-            email:dataStd.id+'@kmitl.ac.th',
-            name:dataStd.name,
-            surname:dataStd.surname
+        const dataStudent = {
+            email: dataStd.id + '@kmitl.ac.th',
+            name: dataStd.name,
+            surname: dataStd.surname
         }
-        console.log(dataStudent)
         API.post('createAccount/', dataStudent)
             .then(function (response) {
+                console.log(dataStudent)
                 console.log(response)
             })
             .catch(function (error) {
@@ -47,12 +70,12 @@ const GenPage = () => {
                 complete: function (results) {
                     results.data.pop()
                     setJson(results.data)
+                    console.log(data)
                 }
             });
         };
     }
     return (
-        // <div style={{ height: '100vh', backgroundColor: '#f0fff0' }}>
         <div class='page' style={{ height: '100vh' }}>
             <Navbar />
             <div class='columns'>
@@ -82,7 +105,6 @@ const GenPage = () => {
                                 </div>
                             </div>
                         </div>
-
                         <table class='table'>
                             <thead>
                                 <tr>
@@ -94,20 +116,10 @@ const GenPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((person, index) => {
-                                    return (
-                                        <tr key={person.id}>
-                                            <td>{person.id}</td>
-                                            <td>{person.name} {person.surname}</td>
-                                            <td>{person.faculty}</td>
-                                            <td>{person.year}</td>
-                                            <td onClick={() => deleteStudent(index)}><button class='button is-danger' >Delete</button></td>
-                                        </tr>
-                                    );
-                                })}
+                                {tableBody}
                             </tbody>
                         </table>
-                        <button className='button is-primary' onClick={printData}>Save</button>
+                        <button className='button is-primary' onClick={generateAccount}>Save</button>
                     </div>
                 </div>
             </div>
