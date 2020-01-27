@@ -76,7 +76,7 @@ const GenPage = () => {
         };
     }
     return (
-        <div class='page' style={{ height: '100vh' }}>
+        <div>
             <Navbar />
             <div class='columns'>
                 <Sidebar />
