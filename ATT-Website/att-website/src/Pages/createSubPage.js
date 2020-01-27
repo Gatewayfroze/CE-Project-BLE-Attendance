@@ -58,36 +58,40 @@ const CreateSubPage = props => {
     }
 
     return (
-        <div class='page'>
+        <div class='Page'>
             <Navbar />
-            <div class='columns'>
-                <Sidebar />
-                <div class='column' >
-                    <form onSubmit={handleSubmit}>
-                        <div style={styles.container}>
-                            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Create Subject</h1>
-                            <div class='box'>
-                                <div className="field">
-                                    <label className='label'>Subject ID</label>
-                                    <input class='input' name='subjectID' value={subjectDetail.subjectID} placeholder='' onChange={handleChange} required></input>
-                                </div>
-                                <div className="field">
-                                    <label className='label'>Subject Name</label>
-                                    <input class='input' name='subjectName' value={subjectDetail.subjectName} placeholder='' onChange={handleChange} required></input>
-                                </div>
-                                <div className="field is-grouped">
-                                    <div className='control'>
-                                        <label className='label'>Schedule</label>
+            <div className='section'>
+                <div class='columns'>
+                    <Sidebar />
+                    <main className='column main'>
+                        <div class='column' >
+                            <form onSubmit={handleSubmit}>
+                                <div style={styles.container}>
+                                    <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Create Subject</h1>
+                                    <div class='box'>
+                                        <div className="field">
+                                            <label className='label'>Subject ID</label>
+                                            <input class='input' name='subjectID' value={subjectDetail.subjectID} placeholder='' onChange={handleChange} required></input>
+                                        </div>
+                                        <div className="field">
+                                            <label className='label'>Subject Name</label>
+                                            <input class='input' name='subjectName' value={subjectDetail.subjectName} placeholder='' onChange={handleChange} required></input>
+                                        </div>
+                                        <div className="field is-grouped">
+                                            <div className='control'>
+                                                <label className='label'>Schedule</label>
+                                            </div>
+                                            <div className='control'>
+                                                <button className='button is-primary' onClick={() => setSchedule(countSchedule + 1)}>Add</button>
+                                            </div>
+                                        </div>
+                                        {createTable()}
                                     </div>
-                                    <div className='control'>
-                                        <button className='button is-primary' onClick={() => setSchedule(countSchedule + 1)}>Add</button>
-                                    </div>
+                                    <button className='button is-primary' type='submit'>Create</button>
                                 </div>
-                                {createTable()}
-                            </div>
-                            <button className='button is-primary' type='submit'>Create</button>
+                            </form>
                         </div>
-                    </form>
+                    </main>
                 </div>
             </div>
         </div>

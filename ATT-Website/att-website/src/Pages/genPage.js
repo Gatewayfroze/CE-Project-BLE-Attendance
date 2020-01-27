@@ -17,7 +17,7 @@ const GenPage = () => {
     const [tableBody, setTableBody] = useState(<tr><td colSpan="2">Empty</td></tr>)
     useEffect(() => {
         console.log(data.length)
-        if (data.length!=0) {
+        if (data.length != 0) {
             setTableBody(data.map((person, index) => {
                 return (
                     <tr key={person.id}>
@@ -76,51 +76,53 @@ const GenPage = () => {
         };
     }
     return (
-        <div>
+        <div className='Page'>
             <Navbar />
-            <div class='columns'>
-                <Sidebar />
-                <div class='column' >
-                    <div style={styles.container}>
-                        <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account Student</h1>
-                        <div class='box'>
-                            <p>Select Role</p>
-                            <div>
-                                <Button className='is-primary'>Student</Button>
-                                <Button >Teacher</Button>
-                            </div>
-                            <p>Upload .CSV File</p>
-                            <div class="field is-grouped">
-                                <div style={{ borderStyle: 'solid', borderColor: 'black', borderWidth: 1, width: '80%', height: 40 }}>
-                                    <Dropzone onDrop={onDrop}>
-                                        {({ getRootProps, getInputProps }) => (
-                                            <section>
-                                                <div {...getRootProps()}>
-                                                    <input {...getInputProps()} />
-                                                    <p>Click here to upload file .CSV</p>
-                                                </div>
-                                            </section>
-                                        )}
-                                    </Dropzone>
+            <div className='section'>
+                <div className='columns'>
+                    <Sidebar />
+                    <main className='column main'>
+                        <div style={styles.container}>
+                            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account Student</h1>
+                            <div class='box'>
+                                <p>Select Role</p>
+                                <div>
+                                    <Button className='is-primary'>Student</Button>
+                                    <Button >Teacher</Button>
+                                </div>
+                                <p>Upload .CSV File</p>
+                                <div class="field is-grouped">
+                                    <div style={{ borderStyle: 'solid', borderColor: 'black', borderWidth: 1, width: '80%', height: 40 }}>
+                                        <Dropzone onDrop={onDrop}>
+                                            {({ getRootProps, getInputProps }) => (
+                                                <section>
+                                                    <div {...getRootProps()}>
+                                                        <input {...getInputProps()} />
+                                                        <p>Click here to upload file .CSV</p>
+                                                    </div>
+                                                </section>
+                                            )}
+                                        </Dropzone>
+                                    </div>
                                 </div>
                             </div>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Name-Surname</th>
+                                        <th>faculty</th>
+                                        <th>year</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {tableBody}
+                                </tbody>
+                            </table>
+                            <button className='button is-primary' onClick={generateAccount}>Save</button>
                         </div>
-                        <table class='table'>
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Name-Surname</th>
-                                    <th>faculty</th>
-                                    <th>year</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {tableBody}
-                            </tbody>
-                        </table>
-                        <button className='button is-primary' onClick={generateAccount}>Save</button>
-                    </div>
+                    </main>
                 </div>
             </div>
         </div>
