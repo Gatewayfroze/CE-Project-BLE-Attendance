@@ -33,6 +33,7 @@ app.post('/createSubject',(req,res)=>{
 
 })
 
+<<<<<<< Updated upstream
 // app.post('/createe',(req,res) => {
 //   pass = req.body.email+'test'
 //   firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).catch(error=>{
@@ -40,6 +41,14 @@ app.post('/createSubject',(req,res)=>{
 //    })
 //    res.end()
 // })
+=======
+
+
+exports.hello = functions.https.onRequest((req,res)=>{
+  res.send('hello')
+})
+
+>>>>>>> Stashed changes
 
 
 app.post('/createAccount',(req,res)=>{
@@ -57,16 +66,20 @@ app.post('/createAccount',(req,res)=>{
       })
     }).catch(error=>{
       console.log(error, toString());
+<<<<<<< Updated upstream
     })  
+=======
+    })
+
+  
+>>>>>>> Stashed changes
   res.end()
 
 })
 
 
 
-exports.hello = functions.https.onRequest((req,res)=>{
-  res.send('hello')
-})
+
 
 const gmailEmail = functions.config().gmail.email;
 const gmailPassword = functions.config().gmail.password;
