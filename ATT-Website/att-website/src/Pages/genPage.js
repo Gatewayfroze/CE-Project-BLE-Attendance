@@ -15,6 +15,8 @@ import { generate } from 'csv'
 const GenPage = () => {
     const [data, setJson] = useState([])
     const [tableBody, setTableBody] = useState(<tr><td colSpan="2">Empty</td></tr>)
+    const [genRole, setRole] = useState('student')
+
     useEffect(() => {
         console.log(data.length)
         if (data.length != 0) {
@@ -34,6 +36,10 @@ const GenPage = () => {
             console.log("eiei")
         }
     }, [data])
+    useEffect(() => {
+
+    }, [genRole])
+
     const deleteStudent = stdIndex => {
         const stdTemp = [...data];
         stdTemp.splice(stdIndex, 1);
@@ -61,6 +67,10 @@ const GenPage = () => {
                 console.log(error)
             })
     }
+    const handleRole = (role) => {
+        setRole(role)
+        console.log(genRole)
+    }
     const onDrop = (e) => {
         const reader = new FileReader();
         reader.readAsText(e[0]);
@@ -75,7 +85,10 @@ const GenPage = () => {
             });
         };
     }
+    let btnstdClass = genRole == 'student' ? 'is-primary' : ''
+    let btntchClass = genRole == 'teacher' ? 'is-primary' : ''
     return (
+
         <div className='Page'>
             <Navbar />
             <div className='section'>
@@ -83,12 +96,12 @@ const GenPage = () => {
                     <Sidebar />
                     <main className='column main'>
                         <div style={styles.container}>
-                            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account Student</h1>
+                            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account</h1>
                             <div class='box'>
                                 <p>Select Role</p>
                                 <div>
-                                    <Button className='is-primary'>Student</Button>
-                                    <Button >Teacher</Button>
+                                    <Button className={btnstdClass} onClick={() => handleRole('student')}>Student</Button>
+                                    <Button className={btntchClass} onClick={() => handleRole('teacher')}>Teacher</Button>
                                 </div>
                                 <p>Upload .CSV File</p>
                                 <div class="field is-grouped">
@@ -120,7 +133,7 @@ const GenPage = () => {
                                     {tableBody}
                                 </tbody>
                             </table>
-                            <button className='button is-primary' onClick={generateAccount}>Save</button>
+                            <Button className='is-primary' onClick={generateAccount} disabled={data.length!=0?false:true}>Save</Button>
                         </div>
                     </main>
                 </div>
