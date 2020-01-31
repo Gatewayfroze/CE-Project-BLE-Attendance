@@ -27,7 +27,7 @@ const Navbar = (props) => {
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <a class="button is-dark">
+                                    <a  class="button is-dark">
                                         Logout
                                     </a>
                                 </div>
