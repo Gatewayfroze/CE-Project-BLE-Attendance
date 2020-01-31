@@ -56,9 +56,8 @@ const Enrollpage = () => {
                         <div class='column' >
                             <div style={styles.container}>
                                 <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Enroll Student</h1>
-    <h2>{curUser}</h2> 
     {/* <button onClick={() => app.auth().signOut()}>Sign out</button> */}
-    <a href="/" onClick={() => app.auth().signOut()} >Sign out</a>
+    
                                 <div class='box'>
                                     <p>Enter Subject</p>
                                     <input class='input' placeholder='subject_id,subjectName'></input>

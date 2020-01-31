@@ -1,8 +1,20 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import app from '../firebase'
 
 
 const Navbar = (props) => {
+    const [curUser, setcurUser] = useState(null)
+
+    useEffect(() => {
+        app.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                setcurUser(user.email)
+            } else {
+                console.log('no')
+            }
+        });
+
+    }, [])
 
     return (
         <header className='hero'>
@@ -17,6 +29,7 @@ const Navbar = (props) => {
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
                         </a>
+
                     </div>
 
                     <div id="navbarBasicExample" class="navbar-menu">
@@ -26,8 +39,9 @@ const Navbar = (props) => {
 
                         <div class="navbar-end">
                             <div class="navbar-item">
+                                <h2>{curUser}</h2>
                                 <div class="buttons">
-                                    <a  class="button is-dark">
+                                    <a class="button is-dark" onClick={() => app.auth().signOut()}>
                                         Logout
                                     </a>
                                 </div>
