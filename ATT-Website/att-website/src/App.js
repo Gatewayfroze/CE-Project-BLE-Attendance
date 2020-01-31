@@ -15,6 +15,7 @@ import ManageSub from "./Pages/viewSub";
 import LeavePage from "./Pages/leavePage";
 import CreateSubPage from "./Pages/createSubPage";
 import { AuthProvider } from "./auth";
+import PrivateRoute from './privateRoute.js'
 
 function App() {
   return (
@@ -22,12 +23,12 @@ function App() {
       <Router>
         {/*All our Routes goes here!*/}
         <Route exact path="/" component={MainPage} />
-        <Route exact path="/generate" component={GenPage} />
-        <Route exact path="/enroll" component={EnrollPage} />
-        <Route exact path="/viewStd" component={ManageStd} />
-        <Route exact path="/viewSub" component={ManageSub} />
-        <Route exact path="/leave" component={LeavePage} />
-        <Route exact path="/createSub" component={CreateSubPage} />
+        <PrivateRoute exact path="/enroll" component={EnrollPage} />        
+        <PrivateRoute exact path="/generate" component={GenPage} />       
+        <PrivateRoute exact path="/viewStd" component={ManageStd} />
+        <PrivateRoute exact path="/viewSub" component={ManageSub} />
+        <PrivateRoute exact path="/leave" component={LeavePage} />
+        <PrivateRoute exact path="/createSub" component={CreateSubPage} />
       </Router>
     </AuthProvider>
   );
