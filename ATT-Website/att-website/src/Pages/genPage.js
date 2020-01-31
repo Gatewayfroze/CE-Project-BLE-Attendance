@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone'
 import Papa from "papaparse"
 import axios from 'axios'
 import API from '../api'
+import DataTable from '../Components/DataTable'
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
@@ -14,43 +15,45 @@ import { generate } from 'csv'
 
 const GenPage = () => {
     const [data, setJson] = useState([])
-    const [tableBody, setTableBody] = useState(<tr><td colSpan="2">Empty</td></tr>)
-    const [genRole, setRole] = useState('student')
+    const [tableBody, setTableBody] = useState(<tr><td colSpan="5">Empty</td></tr>)
+    const [genRole, setRole] = useState('Student')
+    const [fileName, setFileNamed] = useState(<p>Click to upload .CSV file</p>)
 
     useEffect(() => {
-        console.log(data.length)
         if (data.length != 0) {
             setTableBody(data.map((person, index) => {
                 return (
+                    // check role
                     <tr key={person.id}>
                         <td>{person.id}</td>
                         <td>{person.name} {person.surname}</td>
-                        <td>{person.faculty}</td>
-                        <td>{person.year}</td>
+                        <td>{person.id + 'kmitl.ac.th'}</td>
+                        {/* <td>{person.faculty}</td>
+                        <td>{person.year}</td> */}
                         <td onClick={() => deleteStudent(index)}><button class='button is-danger' >Delete</button></td>
                     </tr>
                 );
             }))
         } else {
-            setTableBody(<tr><td colSpan="2">Empty</td></tr>)
-            console.log("eiei")
+            setTableBody(<tr><td colSpan="5">Empty</td></tr>)
         }
     }, [data])
-    useEffect(() => {
-
-    }, [genRole])
 
     const deleteStudent = stdIndex => {
         const stdTemp = [...data];
         stdTemp.splice(stdIndex, 1);
         setJson(stdTemp)
+        console.log(data)
     };
     const generateAccount = () => {
         data.forEach((dataStudent, i) => {
             setTimeout(() => {
                 createAccount(dataStudent)
-            }, i * 1500);
+            }, i * 2000);
         })
+    }
+    const del = (ee) => {
+        console.log(ee)
     }
     const createAccount = (dataStd) => {
         const dataStudent = {
@@ -61,7 +64,6 @@ const GenPage = () => {
         API.post('createAccount/', dataStudent)
             .then(function (response) {
                 console.log(dataStudent)
-                console.log(response)
             })
             .catch(function (error) {
                 console.log(error)
@@ -69,24 +71,27 @@ const GenPage = () => {
     }
     const handleRole = (role) => {
         setRole(role)
+        setJson([])
         console.log(genRole)
     }
     const onDrop = (e) => {
         const reader = new FileReader();
         reader.readAsText(e[0]);
+        // set File name 
+        setFileNamed(<p>{e[0].path}</p>)
         reader.onload = () => {
             Papa.parse(e[0], {
                 header: true,
                 complete: function (results) {
                     results.data.pop()
+                    // set data from file to json
                     setJson(results.data)
-                    console.log(data)
                 }
             });
         };
     }
-    let btnstdClass = genRole == 'student' ? 'is-primary' : ''
-    let btntchClass = genRole == 'teacher' ? 'is-primary' : ''
+    let btnstdClass = genRole == 'Student' ? 'is-primary' : ''
+    let btntchClass = genRole == 'Teacher' ? 'is-primary' : ''
     return (
 
         <div className='Page'>
@@ -100,8 +105,8 @@ const GenPage = () => {
                             <div class='box'>
                                 <p>Select Role</p>
                                 <div>
-                                    <Button className={btnstdClass} onClick={() => handleRole('student')}>Student</Button>
-                                    <Button className={btntchClass} onClick={() => handleRole('teacher')}>Teacher</Button>
+                                    <Button className={btnstdClass} onClick={() => handleRole('Student')}>Student</Button>
+                                    <Button className={btntchClass} onClick={() => handleRole('Teacher')}>Teacher</Button>
                                 </div>
                                 <p>Upload .CSV File</p>
                                 <div class="field is-grouped">
@@ -111,7 +116,7 @@ const GenPage = () => {
                                                 <section>
                                                     <div {...getRootProps()}>
                                                         <input {...getInputProps()} />
-                                                        <p>Click here to upload file .CSV</p>
+                                                        {fileName}
                                                     </div>
                                                 </section>
                                             )}
@@ -119,21 +124,9 @@ const GenPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <table class='table'>
-                                <thead>
-                                    <tr>
-                                        <th>id</th>
-                                        <th>Name-Surname</th>
-                                        <th>faculty</th>
-                                        <th>year</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {tableBody}
-                                </tbody>
-                            </table>
-                            <Button className='is-primary' onClick={generateAccount} disabled={data.length!=0?false:true}>Save</Button>
+                            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
+                            <DataTable data={data} del={deleteStudent} />
+                            <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 ? false : true}>Generate</Button>
                         </div>
                     </main>
                 </div>
