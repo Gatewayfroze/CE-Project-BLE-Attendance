@@ -6,21 +6,33 @@ import { withRouter, Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import { Container, FormGroup, Button, Input, Label } from "reactstrap";
 import app from "../firebase.js";
+
 import { AuthContext } from "../auth";
 //Functional Component
+const fire = app.firestore()
 const MainPage = ({ history }) => {
   const handleLogin = useCallback(
     async event => {
       event.preventDefault();
       const { email, password } = event.target.elements;
-      try {
-        await app
-          .auth()
-          .signInWithEmailAndPassword(email.value, password.value);
-        history.push("/enroll");
-      } catch (error) {
-        alert(error);
-      }
+      
+      fire.collection("users").where('email','==',email.value).get().then((snapshot)=>{
+        snapshot.docs.forEach(doc=>{
+          // console.log(doc.data().role)
+          if(doc.data().role=='teacher'){
+            try {
+              app.auth().signInWithEmailAndPassword(email.value, password.value);
+              history.push("/enroll");
+            } catch (error) {
+              alert(error);
+            }
+          }else{
+            alert('Need permission')
+            return <Redirect to='/'  />
+          }
+        })
+      })
+      
     },
     [history]
   );

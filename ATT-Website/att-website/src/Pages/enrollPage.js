@@ -10,22 +10,7 @@ import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
 
 const Enrollpage = () => {
-    const [data, setJson] = useState([])
-
-    const [curUser, setcurUser] = useState(null)
-
-    useEffect(() => {
-        app.auth().onAuthStateChanged(function(user) {
-            if (user) {
-              setcurUser(user.email)
-            } else {
-                console.log('no')
-            }
-          });
-          
-    }, [])
-
-    
+    const [data, setJson] = useState([])    
 
     const deleteStudent = stdIndex => {
         const stdTemp = [...data];

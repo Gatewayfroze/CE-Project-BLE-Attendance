@@ -10,7 +10,7 @@ const Navbar = (props) => {
             if (user) {
                 setcurUser(user.email)
             } else {
-                console.log('no')
+                
             }
         });
 
