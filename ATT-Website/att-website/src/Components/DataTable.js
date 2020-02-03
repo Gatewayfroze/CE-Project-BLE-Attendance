@@ -55,12 +55,14 @@ const DataTable = (props) => {
                                     {column.label}
                                 </TableCell>
                             ))}
-                            <TableCell>Delete</TableCell>
-                            
+                            {props.extraHeader.map(header => (
+                                <TableCell>{header}</TableCell>
+                            ))}
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,i) => {
+                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => {
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                     {columns.map(column => {
@@ -71,8 +73,12 @@ const DataTable = (props) => {
                                             </TableCell>
                                         );
                                     })}
-                                    <TableCell><Button className='is-danger' onClick={()=>props.del(i)} >Delete</Button></TableCell>
-
+                                    {/* <TableCell><Button className='is-danger' onClick={()=>props.del(i)} >Delete</Button></TableCell> */}
+                                    {props.extraCol.map(ButtonCol => {
+                                        return (
+                                            <TableCell><Button className={ButtonCol.class} onClick={() => ButtonCol.function(i)}>{ButtonCol.text}</Button></TableCell>
+                                        )
+                                    })}
                                 </TableRow>
                             );
                         })}

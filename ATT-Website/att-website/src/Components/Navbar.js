@@ -9,6 +9,7 @@ const Navbar = (props) => {
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
                 setcurUser(user.email)
+                console.log(user)
             } else {
                 
             }
@@ -33,10 +34,6 @@ const Navbar = (props) => {
                     </div>
 
                     <div id="navbarBasicExample" class="navbar-menu">
-                        {/* <div class="navbar-start">
-
-</div> */}
-
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <h2>{curUser}</h2>

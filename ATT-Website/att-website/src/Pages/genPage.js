@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone'
 import Papa from "papaparse"
-import axios from 'axios'
 import API from '../api'
 import DataTable from '../Components/DataTable'
+import TableCell from '@material-ui/core/TableCell';
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
@@ -11,7 +11,6 @@ import { Button } from 'react-bulma-components/dist';
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
-import { generate } from 'csv'
 
 const GenPage = () => {
     const [data, setJson] = useState([])
@@ -19,6 +18,7 @@ const GenPage = () => {
     const [genRole, setRole] = useState('Student')
     const [fileName, setFileNamed] = useState(<p>Click to upload .CSV file</p>)
 
+    
     useEffect(() => {
         if (data.length != 0) {
             setTableBody(data.map((person, index) => {
@@ -90,10 +90,17 @@ const GenPage = () => {
             });
         };
     }
+    const printStudent= stdIndex => {
+        console.log(data[stdIndex])
+    };
+    // toggle role of account
     let btnstdClass = genRole == 'Student' ? 'is-primary' : ''
     let btntchClass = genRole == 'Teacher' ? 'is-primary' : ''
+    // set element extend table in Datatable
+    const tableExtend=[]
+    tableExtend.push({text:'Delete',class:'is-danger',function:deleteStudent})
+    tableExtend.push({text:'print',class:'',function:printStudent})
     return (
-
         <div className='Page'>
             <Navbar />
             <div className='section'>
@@ -125,7 +132,7 @@ const GenPage = () => {
                                 </div>
                             </div>
                             <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
-                            <DataTable data={data} del={deleteStudent} />
+                            <DataTable data={data}  extraHeader={['Delete','Print']} extraCol={tableExtend} />
                             <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 ? false : true}>Generate</Button>
                         </div>
                     </main>
