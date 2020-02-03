@@ -6,6 +6,7 @@ import { withRouter, Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import { Container, FormGroup, Button, Input, Label } from "reactstrap";
 import app from "../firebase.js";
+import 'react-bulma-components/dist/react-bulma-components.min.css';
 
 import { AuthContext } from "../auth";
 //Functional Component
@@ -15,24 +16,24 @@ const MainPage = ({ history }) => {
     async event => {
       event.preventDefault();
       const { email, password } = event.target.elements;
-      
-      fire.collection("users").where('email','==',email.value).get().then((snapshot)=>{
-        snapshot.docs.forEach(doc=>{
+
+      fire.collection("users").where('email', '==', email.value).get().then((snapshot) => {
+        snapshot.docs.forEach(doc => {
           // console.log(doc.data().role)
-          if(doc.data().role=='teacher'){
+          if (doc.data().role == 'teacher') {
             try {
               app.auth().signInWithEmailAndPassword(email.value, password.value);
               history.push("/enroll");
             } catch (error) {
               alert(error);
             }
-          }else{
+          } else {
             alert('Need permission')
-            return <Redirect to='/'  />
+            return <Redirect to='/' />
           }
         })
       })
-      
+
     },
     [history]
   );
@@ -48,11 +49,11 @@ const MainPage = ({ history }) => {
       <h1 className="LogoApp" style={{ fontSize: 50, marginTop: 150 }}>
         ATTENDA
       </h1>
-      <div style={{ textAlign: "center" }}>
+      <div >
         <div
           style={{
-            marginLeft: 550,
-            marginRight: 550,
+            marginLeft: 600,
+            marginRight: 600,
             marginTop: 30,
             backgroundColor: "#e9f2e9",
             borderRadius: 10,
@@ -60,15 +61,29 @@ const MainPage = ({ history }) => {
           }}
         >
           <form onSubmit={handleLogin}>
-            <label>
-              Email
-              <input name="email" type="email" placeholder="Email" />
-            </label>
-            <label>
-              Password
-              <input name="password" type="password" placeholder="Password" />
-            </label>
-            <button type="submit">Log in</button>
+            <div className='field'>
+              <div className='field'>
+                <label className='label'>
+                  Email
+                </label>
+                <input className='input ' name="email" type="email" placeholder="Email" />
+              </div>
+              <div className='field'>
+                <label className='label'>
+                  Password
+                </label>
+                <input className='input' name="password" type="password" placeholder="Password" />
+              </div>
+
+              <div className='field is-grouped is-grouped-centered'>
+                <p className='control'>
+                  <button className='button is-primary' type="submit">Log in</button>
+                </p>
+                <p className='control'>
+                  <button className='button is-default is-outlined'>Change Password</button>
+                </p>
+              </div>
+            </div>
           </form>
         </div>
       </div>

@@ -12,24 +12,21 @@ import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import { Table } from '@material-ui/core';
 const CreateSubPage = props => {
-    const [countSchedule, setCountSchedule] = useState(0)
     const [subjectDetail, setSubjectDetail] = useState({
         subjectID: '', subjectName: ''
     })
     const [schedule, setSchedule] = useState([])
+    const [tableBody, setTableBody] = useState()
+    useEffect(() => {
+        setTableBody(createTable())
+    }, [schedule])
+
     const handleChange = (event) => {
         setSubjectDetail({ ...subjectDetail, [event.target.name]: event.target.value })
     }
-    const [tableBody, setTableBody] = useState()
-
-    useEffect(() => {
-        setTableBody(createTable())
-        console.log('yayyy')
-    }, [schedule])
-
+    // hadle submiting data
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log('submit')
         // API.post('createSubject/', subjectDetail)
         //     .then(function (response) {
         //         console.log("success")
@@ -41,28 +38,32 @@ const CreateSubPage = props => {
     }
     const resetInput = () => {
         setSubjectDetail({ subjectID: '', subjectName: '' })
-        console.log('reeee')
     }
+    // hadle table
     const addSchedule = () => {
-        setCountSchedule(countSchedule + 1)
         const period = {
             date: new Date(),
             start: new Date(),
             end: new Date(),
-            mac:''
+            mac: ''
         }
         setSchedule([...schedule, period])
         console.log(schedule)
     }
-    const setDate = (date,mode, i) => {
+    const setDate = (date, mode, i) => {
         const temp = schedule
         temp[i][mode] = date
         setSchedule([...temp])
         console.log(schedule)
     }
+    const deleteSchedule = schIndex => {
+        const schTemp = [...schedule];
+        schTemp.splice(schIndex, 1);
+        setSchedule(schTemp)
+    };
     const createTable = () => {
         let table = []
-        for (let i = 0; i < countSchedule; i++)
+        for (let i = 0; i < schedule.length; i++)
             table.push(
                 <tr>
                     <td>
@@ -70,12 +71,12 @@ const CreateSubPage = props => {
                     </td>
                     <td>
                         <div className='control' >
-                            <DatePicker className='input' selected={schedule[i].date} onChange={date => setDate(date,'date',i)} maxLength='10' size='10' placeholder='date' />
+                            <DatePicker className='input' selected={schedule[i].date} onChange={date => setDate(date, 'date', i)} maxLength='10' size='10' placeholder='date' />
                         </div>
                     </td>
                     <td>
                         <div className='control' >
-                            <DatePicker className='input' selected={schedule[i].start} onChange={date => setDate(date,'start',i)} maxLength='10' size='10'
+                            <DatePicker className='input' selected={schedule[i].start} onChange={date => setDate(date, 'start', i)} maxLength='10' size='10'
                                 showTimeSelect
                                 showTimeSelectOnly
                                 timeIntervals={15}
@@ -85,7 +86,7 @@ const CreateSubPage = props => {
                     </td>
                     <td>
                         <div className='control'>
-                            <DatePicker className='input' selected={schedule[i].end} onChange={date => setDate(date,'end',i)} maxLength='10' size='10'
+                            <DatePicker className='input' selected={schedule[i].end} onChange={date => setDate(date, 'end', i)} maxLength='10' size='10'
                                 showTimeSelect
                                 showTimeSelectOnly
                                 timeIntervals={15}
@@ -98,9 +99,9 @@ const CreateSubPage = props => {
                             <input className='input' maxLength='10' size='10' placeholder='MAC Addr' />
                         </div>
                     </td>
-                    <td>
+                    <td style={{ alignItems: 'center', display: 'flex' }}>
                         <div className='control'>
-                            <button className='button is-danger' type='button' onClick={() => console.log("sss")}>Delete</button>
+                            <button className='button is-danger is-outlined' type='button' onClick={() => deleteSchedule(i)}>Delete</button>
                         </div>
                     </td>
                 </tr>
@@ -118,17 +119,17 @@ const CreateSubPage = props => {
                     <Sidebar />
                     <main className='column main'>
                         <div class='column' >
-                            <form onSubmit={()=>handleSubmit}>
+                            <form onSubmit={() => handleSubmit}>
                                 <div style={styles.container}>
                                     <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Create Subject</h1>
                                     <div className='box'>
                                         <div className="field">
                                             <label className='label'>Subject ID</label>
-                                            <input class='input' name='subjectID' value={subjectDetail.subjectID} placeholder='' onChange={handleChange} ></input>
+                                            <input class='input' name='subjectID' value={subjectDetail.subjectID} placeholder='' onChange={handleChange} required></input>
                                         </div>
                                         <div className="field">
                                             <label className='label'>Subject Name</label>
-                                            <input class='input' name='subjectName' value={subjectDetail.subjectName} placeholder='' onChange={handleChange} ></input>
+                                            <input class='input' name='subjectName' value={subjectDetail.subjectName} placeholder='' onChange={handleChange} required ></input>
                                         </div>
                                         <div className="field is-grouped">
                                             <div className='control'>
@@ -138,21 +139,23 @@ const CreateSubPage = props => {
                                                 <button className='button is-primary' type='button' onClick={() => addSchedule()}>Add</button>
                                             </div>
                                         </div>
-                                        <Table>
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Date</th>
-                                                    <th>Start</th>
-                                                    <th>End</th>
-                                                    <th>MAC Addr.</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {tableBody}
-                                            </tbody>
-                                        </Table>
+                                        <div style={styles.overFlowTab} >
+                                            <Table>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Date</th>
+                                                        <th>Start</th>
+                                                        <th>End</th>
+                                                        <th>MAC Addr.</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {tableBody}
+                                                </tbody>
+                                            </Table>
+                                        </div>
                                     </div>
                                     <button className='button is-primary' type='submit'>Create</button>
                                 </div>
@@ -169,6 +172,11 @@ const styles = {
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '60%'
+    },
+    overFlowTab:{
+        width: '100%',
+        maxHeight: '300px',
+        overflow: 'auto',
     }
 }
 export default CreateSubPage 
