@@ -52,15 +52,15 @@ const GenPage = () => {
             }, i * 2000);
         })
     }
-    const del = (ee) => {
-        console.log(ee)
-    }
+
     const createAccount = (dataStd) => {
         const dataStudent = {
             email: dataStd.id + '@kmitl.ac.th',
             name: dataStd.name,
-            surname: dataStd.surname
+            surname: dataStd.surname,
+            role:genRole.toLowerCase()
         }
+        console.log(dataStudent.role)
         API.post('createAccount/', dataStudent)
             .then(function (response) {
                 console.log(dataStudent)
@@ -94,8 +94,8 @@ const GenPage = () => {
         console.log(data[stdIndex])
     };
     // toggle role of account
-    let btnstdClass = genRole == 'Student' ? 'is-primary' : ''
-    let btntchClass = genRole == 'Teacher' ? 'is-primary' : ''
+    let btnstdClass = genRole === 'Student' ? 'is-primary' : ''
+    let btntchClass = genRole === 'Teacher' ? 'is-primary' : ''
     // set element extend table in Datatable
     const tableExtend=[]
     tableExtend.push({text:'Delete',class:'is-danger',function:deleteStudent})
