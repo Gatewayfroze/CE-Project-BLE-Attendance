@@ -33,38 +33,27 @@ app.post('/createSubject',(req,res)=>{
 
 })
 
-<<<<<<< Updated upstream
-// app.post('/createe',(req,res) => {
-//   pass = req.body.email+'test'
-//   firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).catch(error=>{
-//      console.log(error, toString());
-//    })
-//    res.end()
-// })
-=======
 
 
 exports.hello = functions.https.onRequest((req,res)=>{
   res.send('hello')
 })
 
->>>>>>> Stashed changes
 
 
-app.post('/createAccount',(req,res)=>{
+app.post('/createAccount',async (req,res)=>{
 
   pass = req.body.email+'test'   
 
     
-  firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).then(createdUser => {
-       return db.collection('users').doc(createdUser.user.uid).set({
+  await firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).then(async createdUser => {
+        await db.collection('users').doc(createdUser.user.uid).set({
         email:req.body.email,
         name:req.body.name,
         surname:req.body.surname,
         role:req.body.role
-      }).catch(error=>{
-        console.log(error, toString());
       })
+      return
     }).catch(error=>{
       console.log(error, toString());
     })  
