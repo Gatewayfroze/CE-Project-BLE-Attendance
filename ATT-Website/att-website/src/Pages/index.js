@@ -1,10 +1,7 @@
 /*index.jsx*/
 import React, { useCallback, useContext } from "react";
 import "../Styles/styles.css";
-import logo from "../logo.svg";
 import { withRouter, Redirect } from "react-router";
-import { Link } from "react-router-dom";
-import { Container, FormGroup, Button, Input, Label } from "reactstrap";
 import app from "../firebase.js";
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 
@@ -20,7 +17,7 @@ const MainPage = ({ history }) => {
       fire.collection("users").where('email', '==', email.value).get().then((snapshot) => {
         snapshot.docs.forEach(doc => {
           // console.log(doc.data().role)
-          if (doc.data().role == 'teacher') {
+          if (doc.data().role === 'teacher') {
             try {
               app.auth().signInWithEmailAndPassword(email.value, password.value);
               history.push("/enroll");

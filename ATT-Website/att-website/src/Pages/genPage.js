@@ -30,7 +30,7 @@ const GenPage = () => {
                         <td>{person.id + 'kmitl.ac.th'}</td>
                         {/* <td>{person.faculty}</td>
                         <td>{person.year}</td> */}
-                        <td onClick={() => deleteUser(index)}><button class='button is-danger' >Delete</button></td>
+                        <td onClick={() => deleteUser(index)}><button className='button is-danger' >Delete</button></td>
                     </tr>
                 );
             }))
@@ -62,7 +62,7 @@ const GenPage = () => {
         console.log(user.role)
         API.post('createAccount/', user)
             .then(function (response) {
-                console.log(user)
+                console.log(response)
             })
             .catch(function (error) {
                 console.log(error)
@@ -106,38 +106,33 @@ const GenPage = () => {
                 <div className='columns'>
                     <Sidebar />
                     <main className='column main'>
-                        <div style={styles.container}>
-                            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account</h1>
-                            <div class='box'>
-                                <p>Select Role</p>
-                                <div class="buttons has-addons" style={{ marginBottom: '0' }}>
-                                    <Button className={btnstdClass} onClick={() => handleRole('Student')}>Student</Button>
-                                    <Button className={btntchClass} onClick={() => handleRole('Teacher')}>Teacher</Button>
+                        <div class='column' >
+                            <div style={styles.container}>
+                                <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account</h1>
+                                <div class='box'>
+                                    <label className='label'>Select Role</label>
+                                    <div class="buttons has-addons" style={{ marginBottom: '0' }}>
+                                        <Button className={btnstdClass} onClick={() => handleRole('Student')}>Student</Button>
+                                        <Button className={btntchClass} onClick={() => handleRole('Teacher')}>Teacher</Button>
+                                    </div>
+                                    <label className='label'>Upload .CSV File</label>
+                                    <div className="field is-grouped">
+                                        <Dropzone onDrop={onDrop}>
+                                            {({ getRootProps, getInputProps }) => (
+                                                <section>
+                                                    <button className='button is-primary is-outlined' {...getRootProps()}>
+                                                        <input {...getInputProps()} />
+                                                        {fileName}
+                                                    </button>
+                                                </section>
+                                            )}
+                                        </Dropzone>
+                                    </div>
                                 </div>
-                                <p>Upload .CSV File</p>
-                                <div class="field is-grouped">
-                                    <Button className='is-primary is-outlined' >
-                                        {/* <span class="icon">
-                                            <i class="fas fa-home"></i>
-                                        </span> */}
-                                        <span>
-                                            <Dropzone onDrop={onDrop}>
-                                                {({ getRootProps, getInputProps }) => (
-                                                    <section>
-                                                        <div {...getRootProps()}>
-                                                            <input {...getInputProps()} />
-                                                            {fileName}
-                                                        </div>
-                                                    </section>
-                                                )}
-                                            </Dropzone>
-                                        </span>
-                                    </Button>
-                                </div>
+                                <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
+                                <DataTable data={data} extraHeader={['Delete', 'Print']} extraCol={tableExtend} />
+                                <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 ? false : true}>Generate</Button>
                             </div>
-                            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
-                            <DataTable data={data} extraHeader={['Delete', 'Print']} extraCol={tableExtend} />
-                            <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 ? false : true}>Generate</Button>
                         </div>
                     </main>
                 </div>

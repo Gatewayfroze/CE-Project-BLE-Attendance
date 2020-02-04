@@ -1,7 +1,6 @@
 import React, { useState, useDebugValue, useEffect } from 'react'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
-import axios from 'axios'
 import API from '../api'
 
 // import component 
@@ -11,12 +10,14 @@ import Sidebar from '../Components/Sidebar'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import { Table } from '@material-ui/core';
+import MaskedInput from 'react-text-mask'
 const CreateSubPage = props => {
     const [subjectDetail, setSubjectDetail] = useState({
         subjectID: '', subjectName: ''
     })
     const [schedule, setSchedule] = useState([])
     const [tableBody, setTableBody] = useState()
+    // const [macAddress,setMAC] = useState()
     useEffect(() => {
         setTableBody(createTable())
     }, [schedule])
@@ -45,7 +46,13 @@ const CreateSubPage = props => {
             date: new Date(),
             start: new Date(),
             end: new Date(),
-            mac: ''
+            mac: '000000000000 '
+        }
+        if (schedule.length > 0) {
+            period.date.setDate(schedule[schedule.length - 1].date.getDate() + 7)
+            period.start = schedule[schedule.length - 1].start
+            period.end = schedule[schedule.length - 1].end
+            period.mac = schedule[schedule.length - 1].mac
         }
         setSchedule([...schedule, period])
         console.log(schedule)
@@ -60,7 +67,15 @@ const CreateSubPage = props => {
         const schTemp = [...schedule];
         schTemp.splice(schIndex, 1);
         setSchedule(schTemp)
-    };
+    }
+    const hadleMACadrr = (event, i) => {
+        // console.log(i)
+        const temp = schedule
+        temp[i].mac = event.target.value.replace(/\:/g, "")
+        console.log(temp[i].mac)
+        setSchedule([...temp])
+        console.log(schedule)
+    }
     const createTable = () => {
         let table = []
         for (let i = 0; i < schedule.length; i++)
@@ -96,7 +111,9 @@ const CreateSubPage = props => {
                     </td>
                     <td>
                         <div className='control' >
-                            <input className='input' maxLength='10' size='10' placeholder='MAC Addr' />
+                            <MaskedInput mask={[/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/]}
+                                guide={false}
+                                className='input' type='input' value={schedule[i].mac} onChange={(event) => hadleMACadrr(event, i)}  placeholder='MAC Addr' />
                         </div>
                     </td>
                     <td style={{ alignItems: 'center', display: 'flex' }}>
@@ -105,8 +122,6 @@ const CreateSubPage = props => {
                         </div>
                     </td>
                 </tr>
-                // </div>
-
             )
         return table
     }
@@ -125,11 +140,11 @@ const CreateSubPage = props => {
                                     <div className='box'>
                                         <div className="field">
                                             <label className='label'>Subject ID</label>
-                                            <input class='input' name='subjectID' value={subjectDetail.subjectID} placeholder='' onChange={handleChange} required></input>
+                                            <input className='input' name='subjectID' value={subjectDetail.subjectID} onChange={handleChange} required />
                                         </div>
                                         <div className="field">
                                             <label className='label'>Subject Name</label>
-                                            <input class='input' name='subjectName' value={subjectDetail.subjectName} placeholder='' onChange={handleChange} required ></input>
+                                            <input className='input' name='subjectName' value={subjectDetail.subjectName} onChange={handleChange} required ></input>
                                         </div>
                                         <div className="field is-grouped">
                                             <div className='control'>
@@ -157,7 +172,8 @@ const CreateSubPage = props => {
                                             </Table>
                                         </div>
                                     </div>
-                                    <button className='button is-primary' type='submit'>Create</button>
+                                    <button className='button is-primary' type='submit' disabled={subjectDetail.subjectID.length != 0
+                                    && subjectDetail.subjectName.length != 0 && schedule.length != 0 ? false : true}>Create</button>
                                 </div>
                             </form>
                         </div>
@@ -173,9 +189,10 @@ const styles = {
         marginRight: 'auto',
         width: '60%'
     },
-    overFlowTab:{
+    overFlowTab: {
         width: '100%',
-        maxHeight: '300px',
+        height:'250px',
+        // maxHeight: '300px',
         overflow: 'auto',
     }
 }
