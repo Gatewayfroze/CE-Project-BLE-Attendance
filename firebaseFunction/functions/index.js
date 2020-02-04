@@ -60,19 +60,14 @@ app.post('/createAccount',(req,res)=>{
        return db.collection('users').doc(createdUser.user.uid).set({
         email:req.body.email,
         name:req.body.name,
-        surname:req.body.surname
+        surname:req.body.surname,
+        role:req.body.role
       }).catch(error=>{
         console.log(error, toString());
       })
     }).catch(error=>{
       console.log(error, toString());
-<<<<<<< Updated upstream
     })  
-=======
-    })
-
-  
->>>>>>> Stashed changes
   res.end()
 
 })
