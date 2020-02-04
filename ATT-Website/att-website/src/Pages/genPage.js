@@ -4,6 +4,7 @@ import Papa from "papaparse"
 import API from '../api'
 import DataTable from '../Components/DataTable'
 import TableCell from '@material-ui/core/TableCell';
+import Modal from '../Components/Modal'
 
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
@@ -17,7 +18,7 @@ const GenPage = () => {
     const [tableBody, setTableBody] = useState(<tr><td colSpan="5">Empty</td></tr>)
     const [genRole, setRole] = useState('Student')
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
-
+    const [loading,setLoading]=useState(false   )
 
     useEffect(() => {
         if (data.length != 0) {
@@ -46,11 +47,16 @@ const GenPage = () => {
         console.log(data)
     };
     const generateAccount = () => {
+        setLoading(true)
         data.forEach((dataUser, i) => {
             setTimeout(() => {
                 createAccount(dataUser)
-            }, i * 2000);
+            }, i * 1000);
         })
+        setTimeout(() => {
+            setLoading(false)
+            console.log(loading)
+        }, 1000*data.length);
     }
     const createAccount = (dataUser) => {
         const user = {
@@ -98,8 +104,8 @@ const GenPage = () => {
     // set element extend table in Datatable
     const tableExtend = []
     tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
-    tableExtend.push({ text: 'print', class: '', function: printUser })
     return (
+
         <div className='Page'>
             <Navbar />
             <div className='section'>
@@ -116,6 +122,7 @@ const GenPage = () => {
                                         <Button className={btntchClass} onClick={() => handleRole('Teacher')}>Teacher</Button>
                                     </div>
                                     <label className='label'>Upload .CSV File</label>
+                                    <i class="fas fa-italic"></i>
                                     <div className="field is-grouped">
                                         <Dropzone onDrop={onDrop}>
                                             {({ getRootProps, getInputProps }) => (
@@ -128,10 +135,16 @@ const GenPage = () => {
                                             )}
                                         </Dropzone>
                                     </div>
+
                                 </div>
                                 <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
-                                <DataTable data={data} extraHeader={['Delete', 'Print']} extraCol={tableExtend} />
-                                <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 ? false : true}>Generate</Button>
+                                <DataTable data={data} extraHeader={['Delete']} extraCol={tableExtend} />
+                                {loading&&<Modal/>}
+                                <div style={{ marginTop: 10 }}>
+                                    <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 ? false : true}>
+                                        Generate
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </main>
