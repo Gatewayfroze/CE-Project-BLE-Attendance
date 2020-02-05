@@ -2,10 +2,11 @@ const functions = require("firebase-functions");
 const nodemailer = require("nodemailer");
 const firebase = require("firebase")
 const cors = require('cors')({origin: true});
-
+var SimpleCrypto = require("simple-crypto-js").default;
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const app = express();
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCgfrNbQKP24zEFJa6aztzKNLIy32RyBNA",
@@ -42,8 +43,11 @@ exports.hello = functions.https.onRequest((req,res)=>{
 
 
 app.post('/createAccount',async (req,res)=>{
-
-  pass = req.body.email+'test'   
+  var _secretKey = "some-unique-key";
+ 
+  var simpleCrypto = new SimpleCrypto(_secretKey);
+ 
+  var pass =  simpleCrypto.encrypt(req.body.email).slice(0,10)
 
     
   await firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).then(async createdUser => {
@@ -57,6 +61,16 @@ app.post('/createAccount',async (req,res)=>{
     }).catch(error=>{
       console.log(error, toString());
     })  
+    const mailOptions = {
+      from: `${APP_NAME} <noreply@firebase.com>`,
+      to: req.body.email
+    };
+    // The user subscribed to the newsletter.
+    mailOptions.subject = `Welcome to ${APP_NAME}!`;
+    mailOptions.text = `Welcome to ${APP_NAME}. Password : ${pass}.`;
+    await mailTransport.sendMail(mailOptions);
+    console.log("New welcome email sent to:", req.body.email);
+    // return null;
   res.end()
 
 })
@@ -79,35 +93,35 @@ const mailTransport = nodemailer.createTransport({
 
 const key = "real secret keys should be long and random";
 const APP_NAME = "BLE Checker";
-exports.sendWelcomeEmail = functions.auth.user().onCreate(user => {
-  // [END onCreateTrigger]
-  // [START eventAttributes]
-  const email = user.email; // The email of the user.
-  // The display name of the user.
+// exports.sendWelcomeEmail = functions.auth.user().onCreate(user => {
+//   // [END onCreateTrigger]
+//   // [START eventAttributes]
+//   const email = user.email; // The email of the user.
+//   // The display name of the user.
 
-  // [END eventAttributes]
+//   // [END eventAttributes]
 
-  return sendWelcomeEmail(email);
-});
+//   return sendWelcomeEmail(email);
+// });
 
 
 
-async function sendWelcomeEmail(email) {
+// async function sendWelcomeEmail(email) {
 
-  const decrypted = email+'test'
+//   const decrypted = email+'test'
 
  
-  const mailOptions = {
-    from: `${APP_NAME} <noreply@firebase.com>`,
-    to: email
-  };
-  // The user subscribed to the newsletter.
-  mailOptions.subject = `Welcome to ${APP_NAME}!`;
-  mailOptions.text = `Welcome to ${APP_NAME}. Password : ${decrypted}.`;
-  await mailTransport.sendMail(mailOptions);
-  console.log("New welcome email sent to:", email);
-  return null;
-}
+//   const mailOptions = {
+//     from: `${APP_NAME} <noreply@firebase.com>`,
+//     to: email
+//   };
+//   // The user subscribed to the newsletter.
+//   mailOptions.subject = `Welcome to ${APP_NAME}!`;
+//   mailOptions.text = `Welcome to ${APP_NAME}. Password : ${decrypted}.`;
+//   await mailTransport.sendMail(mailOptions);
+//   console.log("New welcome email sent to:", email);
+//   return null;
+// }
 
 
 
