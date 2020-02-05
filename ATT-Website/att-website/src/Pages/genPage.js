@@ -16,25 +16,6 @@ const GenPage = () => {
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        if (data.length != 0) {
-            setTableBody(data.map((person, index) => {
-                return (
-                    // check role
-                    <tr key={person.id}>
-                        <td>{person.id}</td>
-                        <td>{person.name} {person.surname}</td>
-                        <td>{person.id + 'kmitl.ac.th'}</td>
-                        {/* <td>{person.faculty}</td>
-                        <td>{person.year}</td> */}
-                        <td onClick={() => deleteUser(index)}><button className='button is-danger' >Delete</button></td>
-                    </tr>
-                );
-            }))
-        } else {
-            setTableBody(<tr><td colSpan="5">Empty</td></tr>)
-        }
-    }, [data])
 
     const deleteUser = userIndex => {
         const userTemp = [...data];
@@ -54,29 +35,41 @@ const GenPage = () => {
         }, 1000 * data.length);
     }
     const createAccount = (dataUser) => {
-        const user = {
-            email: dataUser.id + '@kmitl.ac.th',
-            name: dataUser.name,
-            surname: dataUser.surname,
-            role: genRole.toLowerCase()
+        const user = {}
+        if (genRole === 'Student') {
+            user.email = dataUser.id + '@kmitl.ac.th'
+            user.name = dataUser.name
+            user.surname = dataUser.surname
+            user.role = genRole.toLowerCase()
+        } else {
+            user.email = dataUser.email
+            user.name = dataUser.name
+            user.surname = dataUser.surname
+            user.role = genRole.toLowerCase()
         }
-        API.post('createAccount/', user).then(function (response) {
-            console.log(response)
-        })
-            .catch(function (error) {
-                console.log(error)
-            })
+        console.log(user)
+        // API.post('createAccount/', user).then(function (response) {
+        //     console.log(response)
+        // })
+        //     .catch(function (error) {
+        //         console.log(error)
+        //     })
     }
     const handleRole = (role) => {
         setRole(role)
         setJson([])
+        setFileNamed(<p>Click here to upload .CSV file</p>)
         console.log(genRole)
     }
     const onDrop = (e) => {
         const reader = new FileReader();
         reader.readAsText(e[0]);
+        const fileName = e[0].name
         // set File name 
-        setFileNamed(<p>{e[0].path}</p>)
+        const temp = fileName.split('.')
+        if (temp[temp.length - 1].toLowerCase() !== 'csv')
+            return
+        setFileNamed(<p>{fileName}</p>)
         reader.onload = () => {
             Papa.parse(e[0], {
                 header: true,
@@ -95,6 +88,19 @@ const GenPage = () => {
     let btnstdClass = genRole === 'Student' ? 'is-primary' : ''
     let btntchClass = genRole === 'Teacher' ? 'is-primary' : ''
     // set element extend table in Datatable
+    const columnsStd = [
+        { id: 'id', label: 'Student ID', minWidth: 100 },
+        { id: 'name', label: 'Name', minWidth: 100 },
+        { id: 'surname', label: 'Surname', minWidth: 100 },
+        { id: 'faculty', label: 'Faculty', minWidth: 120 },
+        { id: 'year', label: 'year', minWidth: 100 },
+    ];
+    const columnsTch = [
+        { id: 'id', label: 'Student ID', minWidth: 100 },
+        { id: 'name', label: 'Name', minWidth: 100 },
+        { id: 'surname', label: 'Surname', minWidth: 100 },
+        { id: 'email', label: 'Email', minWidth: 100 },
+    ];
     const tableExtend = []
     tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
     return (
@@ -129,10 +135,9 @@ const GenPage = () => {
                                             )}
                                         </Dropzone>
                                     </div>
-
                                 </div>
                                 <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
-                                <DataTable data={data} extraHeader={['Delete']} extraCol={tableExtend} />
+                                <DataTable columns={genRole === 'Student' ? columnsStd : columnsTch} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
                                 <div style={{ marginTop: 10 }}>
                                     <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 && !loading ? false : true}>
                                         Generate

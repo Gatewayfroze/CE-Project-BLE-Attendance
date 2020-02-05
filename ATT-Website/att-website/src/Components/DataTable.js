@@ -10,11 +10,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
-const columns = [
-    { id: 'id', label: 'Student ID', minWidth: 170 },
-    { id: 'name', label: 'Name', minWidth: 100 },
-    { id: 'surname', label: 'Surname', minWidth: 100 },
-];
 
 const useStyles = makeStyles({
     root: {
@@ -31,7 +26,7 @@ const DataTable = (props) => {
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+    const columns=props.columns
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
