@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import app from '../firebase'
-
+import Person from 'react-ionicons/lib/MdPerson'
 
 const Navbar = (props) => {
     const [curUser, setcurUser] = useState(null)
@@ -11,7 +11,7 @@ const Navbar = (props) => {
                 setcurUser(user.email)
                 console.log(user)
             } else {
-                
+
             }
         });
 
@@ -19,28 +19,30 @@ const Navbar = (props) => {
 
     return (
         <header className='hero'>
+            <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
             <div className='hero-head'>
                 <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
                     <div class="navbar-brand">
                         <a class="navbar-item" href="/">
                             ATTENDA
-                </a>
-                        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
                         </a>
-
                     </div>
-
                     <div id="navbarBasicExample" class="navbar-menu">
                         <div class="navbar-end">
                             <div class="navbar-item">
-                                <h2>{curUser}</h2>
-                                <div class="buttons">
-                                    <a class="button is-dark" onClick={() => app.auth().signOut()}>
-                                        Logout
+                                <div className='field is-grouped'>
+                                    <div className='control'>
+                                        <Person onClick={() => alert('Hi!')} fontSize="30px" />
+                                    </div>
+                                    <div className='control'>
+                                    <p>{curUser}</p>
+                                    </div>
+                                    <div class="buttons">
+                                        <a class="button is-dark" onClick={() => app.auth().signOut()}>
+                                            Logout
                                     </a>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

@@ -3,22 +3,18 @@ import Dropzone from 'react-dropzone'
 import Papa from "papaparse"
 import API from '../api'
 import DataTable from '../Components/DataTable'
-import TableCell from '@material-ui/core/TableCell';
-import Modal from '../Components/Modal'
-
+import Loader from '../Components/loader'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
-
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
-
 const GenPage = () => {
     const [data, setJson] = useState([])
     const [tableBody, setTableBody] = useState(<tr><td colSpan="5">Empty</td></tr>)
     const [genRole, setRole] = useState('Student')
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
-    const [loading,setLoading]=useState(false   )
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (data.length != 0) {
@@ -44,7 +40,6 @@ const GenPage = () => {
         const userTemp = [...data];
         userTemp.splice(userIndex, 1);
         setJson(userTemp)
-        console.log(data)
     };
     const generateAccount = () => {
         setLoading(true)
@@ -53,10 +48,10 @@ const GenPage = () => {
                 createAccount(dataUser)
             }, i * 1000);
         })
+        // calculate timeout (psuedo)
         setTimeout(() => {
             setLoading(false)
-            console.log(loading)
-        }, 1000*data.length);
+        }, 1000 * data.length);
     }
     const createAccount = (dataUser) => {
         const user = {
@@ -65,11 +60,9 @@ const GenPage = () => {
             surname: dataUser.surname,
             role: genRole.toLowerCase()
         }
-        console.log(user.role)
-        API.post('createAccount/', user)
-            .then(function (response) {
-                console.log(response)
-            })
+        API.post('createAccount/', user).then(function (response) {
+            console.log(response)
+        })
             .catch(function (error) {
                 console.log(error)
             })
@@ -108,6 +101,7 @@ const GenPage = () => {
 
         <div className='Page'>
             <Navbar />
+            {loading && <Loader />}
             <div className='section'>
                 <div className='columns'>
                     <Sidebar />
@@ -139,9 +133,8 @@ const GenPage = () => {
                                 </div>
                                 <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
                                 <DataTable data={data} extraHeader={['Delete']} extraCol={tableExtend} />
-                                {loading&&<Modal/>}
                                 <div style={{ marginTop: 10 }}>
-                                    <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 ? false : true}>
+                                    <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 && !loading ? false : true}>
                                         Generate
                                     </Button>
                                 </div>

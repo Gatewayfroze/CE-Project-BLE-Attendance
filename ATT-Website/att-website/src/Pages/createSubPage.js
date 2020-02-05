@@ -1,8 +1,6 @@
 import React, { useState, useDebugValue, useEffect } from 'react'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
-import { Button } from 'react-bulma-components/dist';
-import API from '../api'
-
+import Loader from '../Components/loader'
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
@@ -17,6 +15,7 @@ const CreateSubPage = props => {
     })
     const [schedule, setSchedule] = useState([])
     const [tableBody, setTableBody] = useState()
+    const [loading,setLoading] =useState(false)
     // const [macAddress,setMAC] = useState()
     useEffect(() => {
         setTableBody(createTable())
@@ -26,8 +25,9 @@ const CreateSubPage = props => {
         setSubjectDetail({ ...subjectDetail, [event.target.name]: event.target.value })
     }
     // hadle submiting data
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const handleSubmit = () => {
+        const subjectData = { ...subjectDetail, schedule }
+        console.log(subjectData)
         // API.post('createSubject/', subjectDetail)
         //     .then(function (response) {
         //         console.log("success")
@@ -111,9 +111,9 @@ const CreateSubPage = props => {
                     </td>
                     <td>
                         <div className='control' >
-                            <MaskedInput mask={[/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/,':',/[0-9|A-F]/, /[0-9|A-F]/]}
+                            <MaskedInput mask={[/[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/]}
                                 guide={false}
-                                className='input' type='input' value={schedule[i].mac} onChange={(event) => hadleMACadrr(event, i)}  placeholder='MAC Addr' />
+                                className='input' type='input' value={schedule[i].mac} onChange={(event) => hadleMACadrr(event, i)} placeholder='MAC Addr' />
                         </div>
                     </td>
                     <td style={{ alignItems: 'center', display: 'flex' }}>
@@ -129,53 +129,52 @@ const CreateSubPage = props => {
     return (
         <div class='Page'>
             <Navbar />
+            {loading&&<Loader />}
             <div className='section'>
                 <div class='columns'>
                     <Sidebar />
                     <main className='column main'>
                         <div class='column' >
-                            <form onSubmit={() => handleSubmit}>
-                                <div style={styles.container}>
-                                    <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Create Subject</h1>
-                                    <div className='box'>
-                                        <div className="field">
-                                            <label className='label'>Subject ID</label>
-                                            <input className='input' name='subjectID' value={subjectDetail.subjectID} onChange={handleChange} required />
+                            <div style={styles.container}>
+                                <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Create Subject</h1>
+                                <div className='box'>
+                                    <div className="field">
+                                        <label className='label'>Subject ID</label>
+                                        <input className='input' name='subjectID' value={subjectDetail.subjectID} onChange={handleChange} required />
+                                    </div>
+                                    <div className="field">
+                                        <label className='label'>Subject Name</label>
+                                        <input className='input' name='subjectName' value={subjectDetail.subjectName} onChange={handleChange} required ></input>
+                                    </div>
+                                    <div className="field is-grouped">
+                                        <div className='control'>
+                                            <label className='label'>Schedule</label>
                                         </div>
-                                        <div className="field">
-                                            <label className='label'>Subject Name</label>
-                                            <input className='input' name='subjectName' value={subjectDetail.subjectName} onChange={handleChange} required ></input>
-                                        </div>
-                                        <div className="field is-grouped">
-                                            <div className='control'>
-                                                <label className='label'>Schedule</label>
-                                            </div>
-                                            <div className='control'>
-                                                <button className='button is-primary' type='button' onClick={() => addSchedule()}>Add</button>
-                                            </div>
-                                        </div>
-                                        <div style={styles.overFlowTab} >
-                                            <Table>
-                                                <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Date</th>
-                                                        <th>Start</th>
-                                                        <th>End</th>
-                                                        <th>MAC Addr.</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {tableBody}
-                                                </tbody>
-                                            </Table>
+                                        <div className='control'>
+                                            <button className='button is-primary' type='button' onClick={() => addSchedule()}>Add</button>
                                         </div>
                                     </div>
-                                    <button className='button is-primary' type='submit' disabled={subjectDetail.subjectID.length != 0
-                                    && subjectDetail.subjectName.length != 0 && schedule.length != 0 ? false : true}>Create</button>
+                                    <div style={styles.overFlowTab} >
+                                        <Table>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Date</th>
+                                                    <th>Start</th>
+                                                    <th>End</th>
+                                                    <th>MAC Addr.</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {tableBody}
+                                            </tbody>
+                                        </Table>
+                                    </div>
                                 </div>
-                            </form>
+                                <button className='button is-primary' onClick={() => handleSubmit()} disabled={subjectDetail.subjectID.length != 0
+                                    && subjectDetail.subjectName.length != 0 && schedule.length != 0 ? false : true}>Create</button>
+                            </div>
                         </div>
                     </main>
                 </div>
@@ -191,7 +190,7 @@ const styles = {
     },
     overFlowTab: {
         width: '100%',
-        height:'250px',
+        height: '250px',
         // maxHeight: '300px',
         overflow: 'auto',
     }
