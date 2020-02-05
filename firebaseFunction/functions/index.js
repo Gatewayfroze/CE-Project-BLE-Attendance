@@ -40,6 +40,18 @@ exports.hello = functions.https.onRequest((req,res)=>{
   res.send('hello')
 })
 
+app.post('/getStudent',(req,res)=>{
+  db.collection('users').where('role','==','student').get().then((snapshot)=>{
+    res.send((snapshot.docs.map(doc =>doc.data() )))
+    
+    // res.end()
+    return 
+  }).catch(error=>{
+    console.log(error, toString());
+  })  
+
+})
+
 
 
 app.post('/createAccount',async (req,res)=>{
@@ -93,35 +105,6 @@ const mailTransport = nodemailer.createTransport({
 
 const key = "real secret keys should be long and random";
 const APP_NAME = "BLE Checker";
-// exports.sendWelcomeEmail = functions.auth.user().onCreate(user => {
-//   // [END onCreateTrigger]
-//   // [START eventAttributes]
-//   const email = user.email; // The email of the user.
-//   // The display name of the user.
-
-//   // [END eventAttributes]
-
-//   return sendWelcomeEmail(email);
-// });
-
-
-
-// async function sendWelcomeEmail(email) {
-
-//   const decrypted = email+'test'
-
- 
-//   const mailOptions = {
-//     from: `${APP_NAME} <noreply@firebase.com>`,
-//     to: email
-//   };
-//   // The user subscribed to the newsletter.
-//   mailOptions.subject = `Welcome to ${APP_NAME}!`;
-//   mailOptions.text = `Welcome to ${APP_NAME}. Password : ${decrypted}.`;
-//   await mailTransport.sendMail(mailOptions);
-//   console.log("New welcome email sent to:", email);
-//   return null;
-// }
 
 
 
