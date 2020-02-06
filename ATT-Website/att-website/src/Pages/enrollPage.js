@@ -6,22 +6,20 @@ import { Button } from 'react-bulma-components/dist';
 import NumberFormat from 'react-number-format';
 import DataTable from '../Components/DataTable'
 // import component 
-import Navbar from '../Components/Navbar'
-import Sidebar from '../Components/Sidebar'
 import Alert from '../Components/Alert'
-
+import Layout from '../Layout/layout'
 const Enrollpage = () => {
     const [data, setJson] = useState([])
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
     const [subjectDetail, setSubjectDetail] = useState('')
-    const [textAlert,setTextAlert]=useState(false)
+    const [textAlert, setTextAlert] = useState('')
+    const [alert, isAlert] = useState(false)
     useEffect(() => {
         if (subjectDetail.replace(/ /g, "").length === 8) {
             console.log('ready!!')
             // prepare to fetch data
         }
     }, [subjectDetail])
-
     const deleteUser = userIndex => {
         const userTemp = [...data];
         userTemp.splice(userIndex, 1);
@@ -51,7 +49,8 @@ const Enrollpage = () => {
         // set File name 
         const temp = fileName.split('.')
         if (temp[temp.length - 1].toLowerCase() !== 'csv') {
-            alert('Please upload CSV file only')
+            setTextAlert('Please upload CSV file only')
+            isAlert(true)
             return
         }
         reader.onload = () => {
@@ -61,10 +60,11 @@ const Enrollpage = () => {
                     results.data.pop()
                     // set data from file to json
                     const key = Object.keys(results.data[0])
-                    const studentKey = ['id','name', 'surname', 'faculty', 'year']
+                    const studentKey = ['id', 'name', 'surname', 'faculty', 'year']
                     // const teacherKey = ['id','name', 'surname', 'Email']
-                    if(!(JSON.stringify(key.sort()) === JSON.stringify(studentKey.sort()))){
-                        alert('Your CSV File is corrupted')
+                    if (!(JSON.stringify(key.sort()) === JSON.stringify(studentKey.sort()))) {
+                        setTextAlert('eiei')
+                        isAlert(true)
                         return
                     }
                     setJson(results.data)
@@ -73,57 +73,41 @@ const Enrollpage = () => {
             });
         };
     }
-
+    const hadelClose = () => {
+        isAlert(false)
+        setTextAlert('')
+    }
     return (
-        <div class='Page'>
-            <Alert text={textAlert} enable={textAlert}/>
-            <Navbar />
-            <div className='section'>
-                <div class='columns'>
-                    <Sidebar />
-                    <main className='column main'>
-                        <div class='column' >
-                            <div style={styles.container}>
-                                <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Enroll Student</h1>
-                                <div class='box'>
-                                    <div className='field'>
-                                        <label className='label'>Enter Subject</label>
-                                        <NumberFormat className='input' name='subjectID' placeholder='subject_id' value={subjectDetail} onChange={handleSubjectDetail}
-                                            format='########' />
-                                    </div>
-                                    <div className='field'>
-                                        <label className='label'>Upload .CSV File</label>
-                                        <div className="field is-grouped">
-                                            <Dropzone onDrop={onDrop}>
-                                                {({ getRootProps, getInputProps }) => (
-                                                    <section>
-                                                        <button className='button is-primary is-outlined' {...getRootProps()}>
-                                                            <input {...getInputProps()} />
-                                                            {fileName}
-                                                        </button>
-                                                    </section>
-                                                )}
-                                            </Dropzone>
-                                        </div>
-                                    </div>
-                                </div>
-                                <DataTable columns={columnsStd} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
-                                <div style={{ marginTop: 10 }}>
-                                    <Button class='button is-primary' disabled={subjectDetail.replace(/ /g, "").length !== 8 || data.length === 0 ? true : false}>Enroll</Button>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
+        <Layout>
+            <Alert text={textAlert} enable={alert} close={hadelClose} />
+            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Enroll Student</h1>
+            <div class='box'>
+                <div className='field'>
+                    <label className='label'>Enter Subject</label>
+                    <NumberFormat className='input' name='subjectID' placeholder='subject_id' value={subjectDetail} onChange={handleSubjectDetail}
+                        format='########' />
+                </div>
+                <div className='field'>
+                    <label className='label'>Upload .CSV File</label>
+                    <div className="field is-grouped">
+                        <Dropzone onDrop={onDrop}>
+                            {({ getRootProps, getInputProps }) => (
+                                <section>
+                                    <button className='button is-primary is-outlined' {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        {fileName}
+                                    </button>
+                                </section>
+                            )}
+                        </Dropzone>
+                    </div>
                 </div>
             </div>
-        </div>
+            <DataTable columns={columnsStd} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
+            <div style={{ marginTop: 10 }}>
+                <Button class='button is-primary' disabled={subjectDetail.replace(/ /g, "").length !== 8 || data.length === 0 ? true : false}>Enroll</Button>
+            </div>
+        </Layout>
     )
-}
-const styles = {
-    container: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '60%'
-    }
 }
 export default Enrollpage

@@ -7,35 +7,29 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function AlertDialog(props) {
-    const [open, setOpen] = React.useState(false);
-    React.useEffect(() => {
-        setOpen(props.enable)
-    },props.enable)
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     return (
         <div>
             <Dialog
-                open={open}
-                onClose={handleClose}
+                open={props.enable}
+                onClose={props.close}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                fullWidth={"md"}
             >
-                <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"CSV File Error"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         {props.text}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    {/* <Button onClick={props.close} color="primary">
                         Disagree
-          </Button>
-                    <Button onClick={handleClose} color="primary" autoFocus>
+          </Button> */}
+                    <button onClick={props.close} className='button is-warning' autoFocus>
                         Agree
-          </Button>
+          </button>
                 </DialogActions>
             </Dialog>
         </div>
