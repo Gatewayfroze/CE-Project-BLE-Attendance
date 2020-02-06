@@ -28,7 +28,8 @@ const db = firebase.firestore()
 
 app.post('/createSubject',(req,res)=>{  
   db.collection('subjects').doc(req.body.subjectID).set({
-    subjectName : req.body.subjectName
+    subjectName : req.body.subjectName,
+    schedule:req.body.schedule
   })  
   res.end()
 
@@ -52,7 +53,7 @@ app.post('/getAllStudent',(req,res)=>{
 
 })
 
-app.post('/getAllSubject',(req,res)=>{
+app.get('/getAllSubject',(req,res)=>{
   db.collection('subjects').get().then((snapshot)=>{
     res.send((snapshot.docs.map(doc =>doc.data() )))
     return
