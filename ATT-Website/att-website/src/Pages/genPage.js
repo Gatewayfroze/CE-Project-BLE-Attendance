@@ -17,11 +17,7 @@ const GenPage = () => {
     const [loading, setLoading] = useState(false)
 
 
-    const deleteUser = userIndex => {
-        const userTemp = [...data];
-        userTemp.splice(userIndex, 1);
-        setJson(userTemp)
-    };
+
     const generateAccount = () => {
         setLoading(true)
         data.forEach((dataUser, i) => {
@@ -61,14 +57,41 @@ const GenPage = () => {
         setFileNamed(<p>Click here to upload .CSV file</p>)
         console.log(genRole)
     }
+    const deleteUser = userIndex => {
+        const userTemp = [...data];
+        userTemp.splice(userIndex, 1);
+        setJson(userTemp)
+    };
+    // toggle role of account
+    let btnstdClass = genRole === 'Student' ? 'is-primary' : ''
+    let btntchClass = genRole === 'Teacher' ? 'is-primary' : ''
+    // set element extend table in Datatable
+    const columnDefault=[
+        { id: 'id', label: 'Student ID', minWidth: 100 },
+        { id: 'name', label: 'Name', minWidth: 100 },
+        { id: 'surname', label: 'Surname', minWidth: 100 },
+    ]
+    const columnsStd = [
+        ...columnDefault,
+        { id: 'faculty', label: 'Faculty', minWidth: 120 },
+        { id: 'year', label: 'Year', minWidth: 100 },
+    ];
+    const columnsTch = [
+        ...columnDefault,
+        { id: 'email', label: 'Email', minWidth: 100 },
+    ];
+    const tableExtend = []
+    tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
     const onDrop = (e) => {
         const reader = new FileReader();
         reader.readAsText(e[0]);
         const fileName = e[0].name
         // set File name 
         const temp = fileName.split('.')
-        if (temp[temp.length - 1].toLowerCase() !== 'csv')
+        if (temp[temp.length - 1].toLowerCase() !== 'csv'){
+            alert('Please upload CSV file only')
             return
+        }
         setFileNamed(<p>{fileName}</p>)
         reader.onload = () => {
             Papa.parse(e[0], {
@@ -81,28 +104,6 @@ const GenPage = () => {
             });
         };
     }
-    const printUser = userIndex => {
-        console.log(data[userIndex])
-    };
-    // toggle role of account
-    let btnstdClass = genRole === 'Student' ? 'is-primary' : ''
-    let btntchClass = genRole === 'Teacher' ? 'is-primary' : ''
-    // set element extend table in Datatable
-    const columnsStd = [
-        { id: 'id', label: 'Student ID', minWidth: 100 },
-        { id: 'name', label: 'Name', minWidth: 100 },
-        { id: 'surname', label: 'Surname', minWidth: 100 },
-        { id: 'faculty', label: 'Faculty', minWidth: 120 },
-        { id: 'year', label: 'year', minWidth: 100 },
-    ];
-    const columnsTch = [
-        { id: 'id', label: 'Student ID', minWidth: 100 },
-        { id: 'name', label: 'Name', minWidth: 100 },
-        { id: 'surname', label: 'Surname', minWidth: 100 },
-        { id: 'email', label: 'Email', minWidth: 100 },
-    ];
-    const tableExtend = []
-    tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
     return (
 
         <div className='Page'>

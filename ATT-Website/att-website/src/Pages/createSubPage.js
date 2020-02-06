@@ -1,14 +1,15 @@
 import React, { useState, useDebugValue, useEffect } from 'react'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
-import Loader from '../Components/loader'
+import "react-datepicker/dist/react-datepicker.css";
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
-
+import Loader from '../Components/loader'
 import DatePicker from 'react-datepicker'
-import "react-datepicker/dist/react-datepicker.css";
 import { Table } from '@material-ui/core';
 import MaskedInput from 'react-text-mask'
+import NumberFormat from 'react-number-format';
+
 const CreateSubPage = props => {
     const [subjectDetail, setSubjectDetail] = useState({
         subjectID: '', subjectName: ''
@@ -16,7 +17,6 @@ const CreateSubPage = props => {
     const [schedule, setSchedule] = useState([])
     const [tableBody, setTableBody] = useState()
     const [loading,setLoading] =useState(false)
-    // const [macAddress,setMAC] = useState()
     useEffect(() => {
         setTableBody(createTable())
     }, [schedule])
@@ -69,7 +69,6 @@ const CreateSubPage = props => {
         setSchedule(schTemp)
     }
     const hadleMACadrr = (event, i) => {
-        // console.log(i)
         const temp = schedule
         temp[i].mac = event.target.value.replace(/\:/g, "")
         console.log(temp[i].mac)
@@ -80,7 +79,7 @@ const CreateSubPage = props => {
         let table = []
         for (let i = 0; i < schedule.length; i++)
             table.push(
-                <tr>
+                <tr key={i}>
                     <td>
                         <p>{i + 1}</p>
                     </td>
@@ -140,11 +139,11 @@ const CreateSubPage = props => {
                                 <div className='box'>
                                     <div className="field">
                                         <label className='label'>Subject ID</label>
-                                        <input className='input' name='subjectID' value={subjectDetail.subjectID} onChange={handleChange} required />
+                                        <NumberFormat className='input' format='########' name='subjectID' value={subjectDetail.subjectID} onChange={handleChange}  />
                                     </div>
                                     <div className="field">
                                         <label className='label'>Subject Name</label>
-                                        <input className='input' name='subjectName' value={subjectDetail.subjectName} onChange={handleChange} required ></input>
+                                        <input className='input' name='subjectName' value={subjectDetail.subjectName} onChange={handleChange}  ></input>
                                     </div>
                                     <div className="field is-grouped">
                                         <div className='control'>

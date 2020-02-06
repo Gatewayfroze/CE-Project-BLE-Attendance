@@ -8,17 +8,19 @@ import DataTable from '../Components/DataTable'
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
+import Alert from '../Components/Alert'
 
 const Enrollpage = () => {
     const [data, setJson] = useState([])
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
     const [subjectDetail, setSubjectDetail] = useState('')
-    useEffect(()=>{
-        if(subjectDetail.replace(/ /g,"").length===8){
+    const [textAlert,setTextAlert]=useState(false)
+    useEffect(() => {
+        if (subjectDetail.replace(/ /g, "").length === 8) {
             console.log('ready!!')
             // prepare to fetch data
         }
-    },[subjectDetail])
+    }, [subjectDetail])
 
     const deleteUser = userIndex => {
         const userTemp = [...data];
@@ -29,28 +31,52 @@ const Enrollpage = () => {
     const handleSubjectDetail = (e) => {
         setSubjectDetail(e.target.value)
     }
+    // set element extend table in Datatable
+    const columnDefault = [
+        { id: 'id', label: 'Student ID', minWidth: 100 },
+        { id: 'name', label: 'Name', minWidth: 100 },
+        { id: 'surname', label: 'Surname', minWidth: 100 },
+    ]
+    const columnsStd = [
+        ...columnDefault,
+        { id: 'faculty', label: 'Faculty', minWidth: 120 },
+        { id: 'year', label: 'Year', minWidth: 100 },
+    ];
+    const tableExtend = []
+    tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
     const onDrop = (e) => {
         const reader = new FileReader();
         reader.readAsText(e[0]);
+        const fileName = e[0].name
         // set File name 
-        setFileNamed(<p>{e[0].path}</p>)
+        const temp = fileName.split('.')
+        if (temp[temp.length - 1].toLowerCase() !== 'csv') {
+            alert('Please upload CSV file only')
+            return
+        }
         reader.onload = () => {
             Papa.parse(e[0], {
                 header: true,
                 complete: function (results) {
                     results.data.pop()
                     // set data from file to json
+                    const key = Object.keys(results.data[0])
+                    const studentKey = ['id','name', 'surname', 'faculty', 'year']
+                    // const teacherKey = ['id','name', 'surname', 'Email']
+                    if(!(JSON.stringify(key.sort()) === JSON.stringify(studentKey.sort()))){
+                        alert('Your CSV File is corrupted')
+                        return
+                    }
                     setJson(results.data)
-                    console.log(results.data)
+                    setFileNamed(<p>{fileName}</p>)
                 }
             });
         };
     }
-    const tableExtend = []
-    tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
 
     return (
         <div class='Page'>
+            <Alert text={textAlert} enable={textAlert}/>
             <Navbar />
             <div className='section'>
                 <div class='columns'>
@@ -63,7 +89,7 @@ const Enrollpage = () => {
                                     <div className='field'>
                                         <label className='label'>Enter Subject</label>
                                         <NumberFormat className='input' name='subjectID' placeholder='subject_id' value={subjectDetail} onChange={handleSubjectDetail}
-                                        format='########'/>
+                                            format='########' />
                                     </div>
                                     <div className='field'>
                                         <label className='label'>Upload .CSV File</label>
@@ -81,9 +107,9 @@ const Enrollpage = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <DataTable data={data} extraHeader={['Delete']} extraCol={tableExtend} />
+                                <DataTable columns={columnsStd} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
                                 <div style={{ marginTop: 10 }}>
-                                    <Button class='button is-primary' disabled={subjectDetail.length === 0 || data.length === 0 ? true : false}>Enroll</Button>
+                                    <Button class='button is-primary' disabled={subjectDetail.replace(/ /g, "").length !== 8 || data.length === 0 ? true : false}>Enroll</Button>
                                 </div>
                             </div>
                         </div>
