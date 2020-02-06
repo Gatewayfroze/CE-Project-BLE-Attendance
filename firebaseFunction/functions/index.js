@@ -52,6 +52,24 @@ app.post('/getAllStudent',(req,res)=>{
 
 })
 
+app.post('/getAllSubject',(req,res)=>{
+  db.collection('subjects').get().then((snapshot)=>{
+    res.send((snapshot.docs.map(doc =>doc.data() )))
+    return
+  }).catch(error=>{
+    console.log(error, toString());
+  })
+})
+
+app.post('/getSubject',(req,res)=>{
+  db.collection('subjects').doc(req.body.subjectID).get().then((snapshot)=>{
+    res.send(snapshot.data())
+    return
+  }).catch(error=>{
+    console.log(error, toString());
+  })
+})
+
 app.post('/getStudent',(req,res)=>{
   let email = req.body.studentID + '@kmitl.ac.th'
   db.collection('users').where('email','==',email).get().then((snapshot)=>{
@@ -78,7 +96,9 @@ app.post('/createAccount',async (req,res)=>{
         email:req.body.email,
         name:req.body.name,
         surname:req.body.surname,
-        role:req.body.role
+        role:req.body.role,
+        faculty:req.body.faculty,
+        year:req.body.year
       })
       return
     }).catch(error=>{
