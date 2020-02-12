@@ -5,19 +5,35 @@ import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
 import NumberFormat from 'react-number-format';
 import DataTable from '../Components/DataTable'
+import API from '../api'
 // import component 
 import Alert from '../Components/Alert'
 import Layout from '../Layout/layout'
+import Spinner from '../Components/Spinner'
 const Enrollpage = () => {
     const [data, setJson] = useState([])
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
     const [subjectDetail, setSubjectDetail] = useState('')
     const [textAlert, setTextAlert] = useState('')
     const [alert, isAlert] = useState(false)
+    const [subjectName, setSubjectName] = useState('')
+    const [loading,setLoading]=useState(false)
     useEffect(() => {
         if (subjectDetail.replace(/ /g, "").length === 8) {
             console.log('ready!!')
+            setLoading(true)
             // prepare to fetch data
+            API.post('getSubject/', { subjectID: subjectDetail })
+                .then(function (response) {
+                    console.log(response.data)
+                    setSubjectName(response.data.name)
+                    setLoading(false)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+        } else {
+            setSubjectName('')
         }
     }, [subjectDetail])
     const deleteUser = userIndex => {
@@ -84,8 +100,12 @@ const Enrollpage = () => {
             <div class='box'>
                 <div className='field'>
                     <label className='label'>Enter Subject</label>
-                    <NumberFormat className='input' name='subjectID' placeholder='subject_id' value={subjectDetail} onChange={handleSubjectDetail}
-                        format='########' />
+                    <div className='field is-grouped'>
+                        <NumberFormat className='input' name='subjectID' placeholder='subject_id' value={subjectDetail} onChange={handleSubjectDetail}
+                            format='########' />
+                        {loading&&<Spinner />}
+                    </div>
+                    <p>{subjectName}</p>
                 </div>
                 <div className='field'>
                     <label className='label'>Upload .CSV File</label>
