@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+var admin = require('firebase-admin');
 const nodemailer = require("nodemailer");
 const firebase = require("firebase")
 const cors = require('cors')({origin: true});
@@ -23,8 +24,8 @@ app.use(cors);
 // app.use(bodyParser)
 exports.webApi = functions.https.onRequest(app);
 
-firebase.initializeApp(firebaseConfig)  
-const db = firebase.firestore()
+admin.initializeApp(firebaseConfig)  
+const db = admin.firestore()
 
 app.post('/createSubject',(req,res)=>{  
   db.collection('subjects').doc(req.body.subjectID).set({
@@ -83,17 +84,17 @@ app.post('/getStudent',(req,res)=>{
 })
 
 
-
 app.post('/createAccount',async (req,res)=>{
-  var _secretKey = "some-unique-key";
- 
-  var simpleCrypto = new SimpleCrypto(_secretKey);
- 
+  var _secretKey = "some-unique-key"; 
+  var simpleCrypto = new SimpleCrypto(_secretKey); 
   var pass =  simpleCrypto.encrypt(req.body.email).slice(0,10)
-
     
-  await firebase.auth().createUserWithEmailAndPassword(req.body.email, pass).then(async createdUser => {
-        await db.collection('users').doc(createdUser.user.uid).set({
+  await admin.auth().createUser({
+   
+    email: req.body.email,
+    password: pass
+  }).then(async createdUser => {
+        await db.collection('users').doc(createdUser.uid).set({
         email:req.body.email,
         name:req.body.name,
         surname:req.body.surname,
@@ -117,6 +118,26 @@ app.post('/createAccount',async (req,res)=>{
     // return null;
   res.end()
 
+})
+
+app.delete('/deleteAccount', async(req,res)=>{
+  await admin.auth().deleteUser(req.body.uid).then(async ()=>{
+    await db.collection('users').doc(req.body.uid).delete()
+     res.end()
+     return   
+  }).catch(error=>{
+    console.log(error, toString());
+  })
+})
+
+app.delete('/deleteSubject', async(req,res)=>{
+ 
+    await db.collection('subjects').doc(req.body.subjectID).delete().catch(error=>{
+      console.log(error, toString());
+    })
+     res.end()
+     return   
+  
 })
 
 
