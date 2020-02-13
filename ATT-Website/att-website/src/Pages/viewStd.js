@@ -5,6 +5,7 @@ import { Button } from 'react-bulma-components/dist';
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
+import API from '../api'
 
 const Enrollpage = () => {
     return (

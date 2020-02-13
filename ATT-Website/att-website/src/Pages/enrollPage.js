@@ -26,7 +26,7 @@ const Enrollpage = () => {
             API.post('getSubject/', { subjectID: subjectDetail })
                 .then(function (response) {
                     console.log(response.data)
-                    setSubjectName(response.data.name)
+                    setSubjectName(response.data.subjectName)
                     setLoading(false)
                 })
                 .catch(function (error) {

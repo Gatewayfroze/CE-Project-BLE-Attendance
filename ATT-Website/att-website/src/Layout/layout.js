@@ -9,6 +9,7 @@ const layout = (props) => {
     return (
         <div class='Page'>
             <Navbar />
+            {props.loading}
             <div className='section'>
                 <div class='columns'>
                     <Sidebar />

@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.css";
+import { ThemeProvider } from '@material-ui/core/styles'
+import theme from './Components/ui/Theme'
+
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  Link,
-  Redirect
 } from "react-router-dom";
 import MainPage from "./Pages/index";
 import GenPage from "./Pages/genPage";
@@ -20,16 +20,18 @@ import PrivateRoute from './privateRoute.js'
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        {/*All our Routes goes here!*/}
-        <Route exact path="/" component={MainPage} />
-        <PrivateRoute exact path="/enroll" component={EnrollPage} />        
-        <PrivateRoute exact path="/generate" component={GenPage} />       
-        <PrivateRoute exact path="/viewStd" component={ManageStd} />
-        <PrivateRoute exact path="/viewSub" component={ManageSub} />
-        <PrivateRoute exact path="/leave" component={LeavePage} />
-        <PrivateRoute exact path="/createSub" component={CreateSubPage} />
-      </Router>
+      <ThemeProvider theme={theme}>
+        <Router>
+          {/*All our Routes goes here!*/}
+          <Route exact path="/" component={MainPage} />
+          <PrivateRoute exact path="/enroll" component={EnrollPage} />
+          <PrivateRoute exact path="/generate" component={GenPage} />
+          <PrivateRoute exact path="/viewStd" component={ManageStd} />
+          <PrivateRoute exact path="/viewSub" component={ManageSub} />
+          <PrivateRoute exact path="/leave" component={LeavePage} />
+          <PrivateRoute exact path="/createSub" component={CreateSubPage} />
+        </Router>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

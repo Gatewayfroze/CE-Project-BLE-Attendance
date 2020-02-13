@@ -9,14 +9,15 @@ import DatePicker from 'react-datepicker'
 import { Table } from '@material-ui/core';
 import MaskedInput from 'react-text-mask'
 import NumberFormat from 'react-number-format';
-
+import Layout from '../Layout/layout'
+import API from '../api'
 const CreateSubPage = props => {
     const [subjectDetail, setSubjectDetail] = useState({
         subjectID: '', subjectName: ''
     })
     const [schedule, setSchedule] = useState([])
     const [tableBody, setTableBody] = useState()
-    const [loading,setLoading] =useState(false)
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         setTableBody(createTable())
     }, [schedule])
@@ -28,14 +29,16 @@ const CreateSubPage = props => {
     const handleSubmit = () => {
         const subjectData = { ...subjectDetail, schedule }
         console.log(subjectData)
-        // API.post('createSubject/', subjectDetail)
-        //     .then(function (response) {
-        //         console.log("success")
-        //         resetInput()
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error)
-        //     })
+        setLoading(true)
+        API.post('createSubject/', subjectData)
+            .then(function (response) {
+                console.log("success")
+                resetInput()
+                setLoading(false)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
     const resetInput = () => {
         setSubjectDetail({ subjectID: '', subjectName: '' })
@@ -126,59 +129,46 @@ const CreateSubPage = props => {
     }
 
     return (
-        <div class='Page'>
-            <Navbar />
-            {loading&&<Loader />}
-            <div className='section'>
-                <div class='columns'>
-                    <Sidebar />
-                    <main className='column main'>
-                        <div class='column' >
-                            <div style={styles.container}>
-                                <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Create Subject</h1>
-                                <div className='box'>
-                                    <div className="field">
-                                        <label className='label'>Subject ID</label>
-                                        <NumberFormat className='input' format='########' name='subjectID' value={subjectDetail.subjectID} onChange={handleChange}  />
-                                    </div>
-                                    <div className="field">
-                                        <label className='label'>Subject Name</label>
-                                        <input className='input' name='subjectName' value={subjectDetail.subjectName} onChange={handleChange}  ></input>
-                                    </div>
-                                    <div className="field is-grouped">
-                                        <div className='control'>
-                                            <label className='label'>Schedule</label>
-                                        </div>
-                                        <div className='control'>
-                                            <button className='button is-primary' type='button' onClick={() => addSchedule()}>Add</button>
-                                        </div>
-                                    </div>
-                                    <div style={styles.overFlowTab} >
-                                        <Table>
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Date</th>
-                                                    <th>Start</th>
-                                                    <th>End</th>
-                                                    <th>MAC Addr.</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {tableBody}
-                                            </tbody>
-                                        </Table>
-                                    </div>
-                                </div>
-                                <button className='button is-primary' onClick={() => handleSubmit()} disabled={subjectDetail.subjectID.length != 0
-                                    && subjectDetail.subjectName.length != 0 && schedule.length != 0 ? false : true}>Create</button>
-                            </div>
-                        </div>
-                    </main>
+        <Layout loading={loading && <Loader />}>
+            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Create Subject</h1>
+            <div className='box'>
+                <div className="field">
+                    <label className='label'>Subject ID</label>
+                    <NumberFormat className='input' format='########' name='subjectID' value={subjectDetail.subjectID} onChange={handleChange} />
+                </div>
+                <div className="field">
+                    <label className='label'>Subject Name</label>
+                    <input className='input' name='subjectName' value={subjectDetail.subjectName} onChange={handleChange}  ></input>
+                </div>
+                <div className="field is-grouped">
+                    <div className='control'>
+                        <label className='label'>Schedule</label>
+                    </div>
+                    <div className='control'>
+                        <button className='button is-primary' type='button' onClick={() => addSchedule()}>Add</button>
+                    </div>
+                </div>
+                <div style={styles.overFlowTab} >
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Date</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>MAC Addr.</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tableBody}
+                        </tbody>
+                    </Table>
                 </div>
             </div>
-        </div>
+            <button className='button is-primary' onClick={() => handleSubmit()} disabled={subjectDetail.subjectID.length != 0
+                && subjectDetail.subjectName.length != 0 && schedule.length != 0 ? false : true}>Create</button>
+        </Layout>
     )
 }
 const styles = {
