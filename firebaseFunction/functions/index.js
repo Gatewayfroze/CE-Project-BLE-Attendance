@@ -94,13 +94,18 @@ app.post('/createAccount',async (req,res)=>{
     email: req.body.email,
     password: pass
   }).then(async createdUser => {
+        if(req.body.role === 'teacher'){
+          year = 'nan'
+        }else{
+          year = req.body.year
+        }
         await db.collection('users').doc(createdUser.uid).set({
         email:req.body.email,
         name:req.body.name,
         surname:req.body.surname,
         role:req.body.role,
         faculty:req.body.faculty,
-        year:req.body.year
+        year:year
       })
       return
     }).catch(error=>{
