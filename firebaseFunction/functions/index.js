@@ -42,12 +42,40 @@ exports.hello = functions.https.onRequest((req,res)=>{
   res.send('hello')
 })
 
-app.post('/enroll',(req,res)=>{
-  students = req.body.students
+app.post('/enroll',async (req,res)=>{
+  students = req.body.studentsID
   subject = req.body.subjectID
 
-  studentID = student.map(data=>data+"@kmitl.ac.th")
-  res.send(studentID)
+  studentID = students.map(data=>data+"@kmitl.ac.th")
+  
+  
+   studentID.forEach(async data =>   {
+    await db.collection('users').where("email","==",data).get().then(async (snapshot)=>{
+      await snapshot.forEach(async docs=> {
+        await db.collection('users').doc(docs.id).update({
+          subject:admin.firestore.FieldValue.arrayUnion(req.body.subjectID)
+        })
+        
+      })
+     
+      return
+      // db.collection('users').doc(snapshot.docs.id)
+    }).catch(error=>{
+      console.log(error, toString());
+    })  
+    
+   })
+
+   db.collection('subjects').doc(req.body.subjectID).update({
+     students:students
+   }).then(()=>{
+     res.end()
+     return
+   }).catch(error=>{
+     console.log(error,toString())
+   })
+
+    
 
   
 })
