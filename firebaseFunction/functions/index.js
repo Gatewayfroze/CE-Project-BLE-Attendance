@@ -42,11 +42,21 @@ exports.hello = functions.https.onRequest((req,res)=>{
   res.send('hello')
 })
 
-app.post('/getAllStudent',(req,res)=>{
+app.post('/enroll',(req,res)=>{
+  students = req.body.students
+  subject = req.body.subjectID
+
+  studentID = student.map(data=>data+"@kmitl.ac.th")
+  res.send(studentID)
+
+  
+})
+
+app.get('/getAllStudent',(req,res)=>{
   db.collection('users').where('role','==','student').get().then((snapshot)=>{
-    res.send((snapshot.docs.map(doc =>doc.data() )))
+    res.send((snapshot.docs.map(doc =>[doc.data(),doc.id] )))
     
-    // res.end()
+    
     return 
   }).catch(error=>{
     console.log(error, toString());
@@ -56,14 +66,14 @@ app.post('/getAllStudent',(req,res)=>{
 
 app.get('/getAllSubject',(req,res)=>{
   db.collection('subjects').get().then((snapshot)=>{
-    res.send((snapshot.docs.map(doc =>doc.data() )))
+    res.send((snapshot.docs.map(doc => doc.data() )))
     return
   }).catch(error=>{
     console.log(error, toString());
   })
 })
 
-app.post('/getSubject',(req,res)=>{
+app.get('/getSubject',(req,res)=>{
   db.collection('subjects').doc(req.body.subjectID).get().then((snapshot)=>{
     res.send(snapshot.data())
     return
