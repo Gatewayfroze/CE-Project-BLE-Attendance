@@ -30,7 +30,8 @@ const db = admin.firestore()
 app.post('/createSubject',(req,res)=>{  
   db.collection('subjects').doc(req.body.subjectID).set({
     subjectName : req.body.subjectName,
-    schedule:req.body.schedule
+    schedule:req.body.schedule,
+    students:[]
   })  
   res.end()
 
@@ -143,7 +144,8 @@ app.post('/createAccount',async (req,res)=>{
         surname:req.body.surname,
         role:req.body.role,
         faculty:req.body.faculty,
-        year:year
+        year:year,
+        subject:[]
       })
       return
     }).catch(error=>{
