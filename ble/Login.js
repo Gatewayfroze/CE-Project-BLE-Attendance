@@ -1,7 +1,8 @@
 import React, {Component, useState, useEffect} from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
+import { StyleSheet, Text, TextInput, View, Button, AsyncStorage } from 'react-native'
 import * as firebase from 'firebase';
 import {config} from './firebase';
+import {getToken,storeToken} from './ManageToken'
 firebase.initializeApp(config);
 
 
@@ -9,13 +10,33 @@ firebase.initializeApp(config);
 
 export default class Login extends React.Component {
   state = { email: '', password: '', errorMessage: null } 
+
+  // async storeToken(user) {
+  //   try {
+  //      await AsyncStorage.setItem("userData", JSON.stringify(user));
+  //   } catch (error) {
+  //     console.log("Something went wrong", error);
+  //   }
+  // }
+  // async getToken() {
+  //   try {
+  //     let userData = await AsyncStorage.getItem("userData");
+  //     let data = JSON.parse(userData);
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.log("Something went wrong", error);
+  //   }
+  // }
   
   handleLogin = () => {
     const { email, password } = this.state
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate('Main'))
+      .then((data) =>{
+        storeToken(data)
+        
+        this.props.navigation.navigate('Main')})
       .catch(error => this.setState({ errorMessage: error.message }))
   }
   

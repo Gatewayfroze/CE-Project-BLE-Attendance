@@ -1,49 +1,60 @@
 import React, {Component, useState, useEffect} from 'react';
-import {StyleSheet, Platform, Image, Text, View} from 'react-native';
+import {StyleSheet, Platform, Image, Text, View,Button,AsyncStorage} from 'react-native';
 import * as firebase from 'firebase';
 import {config} from './firebase';
+// import {getToken,storeToken} from './ManageToken'
 
-// function Main() {
-//   const [currentUser, setcurrentUser] = useState('');
+const Main=props=> {
+  const [currentUser, setcurrentUser] = useState(null);
 
- 
+   getToken= async ()=> {
+    try {
+      let userData = await AsyncStorage.getItem("userData");
+      let data = JSON.parse(userData);
+      setcurrentUser(data)
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  }
 
-//   useEffect(() => {
-//     const User= firebase.auth();
-//     console.log(User)
-//     setcurrentUser(User);
-//     // console.log(User)
-//   });
+  useEffect(() => {
+   getToken()
+  },[]);
 
-//   return (
-//     <View style={styles.container}>
-//       <Text>Hi {currentUser.email}!</Text>
-//     </View>
-//   );
+  return (
+    <View style={styles.container}>
+  <Text>Hi </Text>
+      <Button title="press" onPress={()=>console.log(currentUser.user.email)} />
+    </View>
+  );
+}
+
+export default Main
+
+
+// export default class Main extends React.Component {
+    
+
+//   state = { currentUser: null }
+
+//   componentDidMount() {
+//     const  currentUser  = firebase.auth()
+//     this.setState( currentUser )
+//     //console.log(currentUser.email)
 // }
 
-// export default Main;
-export default class Main extends React.Component {
-    
-  state = { currentUser: null }
-
-  componentDidMount() {
-    const { currentUser } = firebase.auth()
-    this.setState({ currentUser })
-    console.log(currentUser.email)
-}
-
-  render() {
-    const { currentUser } = this.state
-    return (
-      <View style={styles.container}>
-        <Text>
-          Hi {currentUser && currentUser.email}!
-        </Text>
-      </View>
-    )
-  }
-}
+//   render() {
+//     const { currentUser } = this.state
+//     return (
+//       <View style={styles.container}>
+//         <Text>
+//           Hi {currentUser && currentUser.email}!
+//         </Text>
+//         <Button title="press" onPress={()=>this.props.navigation.navigate('test')} />
+//       </View>
+//     )
+//   }
+// }
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,13 +1,30 @@
-import React from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import React,{useState,useEffect} from 'react'
+import { View, Text, ScrollView, StyleSheet,AsyncStorage,Button } from 'react-native'
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 const CheckInScreen = props => {
+  const [currentUser, setcurrentUser] = useState('');
+  
+  useEffect(() => {
+    getToken()
+   },[]);
+
+  getToken= async ()=> {
+    try {
+      let userData = await AsyncStorage.getItem("userData");
+      let data = JSON.parse(userData);
+      setcurrentUser(data.user)
+      //console.log(currentUser.email)
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  }
   return (
     <View style={styles.screen} navigation={props.navigation}>
       <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
-        <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}></Text>
+<Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>{currentUser.email}</Text>
+
       </View>
       {/* โชว์ status ที่กำลังเรียนอยู่ปัจจุบัน */}
       {/* <CurrentSubject/> */}
