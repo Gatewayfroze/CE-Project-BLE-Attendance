@@ -84,7 +84,7 @@ app.post('/enroll',async (req,res)=>{
 app.get('/getAllStudent',(req,res)=>{
   db.collection('users').where('role','==','student').get().then((snapshot)=>{
     
-    res.send((snapshot.docs.map(doc => [Object.assign({uid:doc.id},doc.data())] )))
+    res.send((snapshot.docs.map(doc => Object.assign({uid:doc.id},doc.data()) )))
     
     
     return 
