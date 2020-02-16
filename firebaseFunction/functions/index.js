@@ -102,7 +102,7 @@ app.get('/getAllSubject',(req,res)=>{
   })
 })
 
-app.get('/getSubject',(req,res)=>{
+app.post('/getSubject',(req,res)=>{
   db.collection('subjects').doc(req.body.subjectID).get().then((snapshot)=>{
     res.send(snapshot.data())
     return

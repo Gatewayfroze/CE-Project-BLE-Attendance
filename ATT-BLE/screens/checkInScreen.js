@@ -14,7 +14,7 @@ const CheckInScreen = props => {
       let userData = await AsyncStorage.getItem("userData");
       let data = JSON.parse(userData);
       setcurrentUser(data.user)
-      //console.log(currentUser.email)
+      console.log(currentUser.email)
     } catch (error) {
       console.log("Something went wrong", error);
     }
