@@ -1,34 +1,54 @@
 import React, { useState, useEffect } from 'react'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
-
 // import component 
 import API from '../api'
 import Layout from '../Layout/layout'
 import DataTable from '../Components/DataTable'
+import Loader from '../Components/loader'
 const ManagePage = () => {
     const [data, setJson] = useState([])
     const [genRole, setRole] = useState('Student')
+    const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         if (genRole === 'Student') {
-            API.post('getAllStudent/').then(function (response) {
-                console.log(response)
-                setJson(response.data)
-            })
-                .catch(function (error) {
-                    console.log(error)
-                })
+            fetchData()
         }
     }, [genRole])
     // set element extend table in Datatable
+    const fetchData = () => {
+        console.log('fetch')
+        setLoading(true)
+        API.get('getAllStudent/').then(function (response) {
+            console.log(response)
+            setJson(response.data)
+            setLoading(false)
+        })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
     const columnDefault = [
         { id: 'studentID', label: 'Student ID', minWidth: 100 },
         { id: 'name', label: 'Name', minWidth: 100 },
         { id: 'surname', label: 'Surname', minWidth: 100 },
     ]
     const tableExtend = []
-    const deleteUser=()=>{
-
+    const deleteUser = (userIndex) => {
+        setLoading(true)
+        console.log(data[userIndex].uid)
+        API.delete('deleteAccount/', { data: { uid: data[userIndex].uid } })
+            .then(function (response) {
+                console.log(response)
+                // setJson(response.data)
+                console.log('here')
+                fetchData()
+                setLoading(false)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
     tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
     // toggle role of account
@@ -39,7 +59,7 @@ const ManagePage = () => {
         console.log(genRole)
     }
     return (
-        <Layout>
+        <Layout loading={loading && <Loader />}>
             <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>View Account</h1>
             <div class='box'>
                 <label className='label'>Select Role</label>
