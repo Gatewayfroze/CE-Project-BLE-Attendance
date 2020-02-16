@@ -17,12 +17,13 @@ const Enrollpage = () => {
     const [textAlert, setTextAlert] = useState('')
     const [alert, isAlert] = useState(false)
     const [subjectName, setSubjectName] = useState('')
-    const [loading,setLoading]=useState(false)
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         if (subjectDetail.replace(/ /g, "").length === 8) {
             console.log('ready!!')
             setLoading(true)
             // prepare to fetch data
+            console.log(subjectDetail)
             API.post('getSubject/', { subjectID: subjectDetail })
                 .then(function (response) {
                     console.log(response.data)
@@ -44,6 +45,20 @@ const Enrollpage = () => {
     };
     const handleSubjectDetail = (e) => {
         setSubjectDetail(e.target.value)
+    }
+    const enrollStudent = () => {
+        const studentsID = data.map((student) => (
+            student.id
+        ))
+        console.log(subjectDetail)
+        console.log(studentsID)
+        API.post('enroll/', { subjectID: subjectDetail,studentsID:studentsID })
+            .then(function (response) {
+                console.log(response.data)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
     // set element extend table in Datatable
     const columnDefault = [
@@ -103,7 +118,7 @@ const Enrollpage = () => {
                     <div className='field is-grouped'>
                         <NumberFormat className='input' name='subjectID' placeholder='subject_id' value={subjectDetail} onChange={handleSubjectDetail}
                             format='########' />
-                        {loading&&<Spinner />}
+                        {loading && <Spinner />}
                     </div>
                     <p>{subjectName}</p>
                 </div>
@@ -125,7 +140,7 @@ const Enrollpage = () => {
             </div>
             <DataTable columns={columnsStd} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
             <div style={{ marginTop: 10 }}>
-                <Button class='button is-primary' disabled={subjectDetail.replace(/ /g, "").length !== 8 || data.length === 0 ? true : false}>Enroll</Button>
+                <Button class='button is-primary' onClick={enrollStudent} disabled={subjectDetail.replace(/ /g, "").length !== 8 || data.length === 0 ? true : false}>Enroll</Button>
             </div>
         </Layout>
     )

@@ -5,13 +5,15 @@ import DataTable from '../Components/DataTable'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import { Button } from 'react-bulma-components/dist';
 import Layout from '../Layout/layout'
+import Loader from '../Components/loader'
+import API from '../api'
+
 const GenPage = () => {
     const [data, setJson] = useState([])
     const [tableBody, setTableBody] = useState(<tr><td colSpan="5">Empty</td></tr>)
     const [genRole, setRole] = useState('Student')
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
     const [loading, setLoading] = useState(false)
-
 
 
     const generateAccount = () => {
@@ -32,20 +34,23 @@ const GenPage = () => {
             user.email = dataUser.id + '@kmitl.ac.th'
             user.name = dataUser.name
             user.surname = dataUser.surname
+            user.faculty = dataUser.faculty
+            user.year = dataUser.year
             user.role = genRole.toLowerCase()
         } else {
             user.email = dataUser.email
             user.name = dataUser.name
             user.surname = dataUser.surname
+            user.faculty = NaN
             user.role = genRole.toLowerCase()
         }
         console.log(user)
-        // API.post('createAccount/', user).then(function (response) {
-        //     console.log(response)
-        // })
-        //     .catch(function (error) {
-        //         console.log(error)
-        //     })
+        API.post('createAccount/', user).then(function (response) {
+            console.log(response)
+        })
+            .catch(function (error) {
+                console.log(error)
+            })
     }
     const handleRole = (role) => {
         setRole(role)
@@ -101,36 +106,36 @@ const GenPage = () => {
         };
     }
     return (
-        <Layout>
-                <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account</h1>
-                <div class='box'>
-                    <label className='label'>Select Role</label>
-                    <div class="buttons has-addons" style={{ marginBottom: '0' }}>
-                        <Button className={btnstdClass} onClick={() => handleRole('Student')}>Student</Button>
-                        <Button className={btntchClass} onClick={() => handleRole('Teacher')}>Teacher</Button>
-                    </div>
-                    <label className='label'>Upload .CSV File</label>
-                    <i class="fas fa-italic"></i>
-                    <div className="field is-grouped">
-                        <Dropzone onDrop={onDrop}>
-                            {({ getRootProps, getInputProps }) => (
-                                <section>
-                                    <button className='button is-primary is-outlined' {...getRootProps()}>
-                                        <input {...getInputProps()} />
-                                        {fileName}
-                                    </button>
-                                </section>
-                            )}
-                        </Dropzone>
-                    </div>
+        <Layout loading={loading && <Loader />}>
+            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Generate Account</h1>
+            <div class='box'>
+                <label className='label'>Select Role</label>
+                <div class="buttons has-addons" style={{ marginBottom: '0' }}>
+                    <Button className={btnstdClass} onClick={() => handleRole('Student')}>Student</Button>
+                    <Button className={btntchClass} onClick={() => handleRole('Teacher')}>Teacher</Button>
                 </div>
-                <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
-                <DataTable columns={genRole === 'Student' ? columnsStd : columnsTch} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
-                <div style={{ marginTop: 10 }}>
-                    <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 && !loading ? false : true}>
-                        Generate
+                <label className='label'>Upload .CSV File</label>
+                <i class="fas fa-italic"></i>
+                <div className="field is-grouped">
+                    <Dropzone onDrop={onDrop}>
+                        {({ getRootProps, getInputProps }) => (
+                            <section>
+                                <button className='button is-primary is-outlined' {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    {fileName}
+                                </button>
+                            </section>
+                        )}
+                    </Dropzone>
+                </div>
+            </div>
+            <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>{genRole} Data</h1>
+            <DataTable columns={genRole === 'Student' ? columnsStd : columnsTch} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
+            <div style={{ marginTop: 10 }}>
+                <Button className='is-primary' onClick={generateAccount} disabled={data.length != 0 && !loading ? false : true}>
+                    Generate
                     </Button>
-                </div>
+            </div>
         </Layout>
     )
 
