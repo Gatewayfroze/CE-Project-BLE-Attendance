@@ -22,7 +22,15 @@ const ManagePage = () => {
         setLoading(true)
         API.get('getAllStudent/').then(function (response) {
             console.log(response)
-            setJson(response.data)
+
+            const dd=response.data.map(student=>{
+                const studetnObj={
+                    ...student,
+                    id:student.email.replace('@kmitl.ac.th',''),
+                }
+                return studetnObj
+            })
+            setJson(dd)
             setLoading(false)
         })
             .catch(function (error) {
@@ -30,7 +38,7 @@ const ManagePage = () => {
             })
     }
     const columnDefault = [
-        { id: 'studentID', label: 'Student ID', minWidth: 100 },
+        { id: 'id', label: 'Student ID', minWidth: 100 },
         { id: 'name', label: 'Name', minWidth: 100 },
         { id: 'surname', label: 'Surname', minWidth: 100 },
     ]
@@ -74,9 +82,7 @@ const ManagePage = () => {
                 </div>
             </div>
             <DataTable columns={columnDefault} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
-
         </Layout>
-
     )
 }
 const styles = {
