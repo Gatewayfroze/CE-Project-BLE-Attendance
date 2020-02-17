@@ -7,9 +7,10 @@ import { config } from '../firebase';
 firebase.initializeApp(config);
 
 const LoginScreen = props => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("59010734@kmitl.ac.th")
+    const [password, setPassword] = useState("57ed003e60")
     const [disable, setDisable] = useState(true)
+    const [errorMsg,setErrorMsg] =useState('')
     useEffect(() => {
         if (email.length !== 0 && password.length !== 0) {
             setDisable(false)
@@ -34,9 +35,8 @@ const LoginScreen = props => {
                     routeName: 'inApp'
                 })
             })
-            .catch(error => this.setState({ errorMessage: error.message }))
+            .catch(error => setErrorMsg(error.message))
     }
-
     return (
         <View style={styles.screen}>
             <Text style={styles.logo}>
@@ -45,12 +45,17 @@ const LoginScreen = props => {
             <View style={styles.inputView}>
                 <TextInput style={styles.textInput}
                     placeholder="Email"
+                    value={email}
                     placeholderTextColor="grey" onChangeText={email => setEmail(email)} />
             </View>
             <View style={styles.inputView}>
                 <TextInput style={styles.textInput}
                     placeholder="Password" placeholderTextColor="grey" secureTextEntry={true}
+                    value={password}
                     onChangeText={password => setPassword(password)} />
+            </View>
+            <View style={styles.errorMsgContainer}>
+                <Text style={styles.errorMsg}>{errorMsg}</Text>
             </View>
             <Button style={styles.button} disable={disable}
                 click={() => handleLogin()}>
@@ -62,7 +67,7 @@ const LoginScreen = props => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        paddingTop:'45%',
+        paddingTop: '45%',
         alignItems: 'center',
         backgroundColor: 'rgb(69, 172, 156)'
     },
@@ -75,7 +80,6 @@ const styles = StyleSheet.create({
     },
     textInput: {
         height: 50,
-        // color: "white"
     },
     inputView: {
         height: 40,
@@ -90,7 +94,13 @@ const styles = StyleSheet.create({
         height: 40,
         width: '65%',
         borderRadius: 25,
-        marginTop:30
+        marginTop: 30
+    },
+    errorMsgContainer:{
+        width:'65%'
+    },
+    errorMsg:{
+        color:'white'
     }
 })
 export default LoginScreen

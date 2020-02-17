@@ -1,41 +1,44 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import { View, Text, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../constants/Colors'
 
 const SubjectCheckIn = props => {
     return (
-        <View style={props.status? {...styles.itemSubject,backgroundColor:'white'}:{...styles.itemSubject,backgroundColor:'#d1d1d1'}}>
+        <View style={props.disabled?{...styles.itemSubject,backgroundColor:'#d1d1d1'}:{...styles.itemSubject,backgroundColor:'white'}}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={props.status?{...styles.textTitle,color: Colors.highLigthColor}:{...styles.textTitle,color: 'gray'}}>{props.title}</Text>
+                    <Text style={props.disabled?{...styles.textTitle,color: 'gray'}:{...styles.textTitle,color: Colors.highLigthColor}}>{props.title}</Text>
                 </View>
-                <View style={props.status?{
+                <View style={props.disabled?{
                     flex: 1,
-                    borderBottomColor: Colors.brigthCOlor,
+                    borderBottomColor: 'gray',
                     borderBottomWidth: 2,
                 }:{
                     flex: 1,
-                    borderBottomColor: 'gray',
+                    borderBottomColor: Colors.brigthCOlor,
                     borderBottomWidth: 2,
                 }} />
                 <View style={styles.subjectDetail}>
                     <Text>{props.detail}</Text>
-                    <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={props.onClick}>
+                    <TouchableOpacity disabled={props.disabled}  style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={props.onClick}>
                         <Text style={{ fontSize: 15, color: 'orange' }}>เวลาเรียน 1/10 </Text>
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableHighlight style={props.status ?
-                    { ...styles.buttonCircle, backgroundColor: Colors.highLigthColor } :
-                    { ...styles.buttonCircle, backgroundColor: 'gray' }}
+                <TouchableOpacity disabled={props.disabled} style={props.disabled ?{ ...styles.buttonCircle, backgroundColor: 'gray' }:
+                    { ...styles.buttonCircle, backgroundColor: Colors.highLigthColor }}
                     onPress={() => console.log('checkIn' + props.title)}>
                     <Text style={{ fontSize: 22, color: 'white' }}>Check</Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
             </View>
         </View>
     )
 }
+SubjectCheckIn.defaultProps = {
+    disabled: false
+  };
 const styles = StyleSheet.create({
     itemSubject: {
         height: 100,
