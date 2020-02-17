@@ -112,6 +112,15 @@ app.post('/getSubject',(req,res)=>{
   })
 })
 
+app.post('/getSubjectByID',(req,res)=>{
+  db.collection('users').doc(req.body.uid).get().then((snapshot)=>{
+    res.send(snapshot.data().subject)
+    return
+  }).catch(error=>{
+    console.log(error, toString());
+  })
+})
+
 app.post('/getStudent',(req,res)=>{
   let email = req.body.studentID + '@kmitl.ac.th'
   db.collection('users').where('email','==',email).get().then((snapshot)=>{
@@ -139,6 +148,7 @@ app.post('/createAccount',async (req,res)=>{
         }else{
           year = req.body.year
         }
+       
         await db.collection('users').doc(createdUser.uid).set({
         email:req.body.email,
         name:req.body.name,
@@ -162,14 +172,63 @@ app.post('/createAccount',async (req,res)=>{
     await mailTransport.sendMail(mailOptions);
     console.log("New welcome email sent to:", req.body.email);
     // return null;
-  res.end()
+  res.send(req.body)
+
+})
+
+const actionCodeSettings = {
+  // URL you want to redirect back to. The domain (www.example.com) for
+  // this URL must be whitelisted in the Firebase Console.
+  url: 'http://bledatabase.firebaseapp.com',
+  // This must be true for email link sign-in.
+  handleCodeInApp: true,
+  // iOS: {
+  //   bundleId: 'com.example.ios'
+  // },
+  // android: {
+  //   packageName: 'com.example.android',
+  //   installApp: true,
+  //   minimumVersion: '12'
+  // },
+  // // FDL custom domain.
+  // dynamicLinkDomain: 'coolapp.page.link'
+};
+
+
+app.post('/changePassword',(req,res)=>{
+  db.collection('users').doc(req.body.uid).get().then((snapshot)=>{
+
+    admin.auth().generatePasswordResetLink(snapshot.data().email,actionCodeSettings)
+  .then(async (link) => {
+    const mailOptions = {
+      from: `${APP_NAME} <noreply@firebase.com>`,
+      to: snapshot.data().email
+    };
+    // The user subscribed to the newsletter.
+    mailOptions.subject = `New password for ${APP_NAME}!`;
+    mailOptions.text = `Reset password link ${link}.`;
+    await mailTransport.sendMail(mailOptions);
+    console.log("New welcome email sent to:", snapshot.data().email);
+    res.status(200).end()
+    return 
+  }).catch(error=>{
+    console.log(error, toString());
+  })
+
+    
+    
+    return
+  }).catch(error=>{
+    console.log(error, toString());
+  })
+
 
 })
 
 app.delete('/deleteAccount', async(req,res)=>{
   await admin.auth().deleteUser(req.body.uid).then(async ()=>{
     await db.collection('users').doc(req.body.uid).delete()
-     res.end()
+     res.status(200).end()
      return   
   }).catch(error=>{
     console.log(error, toString());
