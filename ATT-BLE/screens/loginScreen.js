@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Text, TextInput, AsyncStorage } from 'react-native'
+import {
+    View,
+    StyleSheet,
+    Text,
+    TextInput,
+    AsyncStorage,
+    ActivityIndicator,
+    ColorPropType
+} from 'react-native'
 import Button from '../components/button'
 import Colors from '../constants/Colors'
 import * as firebase from 'firebase';
 import { config } from '../firebase';
+
 firebase.initializeApp(config);
 
 const LoginScreen = props => {
     const [email, setEmail] = useState("59010734@kmitl.ac.th")
     const [password, setPassword] = useState("57ed003e60")
     const [disable, setDisable] = useState(true)
-    const [errorMsg,setErrorMsg] =useState('')
+    const [errorMsg, setErrorMsg] = useState('')
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         if (email.length !== 0 && password.length !== 0) {
             setDisable(false)
@@ -26,6 +36,7 @@ const LoginScreen = props => {
         }
     }
     handleLogin = () => {
+        setLoading(true)
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
@@ -57,10 +68,13 @@ const LoginScreen = props => {
             <View style={styles.errorMsgContainer}>
                 <Text style={styles.errorMsg}>{errorMsg}</Text>
             </View>
-            <Button style={styles.button} disable={disable}
+            {
+                loading?<ActivityIndicator style={{marginTop: 30}} size="large" color='white'/>:
+                <Button style={styles.button} disable={disable}
                 click={() => handleLogin()}>
                 <Text style={{ color: 'white' }}>Login</Text>
             </Button>
+            }
         </View>
     )
 }
@@ -96,11 +110,11 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         marginTop: 30
     },
-    errorMsgContainer:{
-        width:'65%'
+    errorMsgContainer: {
+        width: '65%'
     },
-    errorMsg:{
-        color:'white'
+    errorMsg: {
+        color: 'red'
     }
 })
 export default LoginScreen

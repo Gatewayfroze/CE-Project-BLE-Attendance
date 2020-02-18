@@ -1,22 +1,42 @@
-import React, { useState, useEffect, useReducer } from 'react'
-import { View, Text, ScrollView, StyleSheet, AsyncStorage, Button } from 'react-native'
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+} from 'react'
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  AsyncStorage,
+  Button,
+  ActivityIndicator
+} from 'react-native'
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
+import Color from '../constants/Colors'
 import API from '../assets/API'
 import { TouchableHighlight } from 'react-native-gesture-handler'
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState('');
-  const [subjects, setSubjects] = useState([])
+  const [subjectsID, setSubjectsID] = useState([])
+  const [subjectsDetail, setSubjectsDetail] = useState([])
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     getToken()
   }, []);
+
   useEffect(() => {
     if (currentUser !== '') {
       getUserSubject()
-      console.log('subjects ' + subjects)
-      getSubjectDetail()
     }
   }, [currentUser])
+  useEffect(() => {
+    if (currentUser !== '') {
+      getSubjectDetail()
+    }
+  }, [subjectsID])
+
   getToken = async () => {
     try {
       let userData = await AsyncStorage.getItem("userData");
@@ -27,24 +47,26 @@ const CheckInScreen = props => {
     }
   }
   const getUserSubject = () => {
-    console.log(currentUser.uid)
+    setLoading(true)
     API.post('getSubjectByID/', { uid: currentUser.uid })
       .then((res) => {
         console.log(res.data)
-        setSubjects(res.data)
+        setSubjectsID(res.data)
       })
       .catch((err) =>
         console.log(err))
   }
 
-  const getSubjectDetail =async  () => {
-    const subjectsDetail = subjects.map(async (subject) => {
-      const a = await API.post('getSubject/', { subjectID: subject })
-      const detail= await a.data
+  const getSubjectDetail = async () => {
+    const subjectsDetail = subjectsID.map(async (subject) => {
+      const res = await API.post('getSubject/', { subjectID: subject })
+      const detail = await res.data
       return detail
     })
-    const results=await Promise.all(subjectsDetail)
+    const results = await Promise.all(subjectsDetail)
+    setSubjectsDetail(results)
     console.log(results)
+    setLoading(false)
   }
 
   return (
@@ -55,8 +77,11 @@ const CheckInScreen = props => {
       </View>
       {/* โชว์ status ที่กำลังเรียนอยู่ปัจจุบัน */}
       {/* <CurrentSubject/> */}
-      <TouchableHighlight onPress={getSubjectDetail}><Text>sss</Text></TouchableHighlight>
       <ScrollView>
+        {loading && <ActivityIndicator size="large" color={Color.primaryColor} />}
+        {subjectsDetail.map((subject, i) => {
+          return <SubjectCheckIn key={i} title={subject.subjectName} detail='เวลาเรียน: จ. 07:30-12:00 น.' />
+        })}
         {/* {subjects.map((subject)=>{
 
         })} */}

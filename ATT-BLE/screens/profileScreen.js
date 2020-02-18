@@ -3,7 +3,20 @@ import { View, Text, StyleSheet } from 'react-native'
 import Colors from '../constants/Colors'
 
 import Button from '../components/button'
+const [currentUser, setCurrentUser] = useState('');
 const ProfileScreen = props => {
+    useEffect(() => {
+        getToken()
+    }, []);
+    getToken = async () => {
+        try {
+            let userData = await AsyncStorage.getItem("userData");
+            let data = JSON.parse(userData);
+            setCurrentUser(data.user)
+        } catch (error) {
+            console.log("Something went wrong", error);
+        }
+    }
     return (
         <View style={styles.screen}>
             <View style={styles.profileContainer}>
@@ -21,10 +34,10 @@ const ProfileScreen = props => {
                 </View>
             </View>
             <Button style={styles.buttonSize} click={
-                ()=> props.navigation.navigate({
-                    routeName:'login'
+                () => props.navigation.navigate({
+                    routeName: 'login'
                 })
-                }>
+            }>
                 <Text style={{ color: 'white', fontFamily: 'TH-sarabun', fontSize: 25 }}>
                     Logout
                 </Text>
