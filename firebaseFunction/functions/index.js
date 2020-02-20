@@ -281,15 +281,30 @@ app.delete("/deleteAccount", async (req, res) => {
 });
 
 app.delete("/deleteSubject", async (req, res) => {
-  await db
-    .collection("subjects")
-    .doc(req.body.subjectID)
-    .delete()
-    .catch(error => {
+  db.collection('users').where('subject','array-contains',req.body.subjectID).get().then( async snapshot=>{
+    snapshot.docs.map(doc=>doc.id).forEach(id=>{
+
+      db.collection('users').doc(id).update({
+        subject:admin.firestore.FieldValue.arrayRemove(req.body.subjectID)
+      }).catch(error => {
+        console.log(error, toString());
+      })
+
+    })
+    //  res.end()
+    return
+  }).then(()=>{
+   db.collection("subjects").doc(req.body.subjectID).delete().catch(error => {
       console.log(error, toString());
     });
-  res.end();
-  return;
+    return
+  }).catch(error => {
+    console.log(error, toString());
+  });
+  res.end()
+
+ 
+  
 });
 
 const gmailEmail = functions.config().gmail.email;
