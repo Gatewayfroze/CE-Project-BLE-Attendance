@@ -10,6 +10,7 @@ import API from '../api'
 import Alert from '../Components/Alert'
 import Layout from '../Layout/layout'
 import Spinner from '../Components/Spinner'
+import Loader from '../Components/loader'
 const Enrollpage = () => {
     const [data, setJson] = useState([])
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
@@ -47,16 +48,19 @@ const Enrollpage = () => {
         setSubjectDetail(e.target.value)
     }
     const enrollStudent = () => {
+        setLoading(true)
         const studentsID = data.map((student) => (
             student.id
         ))
         console.log(subjectDetail)
         console.log(studentsID)
-        API.post('enroll/', { subjectID: subjectDetail,studentsID:studentsID })
+        API.post('enroll/', { subjectID: subjectDetail, studentsID: studentsID })
             .then(function (response) {
+                setLoading(false)
                 console.log(response.data)
             })
             .catch(function (error) {
+                setLoading(false)
                 console.log(error)
             })
     }
@@ -109,7 +113,7 @@ const Enrollpage = () => {
         setTextAlert('')
     }
     return (
-        <Layout>
+        <Layout loading={loading && subjectName !== '' && <Loader />}>
             <Alert text={textAlert} enable={alert} close={hadelClose} />
             <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Enroll Student</h1>
             <div class='box'>
@@ -118,7 +122,7 @@ const Enrollpage = () => {
                     <div className='field is-grouped'>
                         <NumberFormat className='input' name='subjectID' placeholder='subject_id' value={subjectDetail} onChange={handleSubjectDetail}
                             format='########' />
-                        {loading && <Spinner />}
+                        {loading && subjectName === '' && <Spinner />}
                     </div>
                     <p>{subjectName}</p>
                 </div>

@@ -67,23 +67,25 @@ const CheckInScreen = props => {
     setSubjectsDetail(results)
     setLoading(false)
   }
-  const checkVal = () => {
-    subjectsDetail.forEach((subject) => {
-      console.log(subject.subjectName)
-      const schedule = subject.schedule.sort((a, b) => {
+  const currentSchedule = (scheduleSubject) => {
+    const schedule = scheduleSubject
+      .sort((a, b) => {
         // sort Date
         var dateA = new Date(a.date), dateB = new Date(b.date)
         return dateA - dateB //sort by date ascending
       })
-      schedule.forEach((sch) => {
-        const date = new Date(sch.date)
-        console.log(date.toString())
-      })
+    let currentSche = schedule.map((sch) => {
+      const date = new Date(sch.date)
+      const now = new Date()
+      // เดี๋ยวต้องมาเช็คที่เวลากันอีก 
+      if (date > now)
+        return { date: date, start: new Date(sch.start), end: new Date(sch.end) }
     })
+    currentSche = currentSche.filter((sch) => sch !== undefined)
+    return currentSche
   }
   return (
     <View style={styles.screen} navigation={props.navigation}>
-      <TouchableHighlight onPress={checkVal}><Text>ddddd</Text></TouchableHighlight>
       <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
         <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>{currentUser.email}</Text>
@@ -93,7 +95,15 @@ const CheckInScreen = props => {
       <ScrollView>
         {loading && <ActivityIndicator size="large" color={Color.primaryColor} />}
         {subjectsDetail.map((subject, i) => {
-          return <SubjectCheckIn key={i} title={subject.subjectName} detail='เวลาเรียน: จ. 07:30-12:00 น.' />
+          const currentDate = currentSchedule(subject.schedule)[0].date
+          const startTime = currentSchedule(subject.schedule)[0].start.toLocaleTimeString('en-GB').slice(0, -3)
+          const endTime = currentSchedule(subject.schedule)[0].end.toLocaleTimeString('en-GB').slice(0, -3)
+          const day = currentDate.getDate()
+          const month = currentDate.getMonth() + 1
+          const year = currentDate.getFullYear()
+          let dateString = `${day}/${month}/${year}`
+
+          return <SubjectCheckIn key={i} title={subject.subjectName} detail={`${dateString} ${startTime}-${endTime} น.`} />
         })}
         {/* {subjects.map((subject)=>{
 

@@ -20,9 +20,9 @@ const SubjectCheckIn = props => {
                     borderBottomWidth: 2,
                 }} />
                 <View style={styles.subjectDetail}>
-                    <Text>{props.detail}</Text>
+                    <Text style={{ fontSize: 13}} >{props.detail}</Text>
                     <TouchableOpacity disabled={props.disabled}  style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={props.onClick}>
-                        <Text style={{ fontSize: 15, color: 'orange' }}>เวลาเรียน 1/10 </Text>
+                        <Text style={{ fontSize: 13, color: 'orange' }}>เวลาเรียน 1/10 </Text>
                     </TouchableOpacity>
                 </View>
             </View>

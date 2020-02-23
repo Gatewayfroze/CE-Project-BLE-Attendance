@@ -46,7 +46,7 @@ const LoginScreen = props => {
                     routeName: 'inApp'
                 })
             })
-            .catch(error => setErrorMsg(error.message))
+            .catch(error => {setErrorMsg(error.message); setLoading(false)})
     }
     return (
         <View style={styles.screen}>

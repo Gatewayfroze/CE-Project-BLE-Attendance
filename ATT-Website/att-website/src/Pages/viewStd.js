@@ -64,6 +64,7 @@ const ManagePage = () => {
     let btntchClass = genRole === 'Teacher' ? 'is-primary' : ''
     const handleRole = (role) => {
         setRole(role)
+        setJson([])
         console.log(genRole)
     }
     return (
