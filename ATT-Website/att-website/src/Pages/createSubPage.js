@@ -52,6 +52,7 @@ const CreateSubPage = props => {
             mac: '000000000000 '
         }
         if (schedule.length > 0) {
+            period.date=new Date(schedule[schedule.length - 1].date)
             period.date.setDate(schedule[schedule.length - 1].date.getDate() + 7)
             period.start = schedule[schedule.length - 1].start
             period.end = schedule[schedule.length - 1].end

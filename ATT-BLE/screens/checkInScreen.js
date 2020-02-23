@@ -65,12 +65,25 @@ const CheckInScreen = props => {
     })
     const results = await Promise.all(subjectsDetail)
     setSubjectsDetail(results)
-    console.log(results)
     setLoading(false)
   }
-
+  const checkVal = () => {
+    subjectsDetail.forEach((subject) => {
+      console.log(subject.subjectName)
+      const schedule = subject.schedule.sort((a, b) => {
+        // sort Date
+        var dateA = new Date(a.date), dateB = new Date(b.date)
+        return dateA - dateB //sort by date ascending
+      })
+      schedule.forEach((sch) => {
+        const date = new Date(sch.date)
+        console.log(date.toString())
+      })
+    })
+  }
   return (
     <View style={styles.screen} navigation={props.navigation}>
+      <TouchableHighlight onPress={checkVal}><Text>ddddd</Text></TouchableHighlight>
       <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
         <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>{currentUser.email}</Text>
