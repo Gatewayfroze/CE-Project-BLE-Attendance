@@ -1,13 +1,28 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import {
+    View,
+    Text,
+    StyleSheet,
+    AsyncStorage,
+    ActivityIndicator
+} from 'react-native'
 import Colors from '../constants/Colors'
-
+import API from '../assets/API'
+import Color from '../constants/Colors'
 import Button from '../components/button'
-const [currentUser, setCurrentUser] = useState('');
 const ProfileScreen = props => {
+    const [currentUser, setCurrentUser] = useState('');
+    const [userDetail, setUserDetail] = useState('');
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         getToken()
     }, []);
+    useEffect(() => {
+        if (currentUser !== '') {
+            getCurrentUserDetail()
+        }
+    }, [currentUser])
+
     getToken = async () => {
         try {
             let userData = await AsyncStorage.getItem("userData");
@@ -16,6 +31,16 @@ const ProfileScreen = props => {
         } catch (error) {
             console.log("Something went wrong", error);
         }
+    }
+    const getCurrentUserDetail = () => {
+        setLoading(true)
+        const stdID = currentUser.email.replace('@kmitl.ac.th', '')
+        API.post('getStudent/', { studentID: stdID })
+            .then((res) => {
+                setUserDetail(...res.data)
+            })
+            .catch((err) =>
+                console.log(err))
     }
     return (
         <View style={styles.screen}>
@@ -27,10 +52,13 @@ const ProfileScreen = props => {
                     <Text style={styles.titleText}>ชั้นปี</Text>
                 </View>
                 <View style={styles.detailContainer}>
-                    <Text style={styles.detailText}>นิตินนท์ เพ็งเลา</Text>
-                    <Text style={styles.detailText}>5910734</Text>
-                    <Text style={styles.detailText}>วิศวกรรมศาสตร์</Text>
-                    <Text style={styles.detailText}>4</Text>
+                    {userDetail !== '' ? <React.Fragment>
+                        <Text style={styles.detailText}>{userDetail.name} {userDetail.surname}</Text>
+                        <Text style={styles.detailText}>{userDetail.email.replace('@kmitl.ac.th','')}</Text>
+                        <Text style={styles.detailText}>{userDetail.faculty}</Text>
+                        <Text style={styles.detailText}>{userDetail.year}</Text>
+                    </React.Fragment> : <ActivityIndicator />
+                    }
                 </View>
             </View>
             <Button style={styles.buttonSize} click={
