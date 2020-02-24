@@ -17,7 +17,7 @@ firebase.initializeApp(config);
 
 const LoginScreen = props => {
     const [email, setEmail] = useState("59010734@kmitl.ac.th")
-    const [password, setPassword] = useState("99ddae97bc")
+    const [password, setPassword] = useState("Nitinon.556")
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)

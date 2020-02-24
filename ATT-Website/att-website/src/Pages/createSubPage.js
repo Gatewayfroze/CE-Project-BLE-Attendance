@@ -1,6 +1,7 @@
 import React, { useState, useDebugValue, useEffect } from 'react'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import "react-datepicker/dist/react-datepicker.css";
+import app from '../firebase'
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
@@ -18,6 +19,17 @@ const CreateSubPage = props => {
     const [schedule, setSchedule] = useState([])
     const [tableBody, setTableBody] = useState()
     const [loading, setLoading] = useState(false)
+    const [curUser, setcurUser] = useState(null)
+
+    useEffect(() => {
+        app.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                setcurUser(user.uid)
+            } else {
+            }
+        });
+    }, [])
+
     useEffect(() => {
         setTableBody(createTable())
     }, [schedule])
@@ -27,7 +39,7 @@ const CreateSubPage = props => {
     }
     // hadle submiting data
     const handleSubmit = () => {
-        const subjectData = { ...subjectDetail, schedule }
+        const subjectData = { teacherUID:curUser,...subjectDetail, schedule }
         console.log(subjectData)
         setLoading(true)
         API.post('createSubject/', subjectData)
@@ -42,16 +54,19 @@ const CreateSubPage = props => {
     }
     const resetInput = () => {
         setSubjectDetail({ subjectID: '', subjectName: '' })
+        setSchedule([])
     }
     // hadle table
     const addSchedule = () => {
         const period = {
+            schIndex:0,
             date: new Date(),
             start: new Date(),
             end: new Date(),
             mac: '000000000000 '
         }
         if (schedule.length > 0) {
+            period.schIndex=schedule.length
             period.date=new Date(schedule[schedule.length - 1].date)
             period.date.setDate(schedule[schedule.length - 1].date.getDate() + 7)
             period.start = schedule[schedule.length - 1].start

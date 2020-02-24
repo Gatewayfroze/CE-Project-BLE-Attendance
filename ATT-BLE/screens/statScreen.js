@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         padding: 10
     },
     text: {
-        fontFamily: 'TH-sarabun'
     },
 
 });

@@ -24,8 +24,7 @@ const defaultStackNavOptions = {
         backgroundColor: Colors.primaryColor,
     },
     headerTitleStyle: {
-        fontFamily: 'TH-sarabun-bold',
-        fontSize: 30
+        fontSize: 23
     },
     headerTintColor: '#FFFFFF',
 };
@@ -111,8 +110,7 @@ const tabNavigation = createBottomTabNavigator(
                 paddingTop: 7,
             },
             labelStyle: {
-                fontFamily: 'TH-sarabun',
-                fontSize: 18
+                fontSize: 14
             },
             activeTintColor: '#303030'
         }

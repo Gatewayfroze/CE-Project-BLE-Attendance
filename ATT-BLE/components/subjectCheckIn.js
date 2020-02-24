@@ -29,7 +29,7 @@ const SubjectCheckIn = props => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity disabled={props.disabled} style={props.disabled ?{ ...styles.buttonCircle, backgroundColor: 'gray' }:
                     { ...styles.buttonCircle, backgroundColor: Colors.highLigthColor }}
-                    onPress={() => console.log('checkIn' + props.title)}>
+                    onPress={() => props.checkIn}>
                     <Text style={{ fontSize: 22, color: 'white' }}>Check</Text>
                 </TouchableOpacity>
             </View>
@@ -91,9 +91,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textTitle: {
-        fontSize: 25,
-        fontFamily: 'TH-sarabun-bold',
-        
+        fontSize: 20,
     }
 })
 export default SubjectCheckIn

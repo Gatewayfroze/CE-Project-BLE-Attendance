@@ -17,6 +17,8 @@ import CurrentSubject from '../components/currentSubject'
 import Color from '../constants/Colors'
 import API from '../assets/API'
 import { TouchableHighlight } from 'react-native-gesture-handler'
+
+
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState('');
   const [subjectsID, setSubjectsID] = useState([])
@@ -61,12 +63,13 @@ const CheckInScreen = props => {
     const subjectsDetail = subjectsID.map(async (subject) => {
       const res = await API.post('getSubject/', { subjectID: subject })
       const detail = await res.data
-      return detail
+      return { ...detail, subjectID: subject }
     })
     const results = await Promise.all(subjectsDetail)
     setSubjectsDetail(results)
     setLoading(false)
   }
+
   const currentSchedule = (scheduleSubject) => {
     const schedule = scheduleSubject
       .sort((a, b) => {
@@ -75,48 +78,66 @@ const CheckInScreen = props => {
         return dateA - dateB //sort by date ascending
       })
     let currentSche = schedule.map((sch) => {
-      const date = new Date(sch.date)
+      let date = new Date(sch.date)
+      const start = new Date(sch.start)
+      // +7 time zoneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+      date.setHours(start.getHours())
+      date.setMinutes(start.getMinutes())
+      date.setSeconds(start.getSeconds())
+      // console.log(date)
       const now = new Date()
       // เดี๋ยวต้องมาเช็คที่เวลากันอีก 
       if (date > now)
-        return { date: date, start: new Date(sch.start), end: new Date(sch.end) }
+        return { date: date, start: new Date(sch.start), end: new Date(sch.end) ,schIndex:sch.schIndex}
     })
+    console.log("--------------------")
     currentSche = currentSche.filter((sch) => sch !== undefined)
     return currentSche
+  }
+
+  const sendCheckIn = () => {
+
+
+    // API.post('createTransaction/',)
+
   }
   return (
     <View style={styles.screen} navigation={props.navigation}>
       <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
-        <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>{currentUser.email}</Text>
+        <Text style={{  fontSize: 18 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
       </View>
       {/* โชว์ status ที่กำลังเรียนอยู่ปัจจุบัน */}
       {/* <CurrentSubject/> */}
       <ScrollView>
         {loading && <ActivityIndicator size="large" color={Color.primaryColor} />}
         {subjectsDetail.map((subject, i) => {
-          const currentDate = currentSchedule(subject.schedule)[0].date
-          const startTime = currentSchedule(subject.schedule)[0].start.toLocaleTimeString('en-GB').slice(0, -3)
-          const endTime = currentSchedule(subject.schedule)[0].end.toLocaleTimeString('en-GB').slice(0, -3)
+          // check when schedule =0
+          const currentSch = currentSchedule(subject.schedule)[0]
+          const currentDate = currentSch.date
+          const startTime = currentSch.start.toLocaleTimeString('en-GB').slice(0, -3)
+          const endTime = currentSch.end.toLocaleTimeString('en-GB').slice(0, -3)
+          // set for text 
           const day = currentDate.getDate()
           const month = currentDate.getMonth() + 1
           const year = currentDate.getFullYear()
           let dateString = `${day}/${month}/${year}`
 
-          return <SubjectCheckIn key={i} title={subject.subjectName} detail={`${dateString} ${startTime}-${endTime} น.`} />
+          const now=new Date()
+          console.log(now.toString())
+          console.log(currentSch)
+          console.log(currentUser.uid)
+          console.log(subject.subjectID)
+            
+          return <SubjectCheckIn key={i} title={subject.subjectName} detail={`${dateString} ${startTime}-${endTime} น.`} checkIn={sendCheckIn} />
         })}
-        {/* {subjects.map((subject)=>{
 
-        })} */}
+
         {/* <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: จ. 07:30-12:00 น.' onClick={() => {
           props.navigation.navigate({
             routeName: 'statDetail'
           })
         }
         } />
-        <SubjectCheckIn title='Image Processing' detail='เวลาเรียน: จ. 07:30-12:00 น.' />
-        <SubjectCheckIn title='Data Minining' detail='เวลาเรียน: อ. 07:30-12:00 น.' />
-        <SubjectCheckIn disabled={true} title='Advance Digital' detail='เวลาเรียน: พฤ. 07:30-12:00 น.' />
         <SubjectCheckIn disabled={true} title='Human computer interaction' detail='เวลาเรียน: พ. 07:30-12:00 น.' /> */}
       </ScrollView>
     </View>
@@ -135,7 +156,6 @@ const styles = StyleSheet.create({
     padding: 10
   },
   text: {
-    fontFamily: 'TH-sarabun'
   },
 
 });

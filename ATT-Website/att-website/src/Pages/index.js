@@ -4,7 +4,7 @@ import "../Styles/styles.css";
 import { withRouter, Redirect } from "react-router";
 import app from "../firebase.js";
 import 'react-bulma-components/dist/react-bulma-components.min.css';
-
+import { Container } from '@material-ui/core'
 import { AuthContext } from "../auth";
 //Functional Component
 const fire = app.firestore()
@@ -46,42 +46,43 @@ const MainPage = ({ history }) => {
         ATTENDA
       </h1>
       <div >
-        <div
-          style={{
-            marginLeft: 600,
-            marginRight: 600,
-            marginTop: 30,
-            backgroundColor: "#e9f2e9",
-            borderRadius: 10,
-            padding: 10
-          }}
-        >
-          <form onSubmit={handleLogin}>
-            <div className='field'>
-              <div className='field'>
-                <label className='label'>
-                  Email
-                </label>
-                <input className='input ' name="email" type="email" placeholder="Email" />
-              </div>
-              <div className='field'>
-                <label className='label'>
-                  Password
-                </label>
-                <input className='input' name="password" type="password" placeholder="Password" />
-              </div>
+        <Container maxWidth={'xs'}>
 
-              <div className='field is-grouped is-grouped-centered'>
-                <p className='control'>
-                  <button className='button is-primary' type="submit">Log in</button>
-                </p>
-                <p className='control'>
-                  <button className='button is-default is-outlined'>Change Password</button>
-                </p>
+          <div
+            style={{
+              marginTop: 30,
+              backgroundColor: "#e9f2e9",
+              borderRadius: 10,
+              padding: 10
+            }}
+          >
+            <form onSubmit={handleLogin}>
+              <div className='field'>
+                <div className='field'>
+                  <label className='label'>
+                    Email
+                </label>
+                  <input className='input ' name="email" type="email" placeholder="Email" />
+                </div>
+                <div className='field'>
+                  <label className='label'>
+                    Password
+                </label>
+                  <input className='input' name="password" type="password" placeholder="Password" />
+                </div>
+
+                <div className='field is-grouped is-grouped-centered'>
+                  <p className='control'>
+                    <button className='button is-primary' type="submit">Log in</button>
+                  </p>
+                  <p className='control'>
+                    <button className='button is-default is-outlined'>Change Password</button>
+                  </p>
+                </div>
               </div>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
+        </Container>
       </div>
     </div>
   );

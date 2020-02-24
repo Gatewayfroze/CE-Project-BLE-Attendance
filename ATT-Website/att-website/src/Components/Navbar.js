@@ -37,7 +37,6 @@ const Navbar = (props) => {
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
                 setcurUser(user.email)
-                console.log(user)
             } else {
 
             }

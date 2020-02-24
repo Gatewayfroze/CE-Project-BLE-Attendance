@@ -32,6 +32,13 @@ const ProfileScreen = props => {
             console.log("Something went wrong", error);
         }
     }
+
+    const changePassword = () => {
+        API.post('/changePassword', { uid: currentUser.uid })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
+    }
+
     const getCurrentUserDetail = () => {
         setLoading(true)
         const stdID = currentUser.email.replace('@kmitl.ac.th', '')
@@ -54,19 +61,26 @@ const ProfileScreen = props => {
                 <View style={styles.detailContainer}>
                     {userDetail !== '' ? <React.Fragment>
                         <Text style={styles.detailText}>{userDetail.name} {userDetail.surname}</Text>
-                        <Text style={styles.detailText}>{userDetail.email.replace('@kmitl.ac.th','')}</Text>
+                        <Text style={styles.detailText}>{userDetail.email.replace('@kmitl.ac.th', '')}</Text>
                         <Text style={styles.detailText}>{userDetail.faculty}</Text>
                         <Text style={styles.detailText}>{userDetail.year}</Text>
                     </React.Fragment> : <ActivityIndicator />
                     }
                 </View>
             </View>
+
+            <Button style={styles.buttonSize} click={changePassword}>
+                <Text style={{ color: 'white', fontSize: 18 }}>
+                    Change Password
+                </Text>
+            </Button>
+
             <Button style={styles.buttonSize} click={
                 () => props.navigation.navigate({
                     routeName: 'login'
                 })
             }>
-                <Text style={{ color: 'white', fontFamily: 'TH-sarabun', fontSize: 25 }}>
+                <Text style={{ color: 'white',fontSize: 18 }}>
                     Logout
                 </Text>
             </Button>
@@ -122,17 +136,16 @@ const styles = StyleSheet.create({
         fontFamily: 'TH-sarabun'
     },
     titleText: {
-        fontFamily: 'TH-sarabun-bold',
         color: Colors.highLigthColor,
-        fontSize: 28
+        fontSize: 18
     },
     detailText: {
-        fontFamily: 'TH-sarabun',
-        fontSize: 28
+        fontSize: 18
     },
     buttonSize: {
-        height: 35,
-        width: '30%'
+        height: 45,
+        width: '40%',
+        marginBottom: 15
     }
 });
 export default ProfileScreen

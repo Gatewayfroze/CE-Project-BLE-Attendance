@@ -44,7 +44,7 @@ const InputLeaveScreen = props => {
 
                 </View>
                 <Button style={{ height: 50, width: '30%', marginBottom: 20, borderRadius: 40 }}>
-                    <Text style={{ fontSize: 30, color: 'white', fontFamily: 'TH-sarabun' }}>Send</Text>
+                    <Text style={{ fontSize: 20, color: 'white' }}>Send</Text>
                 </Button>
             </View>
 

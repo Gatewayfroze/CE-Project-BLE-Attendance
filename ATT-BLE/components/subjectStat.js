@@ -67,8 +67,7 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     textTitle: {
-        fontSize: 25,
-        fontFamily: 'TH-sarabun-bold',
+        fontSize: 20,
         color: Colors.highLigthColor
     }
 })

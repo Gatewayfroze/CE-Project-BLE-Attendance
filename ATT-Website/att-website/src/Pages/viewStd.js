@@ -8,8 +8,8 @@ import DataTable from '../Components/DataTable'
 import Loader from '../Components/loader'
 const ManagePage = () => {
     const [data, setJson] = useState([])
-    const [genRole, setRole] = useState('Student')
     const [loading, setLoading] = useState(false)
+    const [genRole, setRole] = useState('Student')
 
     useEffect(() => {
         if (genRole === 'Student') {
@@ -18,7 +18,6 @@ const ManagePage = () => {
     }, [genRole])
     // set element extend table in Datatable
     const fetchData = () => {
-        console.log('fetch')
         setLoading(true)
         API.get('getAllStudent/').then(function (response) {
             console.log(response)
