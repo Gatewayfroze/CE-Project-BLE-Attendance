@@ -101,6 +101,22 @@ app.get("/getAllStudent", (req, res) => {
       console.log(error, toString());
     });
 });
+app.get("/getAllTeacher", (req, res) => {
+  db.collection("users")
+    .where("role", "==", "teacher")
+    .get()
+    .then(snapshot => {
+      res.send(
+        snapshot.docs.map(doc => Object.assign({ uid: doc.id }, doc.data()))
+      );
+
+      return;
+    })
+    .catch(error => {
+      console.log(error, toString());
+    });
+});
+
 
 app.get("/getAllSubject", (req, res) => {
   db.collection("subjects")
@@ -302,10 +318,26 @@ app.delete("/deleteSubject", async (req, res) => {
     console.log(error, toString());
   });
   res.end()
+})
+
+app.post("/createTransaction",(req,res)=>{
+  db.collection('transactions').add({
+    timestamp:req.bodytimestamp,
+    schIndex:req.body.schIndex,
+    status:req.body.status,
+    studentUID:req.body.uid,
+    subjectID:req.body.subjectID,
+    uniqueID:req.body.unique.ID
+  }).catch(error => {
+    console.log(error, toString());
+  });
+
+
+})
 
  
   
-});
+
 
 const gmailEmail = functions.config().gmail.email;
 const gmailPassword = functions.config().gmail.password;
