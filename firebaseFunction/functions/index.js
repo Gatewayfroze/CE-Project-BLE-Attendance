@@ -5,7 +5,6 @@ const firebase = require("firebase");
 const cors = require("cors")({ origin: true });
 var SimpleCrypto = require("simple-crypto-js").default;
 const express = require("express");
-// const bodyParser = require('body-parser');
 const app = express();
 
 const firebaseConfig = {
@@ -32,7 +31,8 @@ app.post("/createSubject", (req, res) => {
     .set({
       subjectName: req.body.subjectName,
       schedule: req.body.schedule,
-      students: []
+      students: [],
+      teacher:req.body.teacherUID
     });
   res.end();
 });
@@ -163,7 +163,7 @@ app.post("/getStudent", (req, res) => {
     .get()
     .then(snapshot => {
       res.send(snapshot.docs.map(doc => doc.data()));
-      // res.end()
+     
       return;
     })
     .catch(error => {
@@ -297,10 +297,10 @@ app.delete("/deleteAccount", async (req, res) => {
 });
 
 app.delete("/deleteSubject", async (req, res) => {
-  db.collection('users').where('subject','array-contains',req.body.subjectID).get().then( async snapshot=>{
-    snapshot.docs.map(doc=>doc.id).forEach(id=>{
+  await db.collection('users').where('subject','array-contains',req.body.subjectID).get().then( async snapshot=>{
+    snapshot.docs.map(doc=>doc.id).forEach(async id=>{
 
-      db.collection('users').doc(id).update({
+     await  db.collection('users').doc(id).update({
         subject:admin.firestore.FieldValue.arrayRemove(req.body.subjectID)
       }).catch(error => {
         console.log(error, toString());
@@ -328,7 +328,11 @@ app.post("/createTransaction",(req,res)=>{
     studentUID:req.body.uid,
     subjectID:req.body.subjectID,
     uniqueID:req.body.unique.ID
-  }).catch(error => {
+  }.then(()=>{
+    res.end()
+    return
+  })
+  ).catch(error => {
     console.log(error, toString());
   });
 
