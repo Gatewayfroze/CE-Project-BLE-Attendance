@@ -4,7 +4,6 @@ import { AppLoading } from 'expo'
 
 import MainNavigator from './navigation/ATTNavigation'
 
-
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false)
   return <MainNavigator />;

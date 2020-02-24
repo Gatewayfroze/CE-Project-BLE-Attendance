@@ -34,11 +34,11 @@ const CheckInScreen = props => {
     }
   }, [currentUser])
   useEffect(() => {
-    if (currentUser !== '') {
+    if (currentUser !== '' && subjectsID !== []) {
       getSubjectDetail()
+      console.log('fecth data Detail')
     }
   }, [subjectsID])
-
   getToken = async () => {
     try {
       let userData = await AsyncStorage.getItem("userData");
@@ -60,14 +60,16 @@ const CheckInScreen = props => {
   }
 
   const getSubjectDetail = async () => {
-    const subjectsDetail = subjectsID.map(async (subject) => {
+    setSubjectsDetail([])
+    const subDetail = subjectsID.map(async (subject) => {
       const res = await API.post('getSubject/', { subjectID: subject })
       const detail = await res.data
       return { ...detail, subjectID: subject }
     })
-    const results = await Promise.all(subjectsDetail)
-    setSubjectsDetail(results)
+    const results = await Promise.all(subDetail)
+    console.log('eieiiiiiiiiiiiiiiiiii')
     setLoading(false)
+    setSubjectsDetail(results)
   }
 
   const currentSchedule = (scheduleSubject) => {
@@ -86,15 +88,18 @@ const CheckInScreen = props => {
       date.setSeconds(start.getSeconds())
       // console.log(date)
       const now = new Date()
-      // เดี๋ยวต้องมาเช็คที่เวลากันอีก 
-      if (date > now)
-        return { date: date, start: new Date(sch.start), end: new Date(sch.end) ,schIndex:sch.schIndex}
+      // เวลาไม่เกินคาบครึ่งชม.
+      if (diff_minutes(now, date) < 30)
+        return { date: date, start: new Date(sch.start), end: new Date(sch.end), schIndex: sch.schIndex }
     })
-    console.log("--------------------")
     currentSche = currentSche.filter((sch) => sch !== undefined)
     return currentSche
   }
-
+  const diff_minutes = (dt2, dt1) => {
+    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+    diff /= 60;
+    return Math.round(diff);
+  }
   const sendCheckIn = () => {
 
 
@@ -104,31 +109,43 @@ const CheckInScreen = props => {
   return (
     <View style={styles.screen} navigation={props.navigation}>
       <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{  fontSize: 18 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
+        <Text style={{ fontSize: 18 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
       </View>
       {/* โชว์ status ที่กำลังเรียนอยู่ปัจจุบัน */}
       {/* <CurrentSubject/> */}
+      {loading ? <ActivityIndicator size="large" color={Color.primaryColor} /> : <Button title='refresh' onPress={getSubjectDetail} />}
       <ScrollView>
-        {loading && <ActivityIndicator size="large" color={Color.primaryColor} />}
         {subjectsDetail.map((subject, i) => {
           // check when schedule =0
+          console.log('======================' + i + '==================')
           const currentSch = currentSchedule(subject.schedule)[0]
-          const currentDate = currentSch.date
-          const startTime = currentSch.start.toLocaleTimeString('en-GB').slice(0, -3)
-          const endTime = currentSch.end.toLocaleTimeString('en-GB').slice(0, -3)
-          // set for text 
-          const day = currentDate.getDate()
-          const month = currentDate.getMonth() + 1
-          const year = currentDate.getFullYear()
-          let dateString = `${day}/${month}/${year}`
+          let strDetail = ''
+          if (currentSch != undefined) {
 
-          const now=new Date()
-          console.log(now.toString())
-          console.log(currentSch)
-          console.log(currentUser.uid)
-          console.log(subject.subjectID)
-            
-          return <SubjectCheckIn key={i} title={subject.subjectName} detail={`${dateString} ${startTime}-${endTime} น.`} checkIn={sendCheckIn} />
+            const currentDate = currentSch.date
+            const startTime = currentSch.start.toLocaleTimeString('en-GB').slice(0, -3)
+            const endTime = currentSch.end.toLocaleTimeString('en-GB').slice(0, -3)
+            // set for text 
+            const day = currentDate.getDate()
+            const month = currentDate.getMonth() + 1
+            const year = currentDate.getFullYear()
+            let dateString = `${day}/${month}/${year}`
+            const now = new Date()
+            // console.log(now)
+            // console.log(currentDate)
+            // console.log(diff_minutes(now, currentDate))
+            const objTransac = {
+              subjectID: subject.subjectID,
+              uid: currentUser.uid,
+              schIndex: currentSch.schIndex,
+              timeStamp: now,
+              status: diff_minutes(now, currentDate) <= 15 ? 'ok' : 'late',
+              uniqueID: ''
+            }
+            console.log(objTransac)
+            strDetail = `${dateString} ${startTime}-${endTime} น.`
+          }
+          return <SubjectCheckIn key={i} title={subject.subjectName} detail={strDetail} checkIn={sendCheckIn} />
         })}
 
 
