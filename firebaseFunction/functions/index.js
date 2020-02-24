@@ -106,7 +106,7 @@ app.get("/getAllSubject", (req, res) => {
   db.collection("subjects")
     .get()
     .then(snapshot => {
-      res.send(snapshot.docs.map(doc => doc.data()));
+      res.send(snapshot.docs.map(doc => Object.assign({ subjectID: doc.id }, doc.data())));
       return;
     })
     .catch(error => {
