@@ -322,12 +322,12 @@ app.delete("/deleteSubject", async (req, res) => {
 
 app.post("/createTransaction",(req,res)=>{
   db.collection('transactions').add({
-    timestamp:req.bodytimestamp,
+    timestamp:req.body.timestamp,
     schIndex:req.body.schIndex,
     status:req.body.status,
     studentUID:req.body.uid,
     subjectID:req.body.subjectID,
-    uniqueID:req.body.unique.ID
+    uniqueID:req.body.uniqueID
   }.then(()=>{
     res.end()
     return
