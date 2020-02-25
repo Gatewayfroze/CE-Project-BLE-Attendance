@@ -328,11 +328,11 @@ app.post("/createTransaction",(req,res)=>{
     studentUID:req.body.uid,
     subjectID:req.body.subjectID,
     uniqueID:req.body.uniqueID
-  }.then(()=>{
+  }
+  ).then(()=>{
     res.end()
     return
-  })
-  ).catch(error => {
+  }).catch(error => {
     console.log(error, toString());
   });
 
@@ -343,8 +343,8 @@ app.post("/createTransaction",(req,res)=>{
   
 
 
-const gmailEmail = functions.config().gmail.email;
-const gmailPassword = functions.config().gmail.password;
+// const gmailEmail = functions.config().gmail.email;
+// const gmailPassword = functions.config().gmail.password;
 
 const mailTransport = nodemailer.createTransport({
   service: "gmail",
