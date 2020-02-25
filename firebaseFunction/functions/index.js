@@ -25,6 +25,26 @@ exports.webApi = functions.https.onRequest(app);
 admin.initializeApp(firebaseConfig);
 const db = admin.firestore();
 
+app.post('/getTransactionSub',async (req,res)=>{
+  await db.collection('transactions').where('subjectID','==',req.body.subjectID).get().then((snapshot)=>{
+    res.send(snapshot.docs.map(doc =>  doc.data()));
+
+    return;
+  }).catch(error => {
+    console.log(error, toString());
+  })
+})
+
+app.post('/getTransactionSubStu',async (req,res)=>{
+  await db.collection('transactions').where('subjectID','==',req.body.subjectID).where("studentUID","==",req.body.uid).get().then((snapshot)=>{
+    res.send(snapshot.docs.map(doc =>  doc.data()));
+
+    return;
+  }).catch(error => {
+    console.log(error, toString());
+  })
+})
+
 app.post("/createSubject", (req, res) => {
   db.collection("subjects")
     .doc(req.body.subjectID)
