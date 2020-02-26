@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors")({ origin: true });
 const app = express();
 const fireConfig =require( "./config")
+const admin = require("firebase-admin");
 
 
 
@@ -101,23 +102,22 @@ app.post("/createSubject", (req, res) => {
               .update({
                 subject: admin.firestore.FieldValue.arrayUnion(req.body.subjectID)
               })
-              .then(() =>
-                db
+              .then(() =>{
+                students.forEach((doc)=>{
+                  db
                   .collection("subjects")
                   .doc(req.body.subjectID)
                   .update({
-                    students: students
-                  })
-                  .then(() => {
-                    res.end()
-                    return
-                  })
+                    student: admin.firestore.FieldValue.arrayUnion(doc)
+                  })                  
                   .catch(error => {
                     console.log(error, toString())
                   })
-              )
+                })
+                return
+                })
           })
-  
+          res.end()
           return
           
         })
