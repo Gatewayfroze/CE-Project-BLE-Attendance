@@ -31,7 +31,10 @@ app.post("/getStudent", (req, res) => {
     .where("email", "==", email)
     .get()
     .then(snapshot => {
-      res.send(snapshot.docs.map(doc => doc.data()));
+          snapshot.forEach(doc=>{
+            res.send(Object.assign({ uid: doc.id }, doc.data()));
+          })
+      
 
       return;
     })
