@@ -124,5 +124,49 @@ app.post("/enroll", async (req, res) => {
   })
 })
 
+app.post("/drop", async (req, res) => {
+  student = req.body.studentID
+  subject = req.body.subjectID
+
+  studentID = student.map(data => data + "@kmitl.ac.th")
+
+  studentID.forEach(async data => {
+    await db
+      .collection("users")
+      .where("email", "==", data)
+      .get()
+      .then(async snapshot => {
+        await snapshot.forEach(async docs => {
+          await db
+            .collection("users")
+            .doc(docs.id)
+            .update({
+              subject: admin.firestore.FieldValue.arrayRemove(req.body.subjectID)
+            })
+            .then(() => {
+              student.forEach((doc) => {
+                db
+                  .collection("subjects")
+                  .doc(req.body.subjectID)
+                  .update({
+                    student: admin.firestore.FieldValue.arrayRemove(doc)
+                  })
+                  .catch(error => {
+                    console.log(error, toString())
+                  })
+              })
+              return
+            })
+        })
+        res.end()
+        return
+
+      })
+      .catch(error => {
+        console.log(error, toString())
+      })
+  })
+})
+
 
 module.exports = app

@@ -119,7 +119,7 @@ app.post("/changePassword", (req, res) => {
             from: `${APP_NAME} <noreply@firebase.com>`,
             to: snapshot.data().email
           };
-          // The user subscribed to the newsletter.
+         
           mailOptions.subject = `New password for ${APP_NAME}!`;
           mailOptions.text = `Reset password link ${link}.`;
           await mailTransport.sendMail(mailOptions);
