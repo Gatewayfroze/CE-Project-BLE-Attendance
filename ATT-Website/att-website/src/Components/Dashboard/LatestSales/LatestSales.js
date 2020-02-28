@@ -12,7 +12,7 @@ import {
   Button
 } from '@material-ui/core';
 
-import { data, options } from './chart';
+import { options } from './chart';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -25,8 +25,28 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const LatestSales = props => {
-  const { className, ...rest } = props;
+const Graph = props => {
+  const { className,labelDate, ...rest } = props;
+  const data = {
+    labels: props.labelDate,
+    datasets: [
+      {
+        label: 'In time',
+        // backgroundColor: palette.primary.main,
+        data: [20,10]
+      },
+      {
+        label: 'Late',
+        // backgroundColor: palette.neutral,
+        data: [10]
+      },
+      {
+        label: 'Absent',
+        // backgroundColor: palette.neutral,
+        data: [15]
+      }
+    ]
+  };
   const classes = useStyles();
 
   return (
@@ -40,7 +60,7 @@ const LatestSales = props => {
             size="small"
             variant="text"
           >
-            Last 7 days 
+            Last 7 days
           </Button>
         }
         title="Latest Sales"
@@ -68,8 +88,8 @@ const LatestSales = props => {
   );
 };
 
-LatestSales.propTypes = {
-  className: PropTypes.string
+Graph.propTypes = {
+  labelDate: PropTypes.array.isRequired
 };
 
-export default LatestSales;
+export default Graph;
