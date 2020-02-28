@@ -15,19 +15,22 @@ const useStyles = makeStyles(theme => ({
     },
     logoContainer: {
         padding: 0,
-        marginLeft:'10px'
+        marginLeft: '10px'
     },
     rightMenu: {
         marginLeft: 'auto'
     },
     title: {
-        color:'white'
+        color: 'white'
     },
     button: {
         borderRadius: '50px',
         marginRight: '25px',
         marginLeft: '15px'
-    }
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+    },
 }))
 const Navbar = (props) => {
     const classes = useStyles()
@@ -46,13 +49,12 @@ const Navbar = (props) => {
 
     return (
         <React.Fragment>
-            <AppBar position='static' className={classes.toolbarMargin}>
-                <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+            <AppBar position='fixed' className={classes.appBar}>
                 <Toolbar disableGutters>
                     <div className={classes.logoContainer}>
                         <Typography className={classes.title} variant='h4'  >
                             ATTENDA
-                    </Typography>
+                        </Typography>
                     </div>
                     <div className={classes.rightMenu}>
                         <Person onClick={() => alert('Hi!')} fontSize="30px" />
@@ -60,6 +62,7 @@ const Navbar = (props) => {
                         <Button variant="contained" className={classes.button} color='secondary' onClick={() => app.auth().signOut()}>logout</Button>
                     </div>
                 </Toolbar>
+            {props.loading}
             </AppBar>
         </React.Fragment>
 

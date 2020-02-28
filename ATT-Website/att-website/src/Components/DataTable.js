@@ -15,9 +15,7 @@ const useStyles = makeStyles({
     root: {
         width: '100%',
     },
-    container: {
-        maxHeight: 250,
-    },
+
 });
 const DataTable = (props) => {
     const rows = [
@@ -35,9 +33,10 @@ const DataTable = (props) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+    const height=props.maxHeight?props.maxHeight:250
     return (
         <Paper className={classes.root}>
-            <TableContainer className={classes.container}>
+            <TableContainer style={{maxHeight:height}}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>

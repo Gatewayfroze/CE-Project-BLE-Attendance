@@ -100,12 +100,7 @@ const CheckInScreen = props => {
     diff /= 60;
     return Math.round(diff);
   }
-  const sendCheckIn = () => {
 
-
-    // API.post('createTransaction/',)
-
-  }
   return (
     <View style={styles.screen} navigation={props.navigation}>
       <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
@@ -117,9 +112,9 @@ const CheckInScreen = props => {
       <ScrollView>
         {subjectsDetail.map((subject, i) => {
           // check when schedule =0
-          console.log('======================' + i + '==================')
           const currentSch = currentSchedule(subject.schedule)[0]
           let strDetail = ''
+          let objTransac={}
           if (currentSch != undefined) {
 
             const currentDate = currentSch.date
@@ -134,20 +129,19 @@ const CheckInScreen = props => {
             // console.log(now)
             // console.log(currentDate)
             // console.log(diff_minutes(now, currentDate))
-            const objTransac = {
+            objTransac = {
               subjectID: subject.subjectID,
               uid: currentUser.uid,
               schIndex: currentSch.schIndex,
-              timeStamp: now,
+              timestamp: now,
               status: diff_minutes(now, currentDate) <= 15 ? 'ok' : 'late',
               uniqueID: ''
             }
             console.log(objTransac)
             strDetail = `${dateString} ${startTime}-${endTime} น.`
           }
-          return <SubjectCheckIn key={i} title={subject.subjectName} detail={strDetail} checkIn={sendCheckIn} />
+          return <SubjectCheckIn key={i} title={subject.subjectName} detail={strDetail} transaction={objTransac} />
         })}
-
 
         {/* <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: จ. 07:30-12:00 น.' onClick={() => {
           props.navigation.navigate({
