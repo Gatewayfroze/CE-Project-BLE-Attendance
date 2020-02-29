@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/styles'
 import { Grid, Card, CardHeader, Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 import DataTable from '../Components/DataTable'
-import API from '../api'
 import SearchIcon from '@material-ui/icons/Search';
+import API from '../api'
 import {
   LatestSales,
   UsersByDevice,

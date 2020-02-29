@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-        paddingTop: 20
+        paddingTop: 20,
     },
     toolbar: theme.mixins.toolbar,
     title: {
@@ -92,8 +92,7 @@ const Layout = (props) => {
         )
     }
     return (
-        <div className={classes.root}>
-            <CssBaseline />
+        <div className={classes.root} style={{backgroundColor:'#f7f7f7'}}>
             {drawerActivate ? createDrawer() : destroyDrawer()}
             <main className={classes.content}>
                 <div className={classes.toolbar} />
