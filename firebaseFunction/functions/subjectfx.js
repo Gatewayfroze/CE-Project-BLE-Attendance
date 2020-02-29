@@ -168,5 +168,18 @@ app.post("/drop", async (req, res) => {
   })
 })
 
+app.post('/updateSchedule',(req,res)=>{
+  db.collection('subjects').doc(req.body.subjectID).update({
+    schedule:req.body.newschedule
+  }).then(()=>{
+    res.end()
+    return
+  }).catch(error => {
+    console.log(error, toString())
+  })
+
+
+})
+
 
 module.exports = app
