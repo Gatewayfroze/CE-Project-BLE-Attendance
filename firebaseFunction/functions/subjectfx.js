@@ -100,12 +100,12 @@ app.post("/enroll", async (req, res) => {
               subject: admin.firestore.FieldValue.arrayUnion(req.body.subjectID)
             })
             .then(() => {
-              students.forEach((doc) => {
-                db
+              students.forEach(async (doc) => {
+                await db
                   .collection("subjects")
                   .doc(req.body.subjectID)
                   .update({
-                    student: admin.firestore.FieldValue.arrayUnion(doc)
+                    students: admin.firestore.FieldValue.arrayUnion(doc)
                   })
                   .catch(error => {
                     console.log(error, toString())
@@ -130,7 +130,7 @@ app.post("/drop", async (req, res) => {
 
   studentID = student.map(data => data + "@kmitl.ac.th")
 
-  studentID.forEach(async data => {
+  await studentID.forEach(async data => {
     await db
       .collection("users")
       .where("email", "==", data)
@@ -143,13 +143,13 @@ app.post("/drop", async (req, res) => {
             .update({
               subject: admin.firestore.FieldValue.arrayRemove(req.body.subjectID)
             })
-            .then(() => {
-              student.forEach((doc) => {
-                db
+            .then(async () => {
+              await student.forEach(async (doc) => {
+                await db
                   .collection("subjects")
                   .doc(req.body.subjectID)
                   .update({
-                    student: admin.firestore.FieldValue.arrayRemove(doc)
+                    students: admin.firestore.FieldValue.arrayRemove(doc)
                   })
                   .catch(error => {
                     console.log(error, toString())
