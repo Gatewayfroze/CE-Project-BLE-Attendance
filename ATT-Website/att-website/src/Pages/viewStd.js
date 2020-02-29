@@ -12,24 +12,25 @@ const ManagePage = () => {
     const [genRole, setRole] = useState('Student')
 
     useEffect(() => {
-        if (genRole === 'Student') {
-            fetchData()
-        }
+        fetchData(genRole)
     }, [genRole])
     // set element extend table in Datatable
-    const fetchData = () => {
+    const fetchData = (role) => {
         setLoading(true)
-        API.get('getAllStudent/').then(function (response) {
+        API.get(`getAll${role}/`).then(function (response) {
             console.log(response)
-
-            const dd=response.data.map(student=>{
-                const studetnObj={
-                    ...student,
-                    id:student.email.replace('@kmitl.ac.th',''),
-                }
-                return studetnObj
-            })
-            setJson(dd)
+            if (role == 'Student') {
+                const dd = response.data.map(student => {
+                    const studetnObj = {
+                        ...student,
+                        id: student.email.replace('@kmitl.ac.th', ''),
+                    }
+                    return studetnObj
+                })
+                setJson(dd)
+            } else {
+                setJson(response.data)
+            }
             setLoading(false)
         })
             .catch(function (error) {
@@ -37,7 +38,7 @@ const ManagePage = () => {
             })
     }
     const columnDefault = [
-        { id: 'id', label: 'Student ID', minWidth: 100 },
+        { id: 'id', label: 'ID', minWidth: 100 },
         { id: 'name', label: 'Name', minWidth: 100 },
         { id: 'surname', label: 'Surname', minWidth: 100 },
     ]

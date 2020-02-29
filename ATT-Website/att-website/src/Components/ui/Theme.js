@@ -14,6 +14,9 @@ const theme = createMuiTheme({
     secondary: {
       main: arcOrange
     },
+    error: {
+      main: "#ff604f"
+    }
   },
   status: {
     danger: 'orange',

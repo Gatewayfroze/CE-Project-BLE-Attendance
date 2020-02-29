@@ -9,14 +9,18 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
+import BT from '@material-ui/core/Button';
 import { Button } from 'react-bulma-components/dist';
+import { Link } from 'react-router-dom'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
     },
-
-});
+    button: {
+        textTransform: 'none',
+    }
+}));
 const DataTable = (props) => {
     const rows = [
         ...props.data
@@ -24,7 +28,7 @@ const DataTable = (props) => {
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const columns=props.columns
+    const columns = props.columns
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -33,10 +37,10 @@ const DataTable = (props) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    const height=props.maxHeight?props.maxHeight:250
+    const height = props.maxHeight ? props.maxHeight : 250
     return (
         <Paper className={classes.root}>
-            <TableContainer style={{maxHeight:height}}>
+            <TableContainer style={{ maxHeight: height }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -68,11 +72,14 @@ const DataTable = (props) => {
                                         );
                                     })}
                                     {/* <TableCell><Button className='is-danger' onClick={()=>props.del(i)} >Delete</Button></TableCell> */}
-                                    {props.extraCol.map(ButtonCol => {
+                                    {props.extraCol.map((ButtonCol) => {
                                         return (
-                                            <TableCell><Button className={ButtonCol.class} onClick={() => ButtonCol.function(i)}>{ButtonCol.text}</Button></TableCell>
-                                        )
-                                    })}
+                                            ButtonCol.link?
+                                                <TableCell><a className={`button ${ButtonCol.class}`} style={{textDecoration: 'none'}} href={ButtonCol.link?`viewSub/${ButtonCol.link(i)}`:'#'} >{ButtonCol.text}</a></TableCell>
+                                            :
+                                                <TableCell><a className={`button ${ButtonCol.class}`} style={{textDecoration: 'none'}} onClick={()=>ButtonCol.function(i)} >{ButtonCol.text}</a></TableCell>
+                                            
+                                    )})}
                                 </TableRow>
                             );
                         })}

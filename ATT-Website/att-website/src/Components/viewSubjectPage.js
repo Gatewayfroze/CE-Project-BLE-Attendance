@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles'
 import { Grid, Card, CardHeader, Button, TextField } from '@material-ui/core'
 import DataTable from '../Components/DataTable'
 import API from '../api'
-
+import SearchIcon from '@material-ui/icons/Search';
 import {
   LatestSales,
   UsersByDevice,
@@ -59,7 +59,8 @@ const Dashboard = (props) => {
     } else {
       setStdDataSearch(studentData)
     }
-  }, [searchStd])
+  }, [searchStd,studentData])
+
   const fetchListStudent = async () => {
     const val = subjectData.students.map(async (student) => {
       const detail = await API.post('getStudent/', { studentID: student })
@@ -68,10 +69,10 @@ const Dashboard = (props) => {
       return detail.data
     })
     const results = await Promise.all(val)
+    console.log('=================================')
     console.log(results)
     setStudentData(results)
     setStdDataSearch(results)
-
   }
   const fetchSubject = () => {
     API.post('getSubject/', { subjectID })
@@ -85,15 +86,6 @@ const Dashboard = (props) => {
   const handleSearch = (e) => {
     setSearch(e.target.value)
   }
-  // const fetchStudent = (studentID) => {
-  //   API.post('getStudent/', { studentID })
-  //     .then((res) => {
-  //       console.log(res.data)
-  //       // setStudentData([...studentData, res.data])
-  //       return res.data
-  //     })
-  //     .catch((err) => console.log(err))
-  // }
 
   const columnDefault = [
     { id: 'studentID', label: 'Student ID', minWidth: 100 },
@@ -105,7 +97,7 @@ const Dashboard = (props) => {
     API.post('drop/', { studentID: [studentData[studentIndex].studentID], subjectID })
       .then((response) => {
         console.log(response)
-        setTimeout(fetchListStudent(), 2000)
+        fetchListStudent()
       })
       .catch(function (error) {
         console.log(error)
@@ -146,12 +138,19 @@ const Dashboard = (props) => {
           xs={12}
         >
           <Card>
-              <CardHeader
-                action={
-                  <TextField value={searchStd} onChange={handleSearch} label="Search" size='small' />
-                }
-                title="Student In Class"
-              />
+            <CardHeader
+              action={
+                <Grid container spacing={1} alignItems="flex-end">
+                  <Grid item>
+                    <SearchIcon />
+                  </Grid>
+                  <Grid item>
+                    <TextField value={searchStd} onChange={handleSearch} label='Search' size='small' />
+                  </Grid>
+                </Grid>
+              }
+              title="Student In Class"
+            />
             <DataTable maxHeight={350} columns={columnDefault} data={stdDataSearch} extraHeader={['Delete']} extraCol={tableExtend} />
           </Card>
         </Grid>
