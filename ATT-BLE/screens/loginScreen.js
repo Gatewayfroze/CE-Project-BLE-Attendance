@@ -11,9 +11,11 @@ import {
 import Button from '../components/button'
 import Colors from '../constants/Colors'
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 import { config } from '../firebase';
 
 firebase.initializeApp(config);
+db = firebase.firestore()
 
 const LoginScreen = props => {
     const [email, setEmail] = useState("59010734@kmitl.ac.th")
@@ -37,16 +39,43 @@ const LoginScreen = props => {
     }
     handleLogin = () => {
         setLoading(true)
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-            .then((data) => {
-                storeToken(data)
-                props.navigation.navigate({
-                    routeName: 'inApp'
-                })
+        
+
+        db.collection("users").where('email', '==', email).get().then((snapshot) => {
+            if(!snapshot.docs.exists){
+                console.log('kuyy')
+                setLoading(false)
+            }
+            snapshot.docs.forEach(doc => {
+              
+              if (doc.data().role === 'student') {
+                try {
+                    firebase
+                    .auth()
+                    .signInWithEmailAndPassword(email, password)
+                    .then((data) => {
+                        storeToken(data)
+                        props.navigation.navigate({
+                            routeName: 'inApp'
+                        })
+                    })
+                    .catch(error => {setErrorMsg(error.message); setLoading(false)})
+                } catch (error) {
+                  
+                  
+                // alert(error);
+                setLoading(false)
+                }
+              } else {
+                alert('Need permission')
+                setLoading(false)
+                
+              }
             })
-            .catch(error => {setErrorMsg(error.message); setLoading(false)})
+          })
+
+
+        
     }
     return (
         <View style={styles.screen}>
