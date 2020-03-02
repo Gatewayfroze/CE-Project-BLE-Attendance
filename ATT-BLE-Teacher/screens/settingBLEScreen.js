@@ -23,8 +23,8 @@ const settingScreen = props => {
             </View>
             <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 20,fontFamily:'TH-sarabun'}}>เลือกวิชา</Text>
-                    <TextInput style={{ borderColor: 'black', borderWidth: 1,fontSize:20,fontFamily :'TH-sarabun'}} placeholder='เลือกวิชาที่ต้องการตั้งค่า' />
+                    <Text style={{ fontSize: 20}}>เลือกวิชา</Text>
+                    <TextInput style={{ borderColor: 'black', borderWidth: 1,fontSize:20}} placeholder='เลือกวิชาที่ต้องการตั้งค่า' />
                 </View>
                 <View style={{width:70,height:35,marginVertical:10}}>
                     <Button style={{
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     },
     textTitle: {
         fontSize: 50,
-        fontFamily: 'TH-sarabun-bold',
         color: Colors.highLigthColor
     }
 })

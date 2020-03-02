@@ -68,16 +68,12 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     text: {
-        fontFamily: 'TH-sarabun'
     },
     titleText: {
-        fontFamily: 'TH-sarabun-bold',
         color: Colors.highLigthColor,
         fontSize: 28
     },
     detailText: {
-        fontFamily: 'TH-sarabun',
-        // color:Colors.highLigthColor,
         fontSize: 28
     },
     buttonSize: {

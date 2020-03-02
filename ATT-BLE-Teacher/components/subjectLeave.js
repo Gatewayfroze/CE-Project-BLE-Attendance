@@ -71,8 +71,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textTitle: {
-        fontSize: 25,
-        fontFamily: 'TH-sarabun-bold',
+        fontSize: 20,
         color: Colors.highLigthColor
     }
 })

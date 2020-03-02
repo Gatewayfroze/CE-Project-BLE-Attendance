@@ -16,7 +16,7 @@ const LeaveScreen = props => {
                 <Text style={{ color: 'white' }}>New Leave</Text>
             </TouchableOpacity> */}
             <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
-                <Text style={{ fontFamily: 'TH-sarabun', fontSize: 25 }}>เลือกดูรายละเอียดการลาเพื่ออนุมัติหรือปฎิเสธการลา</Text>
+                <Text style={{  fontSize: 25 }}>เลือกดูรายละเอียดการลาเพื่ออนุมัติหรือปฎิเสธการลา</Text>
             </View>
             <ScrollView>
                 <SubjectLeave title='ป่วยครับ' subject='Data Mining' detail='ไม่สบายน้ำมูกไหล' onClick={() => {
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
         padding: 10
     },
     text: {
-        fontFamily: 'TH-sarabun'
     },
     buttonLeave: {
         flexDirection: 'row',

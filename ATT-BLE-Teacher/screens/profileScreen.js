@@ -23,7 +23,7 @@ const ProfileScreen = props => {
                     routeName:'login'
                 })
                 }>
-                <Text style={{ color: 'white', fontFamily: 'TH-sarabun', fontSize: 25 }}>
+                <Text style={{ color: 'white', fontSize: 18 }}>
                     Logout
                 </Text>
             </Button>
@@ -75,21 +75,19 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     text: {
-        fontFamily: 'TH-sarabun'
     },
     titleText: {
-        fontFamily: 'TH-sarabun-bold',
         color: Colors.highLigthColor,
-        fontSize: 28
+        fontSize: 18
     },
     detailText: {
-        fontFamily: 'TH-sarabun',
         // color:Colors.highLigthColor,
-        fontSize: 28
+        fontSize: 18
     },
     buttonSize: {
-        height: 35,
-        width: '30%'
+        height: 45,
+        width: '40%',
+        marginBottom: 15
     }
 });
 export default ProfileScreen

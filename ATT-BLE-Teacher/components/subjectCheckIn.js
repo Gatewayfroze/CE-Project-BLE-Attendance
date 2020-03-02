@@ -9,7 +9,6 @@ const SubjectCheckIn = props => {
                 <View style={styles.subjectTitle}>
                     <Text style={styles.textTitle}>{props.title}</Text>
                 </View>
-                {/* ดเสเ่หกสาเ่สากดห่ส่ */}
                 <View style={{
                     backgroundColor: 'red',
                     borderBottomColor: Colors.brigthCOlor,
@@ -73,8 +72,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textTitle: {
-        fontSize: 50,
-        fontFamily: 'TH-sarabun-bold',
+        fontSize: 35,
         color: Colors.highLigthColor
     }
 })
