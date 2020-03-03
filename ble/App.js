@@ -47,34 +47,19 @@ export default function App() {
     }
   };
 
-  calculateDistance =rssi => {
   
-    var txPower = -59 //hard coded power value. Usually ranges between -59 to -65
-    
-    if (rssi == 0) {
-      return -1.0; 
-    }
   
-    var ratio = rssi*1.0/txPower;
-    if (ratio < 1.0) {
-      return Math.pow(ratio,10);
-    }
-    else {
-      var distance =  (0.89976)*Math.pow(ratio,7.7095) + 0.111;    
-      return distance;
-    }
-  } 
   scanMC =() => {
     this.manager.startDeviceScan(null, null, (error, device) => {
       if (error) {
-        this.error(error.message);
+       console.log(error.message);
         return;
       }
       if (device.name === 'espino') {
         
         this.manager.stopDeviceScan()
-        console.log(device.rssi)
-        setmac(device.id)        
+        //console.log(calculateDistance(device.rssi))
+        setmac(device.rssi)        
         
         // let distance = Math.pow(10,(-59-device.rssi)/(10))
         // console.log(calculateDistance(device.rssi))
@@ -154,7 +139,7 @@ getIMEI = ()=> {
       </View>
 
           <View>
-            <Text>{Imei}</Text>
+            <Text>{mac}</Text>
           </View>
       
     </View>

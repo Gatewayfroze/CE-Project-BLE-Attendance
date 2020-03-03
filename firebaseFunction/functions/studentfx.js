@@ -9,6 +9,28 @@ app.use(cors);
 
 const db = fireConfig.firestore();
 
+app.post("/setCurrentSubject",async (req,res)=>{
+  await db.collection('users').doc(req.body.uid).update({
+    currentSubject : req.body.currentSubject
+  }).then(()=>{
+    res.end()
+    return
+  }).catch(error => {
+    console.log(error, toString());
+  });
+})
+  app.post("/getCurrentSubject",async (req,res)=>{
+    await db.collection('users').doc(req.body.uid).get().then((doc)=>{
+      res.send(doc.data().currentSubject)
+      return
+    }).catch(error => {
+      console.log(error, toString());
+    });
+
+
+
+})
+
 app.get("/getAllStudent", (req, res) => {
   db.collection("users")
     .where("role", "==", "student")

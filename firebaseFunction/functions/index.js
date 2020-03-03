@@ -69,7 +69,8 @@ app.post("/createAccount", async (req, res) => {
           role: req.body.role,
           faculty: req.body.faculty,
           year: year,
-          subject: []
+          subject: [],
+          currentSubject:{}
         });
       return;
     })
