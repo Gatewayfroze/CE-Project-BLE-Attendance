@@ -44,7 +44,7 @@ const ProfileScreen = props => {
         const stdID = currentUser.email.replace('@kmitl.ac.th', '')
         API.post('getStudent/', { studentID: stdID })
             .then((res) => {
-                setUserDetail(...res.data)
+                setUserDetail(res.data)
             })
             .catch((err) =>
                 console.log(err))

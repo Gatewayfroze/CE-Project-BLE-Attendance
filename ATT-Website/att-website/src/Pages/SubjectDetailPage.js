@@ -58,7 +58,6 @@ const ViewSubjectPage = ({ match }, ...props) => {
             })
             .catch((err) => console.log(err))
     }
-
     return (
         <Layout loading={loading && <Loader />} size='lg'>
             <Grid alignItems='center' container>

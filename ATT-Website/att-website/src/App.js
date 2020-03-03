@@ -15,6 +15,9 @@ import ManageSub from "./Pages/viewSub";
 import LeavePage from "./Pages/leavePage";
 import CreateSubPage from "./Pages/createSubPage";
 import SubjectDetailPage from './Pages/SubjectDetailPage'
+import ScheduleTable from './Pages/ScheduleTable'
+
+
 import { AuthProvider } from "./auth";
 import PrivateRoute from './privateRoute.js'
 
@@ -32,6 +35,7 @@ function App() {
           <PrivateRoute exact path="/viewSub/:subjectID" component={SubjectDetailPage} />
           <PrivateRoute exact path="/leave" component={LeavePage} />
           <PrivateRoute exact path="/createSub" component={CreateSubPage} />
+          <PrivateRoute exact path="/export/:subjectID" component={ScheduleTable} />
         </Router>
       </ThemeProvider>
     </AuthProvider>
