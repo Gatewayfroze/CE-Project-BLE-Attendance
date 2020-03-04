@@ -1,63 +1,75 @@
 const express = require("express");
 const cors = require("cors")({ origin: true });
 const app = express();
-const fireConfig = require("./config")
-
+const fireConfig = require("./config");
 
 app.use(cors);
 const db = fireConfig.firestore();
 
 app.post("/createTransaction", (req, res) => {
-    db.collection("transactions")
-        .add({
-            timestamp: req.body.timestamp,
+  db.collection("transactions")
+    .add({
+      timestamp: req.body.timestamp,
+      schIndex: req.body.schIndex,
+      status: req.body.status,
+      studentUID: req.body.uid,
+      subjectID: req.body.subjectID,
+      uniqueID: req.body.uniqueID
+    })
+    .then(async () => {
+      await db
+        .collection("users")
+        .doc(req.body.uid)
+        .update({
+          currentSubject: {
+            subjectID: req.body.subject,
             schIndex: req.body.schIndex,
-            status: req.body.status,
-            studentUID: req.body.uid,
-            subjectID: req.body.subjectID,
-            uniqueID: req.body.uniqueID
+            endTime: req.body.endTime
+          }
         })
         .then(() => {
-            res.end();
-            return;
+          res.end();
+          return;
         })
         .catch(error => {
-            console.log(error, toString());
+          console.log(error, toString());
         });
+      return;
+    })
+    .catch(error => {
+      console.log(error, toString());
+    });
 });
 
 app.post("/getTransactionSub", async (req, res) => {
-    await db
-        .collection("transactions")
-        .where("subjectID", "==", req.body.subjectID)
-        .get()
-        .then(snapshot => {
-            res.send(snapshot.docs.map(doc => doc.data()));
+  await db
+    .collection("transactions")
+    .where("subjectID", "==", req.body.subjectID)
+    .get()
+    .then(snapshot => {
+      res.send(snapshot.docs.map(doc => doc.data()));
 
-            return;
-        })
-        .catch(error => {
-            console.log(error, toString());
-        });
+      return;
+    })
+    .catch(error => {
+      console.log(error, toString());
+    });
 });
 
 app.post("/getTransactionSubStu", async (req, res) => {
-    await db
-        .collection("transactions")
-        .where("subjectID", "==", req.body.subjectID)
-        .where("studentUID", "==", req.body.uid)
-        .get()
-        .then(snapshot => {
-            res.send(snapshot.docs.map(doc => doc.data()));
+  await db
+    .collection("transactions")
+    .where("subjectID", "==", req.body.subjectID)
+    .where("studentUID", "==", req.body.uid)
+    .get()
+    .then(snapshot => {
+      res.send(snapshot.docs.map(doc => doc.data()));
 
-            return;
-        })
-        .catch(error => {
-            console.log(error, toString());
-        });
+      return;
+    })
+    .catch(error => {
+      console.log(error, toString());
+    });
 });
 
-
-
-
-module.exports = app
+module.exports = app;
