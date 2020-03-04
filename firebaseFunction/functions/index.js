@@ -180,4 +180,17 @@ app.delete("/deleteAccount", async (req, res) => {
     });
 });
 
+app.post('/getUser',(req,res)=>{
+
+  db.collection('users').where('email','==',req.body.email).get().then(snapshot=>{
+    snapshot.forEach(doc=>{
+      res.send(Object.assign({ uid: doc.id }, doc.data()));
+    })
+    return
+  }).catch(error => {
+    console.log(error, toString());
+  });
+
+})
+
 

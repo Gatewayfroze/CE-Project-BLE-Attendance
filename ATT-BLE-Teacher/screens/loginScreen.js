@@ -12,12 +12,13 @@ import Button from '../components/button'
 import Colors from '../constants/Colors'
 import * as firebase from 'firebase';
 import { config } from '../firebase';
+import API from '../assets/API'
 
-firebase.initializeApp(config);
+firebase.initializeApp(config)
 
 const LoginScreen = props => {
-    const [email, setEmail] = useState("nitinon623@gmail.com")
-    const [password, setPassword] = useState("Nitinon.556")
+    const [email, setEmail] = useState("panotsodsri@gmail.com")
+    const [password, setPassword] = useState("43f3970739")
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)
@@ -36,15 +37,29 @@ const LoginScreen = props => {
         }
     }
     handleLogin = () => {
-        setLoading(true)
-        firebase
+        
+        setLoading(true)       
+        
+                firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then((data) => {
-                storeToken(data)
+
+                API.post('/getUser', { email: email })
+            .then((res) => {
+                if(res.data.role=='teacher'){
+                    storeToken(data)
                 props.navigation.navigate({
                     routeName: 'inApp'
                 })
+                }
+                else{
+                    setLoading(false)
+                }
+            })
+            .catch((err) =>
+                console.log(err))
+                
             })
             .catch(error => {setErrorMsg(error.message); setLoading(false)})
     }
