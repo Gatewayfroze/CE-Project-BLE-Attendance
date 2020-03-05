@@ -1,81 +1,60 @@
 import React, {Component, useState, useEffect} from 'react';
 import {BleManager} from 'react-native-ble-plx';
 import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
-import {config} from './firebase';
-import * as firebase from 'firebase';
+// import {config} from './firebase';
+// import * as firebase from 'firebase';
 import DeviceInfo from 'react-native-device-info'
 
 
-firebase.initializeApp(config);
-db = firebase.firestore();
+
 
 export default function App() {
   manager = new BleManager();
 
-  const [mail, setemail] = useState('');
-  const [password, setpassword] = useState('');
+  
   const [mac,setmac]=useState('none')
-  const [Imei,setImei]=useState('')
+  
 
   // useEffect(() => {
   //   scanMC()
   // });
 
-  loginUser = (em, pass) => {
-    console.log('logged');
-    try {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(em, pass)
-        .then(user => {
-          profile = firebase.auth().currentUser;
-          alert('Welcome ' + profile.email);
-        });
-    } catch (error) {
-      console.log(error.toString());
-      alert(error.toString());
-    }
-  };
+  
 
-  signUpUser = em => {
-    var pass = em +'TEST';
-    console.log(pass);
-    try {
-      firebase.auth().createUserWithEmailAndPassword(em, pass);
-    } catch (error) {
-      console.log(error, toString());
-    }
-  };
+  
 
   
   
-  scanMC =() => {
-    this.manager.startDeviceScan(null, null, (error, device) => {
+  scanMC = async () => {
+   
+    var num = new Array()
+     this.manager.startDeviceScan(['4fafc201-1fb5-459e-8fcc-c5c9c331914b'], null, (error, device) => {
       if (error) {
        console.log(error.message);
         return;
-      }
-      if (device.name === 'espino') {
-        
-        this.manager.stopDeviceScan()
-        //console.log(calculateDistance(device.rssi))
-        setmac(device.rssi)        
-        
-        // let distance = Math.pow(10,(-59-device.rssi)/(10))
-        // console.log(calculateDistance(device.rssi))
-        //setmac(distance)
-      }
+      }   
+       
+        num.push(Math.pow(10,(-62-device.rssi)/(30)))
+
+        if(num.length == 50){
+          clearTimeout(time)
+          this.manager.stopDeviceScan()
+          const result = num.reduce((sum,number) => {
+          return sum+number/num.length
+        }, 0)
+        console.log(result)
+        setmac(result)
+
+        }       
   })
+  time = setTimeout(()=> {
+    this.manager.stopDeviceScan()
+    console.log('not found')
+  }, 20000);
+
 }
 
-check = ()=>{
-   
-  //console.log(scanMC())
-  db.collection("transaction").add({
-    mac:mac,
-    time:firebase.firestore.Timestamp.fromDate(new Date())
-})
-}
+
 getIMEI = ()=> {
   let uniqueId = DeviceInfo.getUniqueId();
   setImei(uniqueId)
