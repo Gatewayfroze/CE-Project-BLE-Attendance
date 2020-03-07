@@ -200,6 +200,7 @@ app.post('/addBoard',(req,res)=>{
     mac:req.body.mac
   }).then(()=>{
     res.end()
+    return
   })
 
 })
