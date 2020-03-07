@@ -193,4 +193,15 @@ app.post('/getUser',(req,res)=>{
 
 })
 
+app.post('/addBoard',(req,res)=>{
+  db.collection('boards').add({
+    name:req.body.boardName,
+    serviceUID:req.body.serviceUID,
+    mac:req.body.mac
+  }).then(()=>{
+    res.end()
+  })
+
+})
+
 

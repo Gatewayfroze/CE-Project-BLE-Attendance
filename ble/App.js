@@ -25,27 +25,35 @@ export default function App() {
 
   
   
-  scanMC = async () => {
-   
+  scanMC = async (service,espname) => {
+    
     var num = new Array()
-     this.manager.startDeviceScan(['4fafc201-1fb5-459e-8fcc-c5c9c331914b'], null, (error, device) => {
+     this.manager.startDeviceScan([service], null, (error, device) => {
       if (error) {
-       console.log(error.message);
-        return;
-      }   
+        console.log(error.message);
+         return;
+       }  
        
-        num.push(Math.pow(10,(-62-device.rssi)/(30)))
-
+      if(device.name == espname){
+        clearTimeout(time)
+        num.push(Math.pow(10,(-62-device.rssi)/(20)))
         if(num.length == 50){
           clearTimeout(time)
           this.manager.stopDeviceScan()
           const result = num.reduce((sum,number) => {
           return sum+number/num.length
-        }, 0)
-        console.log(result)
-        setmac(result)
-
+        }, 0)     
+      console.log(device.name+' : '+device.serviceUUIDs +' : '+result)
         }       
+        
+      //setmac(device.name)
+      
+      }
+      
+       
+        
+
+        
   })
   time = setTimeout(()=> {
     this.manager.stopDeviceScan()
@@ -109,7 +117,7 @@ getIMEI = ()=> {
         onChangeText={pass => setpassword(pass)}></TextInput> */}
 
       <View style={styles.butt}>
-        <Button title="IMEI" onPress={() => this.scanMC()}>
+        <Button title="IMEI" onPress={() => this.scanMC("5fafc201-1fb5-459e-8fcc-c5c9c331914b","espino2")}>
           {' '}
         </Button>
         {/* <Button title="Sign Up" onPress={() => this.sign UpUser(mail)}>
