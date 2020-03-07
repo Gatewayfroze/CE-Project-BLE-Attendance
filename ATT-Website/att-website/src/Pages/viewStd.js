@@ -51,7 +51,7 @@ const ManagePage = () => {
                 console.log(response)
                 // setJson(response.data)
                 console.log('here')
-                fetchData()
+                fetchData(genRole)
                 setLoading(false)
             })
             .catch(function (error) {

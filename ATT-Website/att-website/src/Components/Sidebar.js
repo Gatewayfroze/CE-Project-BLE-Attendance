@@ -122,10 +122,10 @@ function ListItemLink(props) {
 export default function ClippedDrawer() {
     const classes = useStyles();
     const list = [
-        { name: 'Enroll Student', icon: Enroll, link: '/enroll' },
         { name: 'Generate Accout', icon: CreateUser, link: '/generate' },
-        { name: 'Create Subject', icon: CreateSub, link: '/createSub' },
+        { name: 'Enroll Student', icon: Enroll, link: '/enroll' },
         { name: 'Manage Account', icon: Account, link: '/viewStd' },
+        { name: 'Create Subject', icon: CreateSub, link: '/createSub' },
         { name: 'Manage Subject', icon: Subject, link: '/viewSub' },
     ]
     return (
@@ -139,10 +139,16 @@ export default function ClippedDrawer() {
             <div className={classes.toolbar} />
             <List style={{ marginTop: 20 }} component="nav" >
                 {list.map((menu, i) => {
-                    return (<ListItemLink className={classes.menuList} href={menu.link}>
-                        <menu.icon color='rgba(0, 0, 0, 0.54)' fontSize="23px" />
-                        <ListItemText className={classes.menuText} primary={menu.name} />
-                    </ListItemLink>
+                    return (
+                        <React.Fragment>
+                            <ListItemLink className={classes.menuList} href={menu.link}>
+                                <menu.icon color='rgba(0, 0, 0, 0.54)' fontSize="23px" />
+                                <ListItemText className={classes.menuText} primary={menu.name} />
+                            </ListItemLink>
+                            
+                            {i==2||i==0?<Divider />:''}
+                        </React.Fragment>
+
                     )
                 })}
             </List>

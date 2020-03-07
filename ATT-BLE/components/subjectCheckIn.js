@@ -4,14 +4,7 @@ import { View, Text, TouchableHighlight, StyleSheet, TouchableOpacity } from 're
 import Colors from '../constants/Colors'
 import API from '../assets/API'
 const SubjectCheckIn = props => {
-    const sendCheckIn = () => {
-        const transaction=props.transaction;
-        console.log(transaction)
-        API.post('createTransaction/', transaction)
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
-
-    }
+ 
     return (
         <View style={props.disabled ? { ...styles.itemSubject, backgroundColor: '#d1d1d1' } : { ...styles.itemSubject, backgroundColor: 'white' }}>
             <View style={styles.subjectDetailContainer}>
@@ -37,7 +30,7 @@ const SubjectCheckIn = props => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity disabled={props.disabled} style={props.disabled ? { ...styles.buttonCircle, backgroundColor: 'gray' } :
                     { ...styles.buttonCircle, backgroundColor: Colors.highLigthColor }}
-                    onPress={() => sendCheckIn()}>
+                    onPress={props.sendTransaction}>
                     <Text style={{ fontSize: 17, color: 'white' }}>Check-In</Text>
                 </TouchableOpacity>
             </View>

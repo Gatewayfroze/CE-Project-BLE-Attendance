@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Bar } from 'react-chartjs-2';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles,useTheme } from '@material-ui/styles';
 import {
   Card,
   CardHeader,
@@ -11,7 +11,7 @@ import {
   Divider,
   Button
 } from '@material-ui/core';
-
+import { Link } from 'react-router-dom'
 import { options } from './chart';
 
 const useStyles = makeStyles(() => ({
@@ -25,24 +25,24 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Graph = props => {
-  const { className,labelDate, ...rest } = props;
+const Graph = ({subjectID,labelDate,className},...rest) => {
+  const theme = useTheme();
   const data = {
-    labels: props.labelDate,
+    labels: labelDate,
     datasets: [
       {
         label: 'In time',
-        // backgroundColor: palette.primary.main,
-        data: [20,10]
+        backgroundColor: theme.palette.primary.main,
+        data: [20, 10]
       },
       {
         label: 'Late',
-        // backgroundColor: palette.neutral,
+        backgroundColor: theme.palette.warning.main,
         data: [10]
       },
       {
         label: 'Absent',
-        // backgroundColor: palette.neutral,
+        backgroundColor: theme.palette.error.main,
         data: [15]
       }
     ]
@@ -58,12 +58,14 @@ const Graph = props => {
         action={
           <Button
             size="small"
-            variant="text"
+            variant="contained"
+            color='secondary'
+          
           >
-            Last 7 days
+            View schedule
           </Button>
         }
-        title="Latest Sales"
+        title="Schedule Graph"
       />
       <Divider />
       <CardContent>
@@ -74,16 +76,6 @@ const Graph = props => {
           />
         </div>
       </CardContent>
-      <Divider />
-      <CardActions className={classes.actions}>
-        <Button
-          color="primary"
-          size="small"
-          variant="text"
-        >
-          Overview
-        </Button>
-      </CardActions>
     </Card>
   );
 };

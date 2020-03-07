@@ -1,20 +1,36 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
+import API from '../assets/API'
 import Colors from '../constants/Colors'
-const CurrentSubject = props => {
+const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
     const [curTime, setTime] = useState(
         new Date().toLocaleTimeString()
     )
+    const [currentSubject, setCurrentSubject] = useState('')
+    useEffect(() => {
+        getCurrentSubject()
+    }, [])
     useEffect(() => {
         setInterval(() => {
             setTime(new Date().toLocaleTimeString())
         }, 1000)
     })
+    useEffect(() => {
+        if (currentSubject !== '') {
+            console.log(typeof currentSubject.endTime)
+            console.log(currentSubject.endTime.toString())
+        }
+    }, [currentSubject])
+    const getCurrentSubject = () => {
+        console.log({ uid: currentUser.uid })
+        API.post('getCurrentSubject', { uid: currentUser.uid }).then((res) => { res.data.endTime = new Date(res.data.endTime); setCurrentSubject(res.data) })
+    }
     return (
         <View style={styles.currentSubjectContainer}>
-            <Text style={styles.title}>วิชา Data Mining</Text>
+            <Text style={styles.title}>{currentSubject.subjectID}</Text>
             <Text style={styles.time}>{curTime}</Text>
-            <Text>หมดเวลา 12:00</Text>
+            <Text>{currentSubject.endTime ? currentSubject.endTime.toString() : ''}</Text>
+            <Button onPress={checkOut} title='Check out' disabled={currentSubject.endTime && new Date() > currentSubject.endTime ? false : true}></Button>
         </View>
     )
 }

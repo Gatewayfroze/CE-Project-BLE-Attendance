@@ -18,8 +18,8 @@ firebase.initializeApp(config);
 db = firebase.firestore()
 
 const LoginScreen = props => {
-    const [email, setEmail] = useState("59010781@kmitl.ac.th")
-    const [password, setPassword] = useState("aa9211d195")
+    const [email, setEmail] = useState("59010734@kmitl.ac.th")
+    const [password, setPassword] = useState("Nitinon.556")
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)
@@ -39,8 +39,6 @@ const LoginScreen = props => {
     }
     handleLogin = () => {
         setLoading(true)
-        
-
         db.collection("users").where('email', '==', email).get().then((snapshot) => {
             if(snapshot.docs.length==0){
                 setLoading(false)

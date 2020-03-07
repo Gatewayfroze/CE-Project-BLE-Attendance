@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles'
 import {
-    LatestSales,
+    ScheduleGraph,
     UsersByDevice,
 } from '../Components/Dashboard';
 import API from '../api'
@@ -71,7 +71,7 @@ const ViewSubjectPage = ({ match }, ...props) => {
             <div className={classes.root}>
                 <Grid container spacing={2}>
                     <Grid item lg={8} md={12} xl={9} xs={12}>
-                        <LatestSales labelDate={LabelDate} />
+                        <ScheduleGraph labelDate={LabelDate} subjectID={subjectID} />
                     </Grid>
                     <Grid item lg={4} md={6} xl={3} xs={12}>
                         <UsersByDevice />

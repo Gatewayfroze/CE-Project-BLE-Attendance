@@ -107,7 +107,7 @@ const UsersByDevice = props => {
           <IconButton size="small">
           </IconButton>
         }
-        title="Users By Device"
+        title="Percentage In class"
       />
       <Divider />
       <CardContent>

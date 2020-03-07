@@ -73,7 +73,8 @@ const EditSch = ({ scheduleList,subjectID }, ...props) => {
         let table = []
         for (let i = 0; i < schedule.length; i++) {
             const now = new Date()
-            const isDisable = now > schedule[i].date ? true : false
+            const isDisable=false
+            // const isDisable = now > schedule[i].date ? true : false
             table.push(
                 <tr key={i}>
                     <td>
