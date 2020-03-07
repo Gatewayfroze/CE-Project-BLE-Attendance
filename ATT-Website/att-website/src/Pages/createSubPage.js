@@ -85,6 +85,10 @@ const CreateSubPage = props => {
     const deleteSchedule = schIndex => {
         const schTemp = [...schedule];
         schTemp.splice(schIndex, 1);
+        schTemp.forEach((sch,i)=>{
+            sch.schIndex=i
+        })
+        console.log(schTemp)
         setSchedule(schTemp)
     }
     const hadleMACadrr = (event, i) => {

@@ -22,8 +22,8 @@ const EditSch = ({ scheduleList,subjectID }, ...props) => {
     useEffect(() => { setSchedule(scheduleList) }, [scheduleList])
     useEffect(() => {
         if (schedule) {
-            console.log('=============================================')
-            console.log(schedule)
+            // console.log('=============================================')
+            // console.log(schedule)
             schedule.forEach((sch) => {
                 sch.date = new Date(sch.date)
                 sch.start = new Date(sch.start)
@@ -67,6 +67,9 @@ const EditSch = ({ scheduleList,subjectID }, ...props) => {
     const deleteSchedule = schIndex => {
         const schTemp = [...schedule];
         schTemp.splice(schIndex, 1);
+        schTemp.forEach((sch,i)=>{
+            sch.schIndex=i
+        })
         setSchedule(schTemp)
     }
     const createTable = () => {

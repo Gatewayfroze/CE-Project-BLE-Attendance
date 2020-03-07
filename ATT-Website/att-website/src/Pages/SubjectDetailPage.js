@@ -69,7 +69,7 @@ const ViewSubjectPage = ({ match }, ...props) => {
             <div className={classes.root}>
                 <Grid container spacing={2}>
                     <Grid item lg={8} md={12} xl={9} xs={12}>
-                        <ScheduleGraph labelDate={LabelDate} subjectID={subjectID} schedule={subjectData?subjectData.schedule:[]} studentNo={subjectData?subjectData.students.length:0}/>
+                        <ScheduleGraph labelDate={LabelDate} subjectID={subjectID} scheduleList={schedule} studentNo={subjectData?subjectData.students.length:0}/>
                     </Grid>
                     <Grid item lg={4} md={6} xl={3} xs={12}>
                         <UsersByDevice />

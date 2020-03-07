@@ -25,36 +25,61 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const ScheduleGraph = ({ subjectID, labelDate, schedule, className, studentNo }, ...rest) => {
+const ScheduleGraph = ({ subjectID, labelDate, scheduleList, className, studentNo }, ...rest) => {
   const theme = useTheme();
+  const [schedule, setSchedule] = useState(scheduleList)
   const [transaction, setTransac] = useState('')
-  const [transacData, setTransacData] = useState()
+  const [transacData, setTransacData] = useState([])
+  useEffect(() => { setSchedule(scheduleList) }, [scheduleList])
   useEffect(() => {
-    fetchTrasaction()
-  }, [])
-  useEffect(() => {
-    if (transaction !== '') {
+    if (schedule) {
       const transacObj = {
         inTime: 0,
         late: 0,
         absent: studentNo
       }
-      console.log(findLastSchedule())
+      // const array = new Array(findLastSchedule()).fill({ ...transacObj })
+      let array = []
+      for (let i = 0; i < findLastSchedule(); i++) {
+        array = [...array, { ...transacObj }]
+      }
+      setTransacData(array)
+      fetchTrasaction()
+    }
+  }, [schedule])
+  useEffect(() => {
+    if (transaction !== '' &&transacData.length!==0) {
+      transaction.forEach((transac) => {
+        const temp = [...transacData]
+        if (transac.status === 'ok') {
+          temp[transac.schIndex].inTime += 1
+          temp[transac.schIndex].absent -= 1
+
+        } else if (transac.status === 'late') {
+          temp[transac.schIndex].late += 1
+          temp[transac.schIndex].absent -= 1
+        }
+        setTransacData(temp)
+      })
     }
   }, [transaction])
   const findLastSchedule = () => {
     for (let i = 0; i < schedule.length; i++) {
       let sch = schedule[i]
-      const now = new Date()
-      if (sch.date > now) {
+      const now = new Date
+      const date = new Date(sch.date)
+      if (date > now) {
         return i
       }
     }
+    return 0
+
   }
   const fetchTrasaction = () => {
     API.post('getTransactionSub/', { subjectID })
       .then((res) => {
         setTransac(res.data)
+        console.log(res.data)
       })
       .catch((err) => console.log(err))
   }
@@ -64,17 +89,17 @@ const ScheduleGraph = ({ subjectID, labelDate, schedule, className, studentNo },
       {
         label: 'In time',
         backgroundColor: theme.palette.primary.main,
-        data: [20, 10]
+        data: transacData.map((sch) => sch.inTime)
       },
       {
         label: 'Late',
         backgroundColor: theme.palette.warning.main,
-        data: [10]
+        data: transacData.map((sch) => sch.late)
       },
       {
         label: 'Absent',
         backgroundColor: theme.palette.error.main,
-        data: [15]
+        data: transacData.map((sch) => sch.absent)
       }
     ]
   };
@@ -91,7 +116,8 @@ const ScheduleGraph = ({ subjectID, labelDate, schedule, className, studentNo },
             size="small"
             variant="contained"
             color='secondary'
-
+            component={Link}
+            to={`/export/${subjectID}`}
           >
             View schedule
           </Button>
