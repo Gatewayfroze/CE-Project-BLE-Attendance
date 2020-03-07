@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Bar } from 'react-chartjs-2';
-import { makeStyles,useTheme } from '@material-ui/styles';
+import { makeStyles, useTheme } from '@material-ui/styles';
 import {
   Card,
   CardHeader,
   CardContent,
-  CardActions,
   Divider,
   Button
 } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import { options } from './chart';
+import API from '../../../api'
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -25,8 +25,39 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Graph = ({subjectID,labelDate,className},...rest) => {
+const ScheduleGraph = ({ subjectID, labelDate, schedule, className, studentNo }, ...rest) => {
   const theme = useTheme();
+  const [transaction, setTransac] = useState('')
+  const [transacData, setTransacData] = useState()
+  useEffect(() => {
+    fetchTrasaction()
+  }, [])
+  useEffect(() => {
+    if (transaction !== '') {
+      const transacObj = {
+        inTime: 0,
+        late: 0,
+        absent: studentNo
+      }
+      console.log(findLastSchedule())
+    }
+  }, [transaction])
+  const findLastSchedule = () => {
+    for (let i = 0; i < schedule.length; i++) {
+      let sch = schedule[i]
+      const now = new Date()
+      if (sch.date > now) {
+        return i
+      }
+    }
+  }
+  const fetchTrasaction = () => {
+    API.post('getTransactionSub/', { subjectID })
+      .then((res) => {
+        setTransac(res.data)
+      })
+      .catch((err) => console.log(err))
+  }
   const data = {
     labels: labelDate,
     datasets: [
@@ -60,12 +91,12 @@ const Graph = ({subjectID,labelDate,className},...rest) => {
             size="small"
             variant="contained"
             color='secondary'
-          
+
           >
             View schedule
           </Button>
         }
-        title="Schedule Graph"
+        title="Schedule Graph "
       />
       <Divider />
       <CardContent>
@@ -80,8 +111,9 @@ const Graph = ({subjectID,labelDate,className},...rest) => {
   );
 };
 
-Graph.propTypes = {
-  labelDate: PropTypes.array.isRequired
+ScheduleGraph.propTypes = {
+  labelDate: PropTypes.array.isRequired,
+  studentNo: PropTypes.number.isRequired,
 };
 
-export default Graph;
+export default ScheduleGraph;
