@@ -18,7 +18,7 @@ app.post("/createTransaction", (req, res) => {
     })
     .then(async () => {
       const map= {
-        subjectID: req.body.subject,
+        subjectID: req.body.subjectID,
         schIndex: req.body.schIndex,
         endTime: req.body.endTime
       }
