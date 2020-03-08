@@ -157,6 +157,24 @@ app.post("/drop", async (req, res) => {
               })
               return
             })
+
+           await db
+          .collection("transactions")
+           .where("subjectID", "==", req.body.subjectID)
+           .where("studentUID", "==", docs.id)
+           .get()
+            .then(snapshot => {
+             snapshot.docs.map(doc => doc.id).forEach(tran=>{
+              db.collection("transactions").doc(tran).delete().catch(error => {
+                console.log(error, toString());
+              });
+             })
+
+      return;
+    })
+    .catch(error => {
+      console.log(error, toString());
+    });
         })
         res.end()
         return

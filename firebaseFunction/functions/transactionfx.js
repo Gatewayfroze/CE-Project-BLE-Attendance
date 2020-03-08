@@ -17,15 +17,16 @@ app.post("/createTransaction", (req, res) => {
       uniqueID: req.body.uniqueID
     })
     .then(async () => {
+      const map= {
+        subjectID: req.body.subject,
+        schIndex: req.body.schIndex,
+        endTime: req.body.endTime
+      }
       await db
         .collection("users")
         .doc(req.body.uid)
         .update({
-          currentSubject: {
-            subjectID: req.body.subject,
-            schIndex: req.body.schIndex,
-            endTime: req.body.endTime
-          }
+          currentSubject: map
         })
         .then(() => {
           res.end();

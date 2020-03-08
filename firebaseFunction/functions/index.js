@@ -201,7 +201,9 @@ app.post('/addBoard',(req,res)=>{
   }).then(()=>{
     res.end()
     return
-  })
+  }).catch(error => {
+    console.log(error, toString());
+  });
 
 })
 
