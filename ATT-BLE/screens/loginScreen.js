@@ -19,7 +19,7 @@ db = firebase.firestore()
 
 const LoginScreen = props => {
     const [email, setEmail] = useState("59010734@kmitl.ac.th")
-    const [password, setPassword] = useState("Nitinon.556")
+    const [password, setPassword] = useState("cafab4829a")
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)

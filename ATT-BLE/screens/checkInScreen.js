@@ -11,7 +11,7 @@ import {
   AsyncStorage,
   Button,
   ActivityIndicator,
-  RefreshControl 
+  RefreshControl
 } from 'react-native'
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
@@ -115,9 +115,15 @@ const CheckInScreen = props => {
     return currentSche
   }
   const sendCheckIn = (transaction) => {
+    console.log('eiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+    console.log(transaction)
     API.post('createTransaction/', transaction)
-      .then((res) => { getCurrentSubject(); console.log(res) })
-      .catch((err) => console.log(err))
+      .then((res) => {
+        getCurrentSubject();
+        console.log(res)
+      })
+      .catch((err) =>
+        console.log(err))
   }
   const checkOut = () => {
     API.post('setCurrentSubject/', { uid: currentUser.uid, currentSubject: {} })
@@ -135,7 +141,7 @@ const CheckInScreen = props => {
       {objIsEmpty(currentSubject) ?
         <React.Fragment>
           {/* {loading ? <ActivityIndicator size="large" color={Color.primaryColor} /> : <Button title='refresh' onPress={getUserSubject} />} */}
-          <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={getUserSubject} />}>
+          <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
             {subjectsDetail.map((subject, i) => {
               // check when schedule =0
               const currentSch = currentSchedule(subject.schedule)[0]
