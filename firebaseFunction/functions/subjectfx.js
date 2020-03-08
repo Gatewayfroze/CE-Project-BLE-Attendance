@@ -67,17 +67,28 @@ app.delete("/deleteSubject", async (req, res) => {
       })
 
     })
-    //  res.end()
+    
     return
-  }).then(() => {
-    db.collection("subjects").doc(req.body.subjectID).delete().catch(error => {
+  }).then(async() => {
+   await db.collection("subjects").doc(req.body.subjectID).delete().catch(error => {
       console.log(error, toString())
     })
+
+    await db.collection("transactions")
+     .where("subjectID", "==", req.body.subjectID).get()
+      .then(snapshot => {
+       snapshot.docs.map(doc => doc.id).forEach(tran=>{
+        db.collection("transactions").doc(tran).delete().catch(error => {
+          console.log(error, toString());
+        });
+       })
     return
   }).catch(error => {
     console.log(error, toString())
   })
   res.end()
+  return
+})
 })
 
 app.post("/enroll", async (req, res) => {
