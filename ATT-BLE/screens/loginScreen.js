@@ -24,6 +24,24 @@ const LoginScreen = props => {
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)
     useEffect(() => {
+        AsyncStorage.getItem("userData").then((value) => {
+            if(value == null){
+                console.log(value)
+            }else{
+                props.navigation.navigate({
+                    routeName: 'inApp'
+                })
+            }
+           
+        })
+        // .then(res => {
+        //     //do something else
+        // });
+        
+       
+    }, [])
+    
+    useEffect(() => {
         if (email.length !== 0 && password.length !== 0) {
             setDisable(false)
         } else {
@@ -37,7 +55,19 @@ const LoginScreen = props => {
             console.log("Something went wrong", error);
         }
     }
+
+    const getToken = async () => {
+        try {
+          let userData = await AsyncStorage.getItem("userData");
+          let data = JSON.parse(userData);
+          console.log(data)
+          return data
+        } catch (error) {
+          console.log("Something went wrong", error);
+        }
+      }
     handleLogin = () => {
+        
         setLoading(true)
         db.collection("users").where('email', '==', email).get().then((snapshot) => {
             if(snapshot.docs.length==0){
@@ -51,11 +81,12 @@ const LoginScreen = props => {
                     firebase
                     .auth()
                     .signInWithEmailAndPassword(email, password)
-                    .then((data) => {
-                        storeToken(data)
-                        props.navigation.navigate({
+                    .then(async (data) => {
+                        await storeToken(data)
+                        await props.navigation.navigate({
                             routeName: 'inApp'
                         })
+                        
                     })
                     .catch(error => {setErrorMsg(error.message); setLoading(false)})
                 } catch (error) {

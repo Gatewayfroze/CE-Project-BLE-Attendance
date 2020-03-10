@@ -49,6 +49,18 @@ const ProfileScreen = props => {
             .catch((err) =>
                 console.log(err))
     }
+
+    const deleteToken= async() =>{
+        try {
+          await AsyncStorage.removeItem("userData").then(()=>{
+            props.navigation.navigate({
+                routeName: 'login'
+            })
+          })
+        } catch (err) {
+          console.log(`The error is: ${err}`)
+        }
+      }
     return (
         <View style={styles.screen}>
             <View style={styles.profileContainer}>
@@ -76,9 +88,8 @@ const ProfileScreen = props => {
             </Button>
 
             <Button style={styles.buttonSize} click={
-                () => props.navigation.navigate({
-                    routeName: 'login'
-                })
+                () => deleteToken()
+                
             }>
                 <Text style={{ color: 'white',fontSize: 18 }}>
                     Logout

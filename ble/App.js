@@ -37,13 +37,14 @@ export default function App() {
       if(device.name == espname){
         clearTimeout(time)
         num.push(Math.pow(10,(-62-device.rssi)/(20)))
-        if(num.length == 50){
+        if(num.length == 20){
           clearTimeout(time)
           this.manager.stopDeviceScan()
           const result = num.reduce((sum,number) => {
           return sum+number/num.length
         }, 0)     
       console.log(device.name+' : '+device.serviceUUIDs +' : '+result)
+      setmac(result)
         }       
         
       //setmac(device.name)
