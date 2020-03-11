@@ -22,6 +22,19 @@ const LoginScreen = props => {
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        AsyncStorage.getItem("userData").then((value) => {
+            if(value == null){
+                console.log(value)
+            }else{
+                props.navigation.navigate({
+                    routeName: 'inApp'
+                })
+            }          
+        })        
+    }, [])
+
     useEffect(() => {
         if (email.length !== 0 && password.length !== 0) {
             setDisable(false)

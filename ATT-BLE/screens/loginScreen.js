@@ -31,14 +31,8 @@ const LoginScreen = props => {
                 props.navigation.navigate({
                     routeName: 'inApp'
                 })
-            }
-           
-        })
-        // .then(res => {
-        //     //do something else
-        // });
-        
-       
+            }          
+        })        
     }, [])
     
     useEffect(() => {

@@ -3,6 +3,18 @@ import { View, Text, StyleSheet } from 'react-native'
 import Colors from '../constants/Colors'
 
 import Button from '../components/button'
+
+const deleteToken= async() =>{
+    try {
+      await AsyncStorage.removeItem("userData").then(()=>{
+        props.navigation.navigate({
+            routeName: 'login'
+        })
+      })
+    } catch (err) {
+      console.log(`The error is: ${err}`)
+    }
+  }
 const ProfileScreen = props => {
     return (
         <View style={styles.screen}>
@@ -19,9 +31,7 @@ const ProfileScreen = props => {
                 </View>
             </View>
             <Button style={styles.buttonSize} click={
-                ()=> props.navigation.navigate({
-                    routeName:'login'
-                })
+                ()=> deleteToken()
                 }>
                 <Text style={{ color: 'white', fontSize: 18 }}>
                     Logout
