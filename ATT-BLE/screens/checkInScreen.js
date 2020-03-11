@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useReducer,
 } from 'react'
+
 import {
   View,
   Text,
@@ -10,9 +11,9 @@ import {
   StyleSheet,
   AsyncStorage,
   Button,
-  ActivityIndicator,
   RefreshControl
 } from 'react-native'
+
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 import Color from '../constants/Colors'
@@ -45,7 +46,6 @@ const CheckInScreen = props => {
 
 
   // -----------------------------------------------------------------------------
-
   getToken = async () => {
     try {
       let userData = await AsyncStorage.getItem("userData");
@@ -176,14 +176,6 @@ const CheckInScreen = props => {
               }
               return <SubjectCheckIn key={i} disabled={isDisable} title={subject.subjectName} detail={strDetail} sendTransaction={() => sendCheckIn(objTransac)} />
             })}
-
-            {/* <SubjectCheckIn title='Data structure and algorithm' detail='เวลาเรียน: จ. 07:30-12:00 น.' onClick={() => {
-          props.navigation.navigate({
-            routeName: 'statDetail'
-          })
-        }
-        } />
-        <SubjectCheckIn disabled={true} title='Human computer interaction' detail='เวลาเรียน: พ. 07:30-12:00 น.' /> */}
           </ScrollView>
         </React.Fragment>
         :

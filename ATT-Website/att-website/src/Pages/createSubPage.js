@@ -20,7 +20,7 @@ const CreateSubPage = props => {
     const [tableBody, setTableBody] = useState()
     const [loading, setLoading] = useState(false)
     const [curUser, setcurUser] = useState(null)
-
+    const [numSch, setNumSch] = useState(1)
     useEffect(() => {
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -39,7 +39,7 @@ const CreateSubPage = props => {
     }
     // hadle submiting data
     const handleSubmit = () => {
-        const subjectData = { teacherUID:curUser,...subjectDetail, schedule }
+        const subjectData = { teacherUID: curUser, ...subjectDetail, schedule }
         console.log(subjectData)
         setLoading(true)
         API.post('createSubject/', subjectData)
@@ -57,24 +57,34 @@ const CreateSubPage = props => {
         setSchedule([])
     }
     // hadle table
+    const clearSch = () => {
+        setNumSch(1)
+        setTableBody()
+        setSchedule([])
+    }
     const addSchedule = () => {
+        const num = numSch
         const period = {
-            schIndex:0,
+            schIndex: 0,
             date: new Date(),
             start: new Date(),
             end: new Date(),
             mac: '000000000000 '
         }
-        if (schedule.length > 0) {
-            period.schIndex=schedule.length
-            period.date=new Date(schedule[schedule.length - 1].date)
-            period.date.setDate(schedule[schedule.length - 1].date.getDate() + 7)
-            period.start = schedule[schedule.length - 1].start
-            period.end = schedule[schedule.length - 1].end
-            period.mac = schedule[schedule.length - 1].mac
+        let temp = schedule
+        for (let i = 0; i < num; i++) {
+            if (temp.length > 0) {
+                period.schIndex = temp.length
+                period.date = new Date(temp[temp.length - 1].date)
+                period.date.setDate(temp[temp.length - 1].date.getDate() + 7)
+                period.start = temp[temp.length - 1].start
+                period.end = temp[temp.length - 1].end
+                period.mac = temp[temp.length - 1].mac
+            }
+            temp = [...temp, { ...period }]
+            console.log(temp)
         }
-        setSchedule([...schedule, period])
-        console.log(schedule)
+        setSchedule(temp)
     }
     const setDate = (date, mode, i) => {
         const temp = schedule
@@ -85,8 +95,8 @@ const CreateSubPage = props => {
     const deleteSchedule = schIndex => {
         const schTemp = [...schedule];
         schTemp.splice(schIndex, 1);
-        schTemp.forEach((sch,i)=>{
-            sch.schIndex=i
+        schTemp.forEach((sch, i) => {
+            sch.schIndex = i
         })
         console.log(schTemp)
         setSchedule(schTemp)
@@ -97,6 +107,9 @@ const CreateSubPage = props => {
         console.log(temp[i].mac)
         setSchedule([...temp])
         console.log(schedule)
+    }
+    const handleNumChange = (event) => {
+        setNumSch(event.target.value)
     }
     const createTable = () => {
         let table = []
@@ -165,7 +178,13 @@ const CreateSubPage = props => {
                         <label className='label'>Schedule</label>
                     </div>
                     <div className='control'>
+                        <input className='input' type='number' value={numSch} onChange={handleNumChange} />
+                    </div>
+                    <div className='control'>
                         <button className='button is-primary' type='button' onClick={() => addSchedule()}>Add</button>
+                    </div>
+                    <div className='control'>
+                        <button className='button is-warning' type='button' onClick={() => clearSch()}>Clear</button>
                     </div>
                 </div>
                 <div style={styles.overFlowTab} >
