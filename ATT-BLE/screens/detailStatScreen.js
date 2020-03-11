@@ -8,43 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { PieChart } from "react-native-chart-kit"
 import API from '../assets/API'
 
-const data = [
-    {
-        name: "Seoul",
-        population: 21500000,
-        color: "rgba(131, 167, 234, 1)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Toronto",
-        population: 2800000,
-        color: "#F00",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Beijing",
-        population: 527612,
-        color: "red",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "New York",
-        population: 8538000,
-        color: "#ffffff",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Moscow",
-        population: 11920000,
-        color: "rgb(0, 0, 255)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    }
-];
+
 
 const DetailStatScreen = ({ navigation }, ...props) => {
     const [subjectData, setSubjectData] = useState('')
@@ -52,9 +16,11 @@ const DetailStatScreen = ({ navigation }, ...props) => {
     const [transaction, setTransaction] = useState([])
     const [dataSchedule, setDataSchedule] = useState([])
     const [loading, setLoading] = useState(false)
-
+    const [dataChart, setDataChart] = useState([])
     const subjectID = navigation.state.params.subjectID
     const currentUID = navigation.state.params.uid
+
+
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
         backgroundGradientFromOpacity: 0,
@@ -63,7 +29,10 @@ const DetailStatScreen = ({ navigation }, ...props) => {
         color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5
-      };
+    }
+
+
+
     useEffect(() => {
         fetchSubject()
     }, [])
@@ -88,27 +57,62 @@ const DetailStatScreen = ({ navigation }, ...props) => {
                 let dateSch = new Date(...sch.split('/').reverse())
                 dateSch.setMonth(dateSch.getMonth() - 1)
                 let defaultTxt = ''
-                console.log(dateSch.toString())
-                console.log(now.toString())
-                console.log(dateSch < now)
-                console.log('----------------------')
+                // console.log(dateSch.toString())
+                // console.log(now.toString())
+                // console.log(dateSch < now)
+                // console.log('----------------------')
                 if (dateSch < now) defaultTxt = 'Absent'
                 return [i + 1, sch, defaultTxt]
             })
             setDataSchedule(data)
-            fetchTrasaction()
+            fetchTrasaction(data)
         }
     }, [subjectData])
 
     useEffect(() => {
 
     }, [transaction])
-    const fetchTrasaction = () => {
+    const fetchTrasaction = (dataSch) => {
         setLoading(true)
         API.post('getTransactionSubStu/', { uid: currentUID, subjectID })
             .then((res) => {
                 setLoading(false)
                 setTransaction(res.data)
+                let tempSch = dataSch
+                tempSch.forEach((sch, i) => {
+                    console.log(i)
+                    const findTrans = res.data.find((trans) => {
+                        return trans.schIndex == i
+                    })
+                    console.log(findTrans)
+                    if (findTrans) sch[sch.length - 1] = findTrans.status
+                })
+                setDataSchedule(tempSch)
+                let valStatus = { ok: 0, late: 0, absent: 0 }
+                res.data.forEach((data) => {
+                    valStatus[`${data.status}`] += 1
+                })
+                setDataChart([{
+                    name: "In time",
+                    population: valStatus.ok,
+                    color: Colors.primaryColor,
+                    legendFontColor: "#7F7F7F",
+                    legendFontSize: 15
+                },
+                {
+                    name: "Late",
+                    population: valStatus.late,
+                    color: Colors.secondaryColor,
+                    legendFontColor: "#7F7F7F",
+                    legendFontSize: 15
+                },
+                {
+                    name: "Absent",
+                    population: valStatus.absent,
+                    color: "#F00",
+                    legendFontColor: "#7F7F7F",
+                    legendFontSize: 15
+                }])
             })
             .catch((err) => {
                 console.log(err)
@@ -127,7 +131,7 @@ const DetailStatScreen = ({ navigation }, ...props) => {
         <ScrollView style={{ paddingHorizontal: 10 }} refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={fetchSubject} />}>
             <View style={styles.statValContain}>
                 <View style={styles.statContainer}>
-                    <View style={styles.titleContainer}>
+                    {/* <View style={styles.titleContainer}>
                         <Text style={styles.titleText}>จำนวนครั้งที่เข้าเรียน</Text>
                         <Text style={styles.titleText}>มา</Text>
                         <Text style={styles.titleText}>สาย</Text>
@@ -138,10 +142,10 @@ const DetailStatScreen = ({ navigation }, ...props) => {
                         <Text style={styles.detailText}>10</Text>
                         <Text style={styles.detailText}>0</Text>
                         <Text style={styles.detailText}>0</Text>
-                    </View>
+                    </View> */}
                     <PieChart
-                        data={data}
-                        width={400}
+                        data={dataChart}
+                        width={300}
                         height={220}
                         chartConfig={chartConfig}
                         accessor="population"
@@ -181,6 +185,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: '90%',
+        width: '99%',
         paddingVertical: 50,
         borderRadius: 20,
         // shadow
