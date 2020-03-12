@@ -27,12 +27,12 @@ const useStyles = makeStyles(() => ({
 
 const ScheduleGraph = ({ subjectID, labelDate, scheduleList, className, studentNo }, ...rest) => {
   const theme = useTheme();
-  const [schedule, setSchedule] = useState(scheduleList)
+  const [schedule, setSchedule] = useState('')
   const [transaction, setTransac] = useState('')
   const [transacData, setTransacData] = useState([])
   useEffect(() => { setSchedule(scheduleList) }, [scheduleList])
   useEffect(() => {
-    if (schedule) {
+    if (schedule != '') {
       const transacObj = {
         inTime: 0,
         late: 0,
@@ -48,7 +48,8 @@ const ScheduleGraph = ({ subjectID, labelDate, scheduleList, className, studentN
     }
   }, [schedule])
   useEffect(() => {
-    if (transaction !== '' &&transacData.length!==0) {
+    // console.log(transaction + '     ' + transaction.length)
+    if (transaction !== '' && transacData.length !== 0) {
       transaction.forEach((transac) => {
         const temp = [...transacData]
         if (transac.status === 'ok') {
@@ -79,7 +80,6 @@ const ScheduleGraph = ({ subjectID, labelDate, scheduleList, className, studentN
     API.post('getTransactionSub/', { subjectID })
       .then((res) => {
         setTransac(res.data)
-        console.log(res.data)
       })
       .catch((err) => console.log(err))
   }

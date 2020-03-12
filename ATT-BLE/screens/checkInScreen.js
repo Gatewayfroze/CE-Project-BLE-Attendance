@@ -109,7 +109,7 @@ const CheckInScreen = props => {
       const now = new Date()
       // เวลาไม่เกินคาบครึ่งชม.
       if (diff_minutes(now, date) < 30)
-        return { date: date, start: new Date(sch.start), end: new Date(sch.end), schIndex: sch.schIndex }
+        return { date: date, start: new Date(sch.start), end: new Date(sch.end), schIndex: sch.schIndex, mac: sch.mac }
     })
     currentSche = currentSche.filter((sch) => sch !== undefined)
     return currentSche
@@ -130,6 +130,10 @@ const CheckInScreen = props => {
       .then((res) => { getCurrentSubject(); console.log(res) })
       .catch((err) => console.log(err))
   }
+  const findBLE = () => {
+    return `${mac}` === '000000000000'
+  }
+
 
   return (
     <View style={styles.screen} navigation={props.navigation}>
@@ -172,7 +176,8 @@ const CheckInScreen = props => {
                 }
                 // console.log(objTransac)
                 strDetail = `${dateString} ${startTime}-${endTime} น.`
-                isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 ? true : false
+                // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
+                isDisable = !findBLE(currentSch.mac) ? true : false
               }
               return <SubjectCheckIn key={i} disabled={isDisable} title={subject.subjectName} detail={strDetail} sendTransaction={() => sendCheckIn(objTransac)} />
             })}
