@@ -44,7 +44,8 @@ app.get("/getAllTeacher", (req, res) => {
 app.post("/createAccount", async (req, res) => {
   var _secretKey = "some-unique-key";
   var simpleCrypto = new SimpleCrypto(_secretKey);
-  var pass = simpleCrypto.encrypt(req.body.email).slice(0, 10);
+  // var pass = simpleCrypto.encrypt(req.body.email).slice(0, 10);
+  var pass = "00000000"
 
   await admin
     .auth()
