@@ -196,7 +196,7 @@ app.post('/getUser',(req,res)=>{
 
 app.post('/addBoard',(req,res)=>{
   db.collection('boards').add({
-    name:req.body.boardName,
+    boardName:req.body.boardName,
     serviceUID:req.body.serviceUID,
     mac:req.body.mac
   }).then(()=>{
@@ -206,6 +206,28 @@ app.post('/addBoard',(req,res)=>{
     console.log(error, toString());
   });
 
+})
+
+app.post('/deleteBoard',(req,res)=>{
+    db.collection('boards').doc(req.body.id).delete().then(()=>{
+      res.end()
+      return
+    }).catch(error => {
+      console.log(error, toString());
+    });
+})
+
+app.post('/updateBoard',(req,res)=>{
+  db.collection('boards').doc(req.body.id).update({
+    boardName:req.body.boardName,
+    serviceUID:req.body.serviceUID,
+    mac:req.body.mac
+  }).then(()=>{
+    res.end()
+    return
+  }).catch(error => {
+    console.log(error, toString());
+  });
 })
 
 app.post('/getBoard',(req,res)=>{
