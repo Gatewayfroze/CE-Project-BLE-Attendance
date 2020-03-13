@@ -26,7 +26,9 @@ const CheckInScreen = props => {
   const [subjectsID, setSubjectsID] = useState([])
   const [subjectsDetail, setSubjectsDetail] = useState([])
   const [loading, setLoading] = useState(false)
+  const [BLEstatus, setBLEStatus] = useState(false)
   const [currentSubject, setCurrentSubject] = useState({})
+  const [componentData, setCompData] = useState([])
   useEffect(() => {
     getToken()
   }, []);
@@ -44,7 +46,24 @@ const CheckInScreen = props => {
     }
   }, [subjectsID])
 
-
+  useEffect(() => {
+    if (subjectsDetail.length !== 0) {
+      setLoading(true)
+      console.log('find BLEEEEEEEEEEEEEEEEEEEEEEE')
+      // ========================================================BLE is here 
+      // ใช้ subject Data [0].mac หาไปก่อน 
+      // เอาพอหอเสร็จ ตั้ง state ให้ BLE stauts แล้วเอาไปเช็คเงื่อนไข isDisable ที่ function  genComponentData()
+      setTimeout(() => {
+        setBLEStatus(true)
+        setLoading(false)
+      }, 1000)
+    }
+  }, [subjectsDetail])
+  useEffect(() => {
+    if (subjectsDetail.length !== 0) {
+      setCompData(genComponentData())
+    }
+  }, [BLEstatus])
   // -----------------------------------------------------------------------------
   getToken = async () => {
     try {
@@ -131,9 +150,46 @@ const CheckInScreen = props => {
       .catch((err) => console.log(err))
   }
   const findBLE = () => {
-    return `${mac}` === '000000000000'
+    return true
   }
-
+  const genComponentData = () => {
+    const compData = subjectsDetail.map((subject, i) => {
+      // check when schedule =0
+      const currentSch = currentSchedule(subject.schedule)[0]
+      let strDetail = ''
+      let objTransac = {}
+      let isDisable = true
+      if (currentSch != undefined) {
+        const currentDate = currentSch.date
+        const startTime = currentSch.start.toLocaleTimeString('en-GB').slice(0, -3)
+        const endTime = currentSch.end.toLocaleTimeString('en-GB').slice(0, -3)
+        // set for text 
+        const day = currentDate.getDate()
+        const month = currentDate.getMonth() + 1
+        const year = currentDate.getFullYear()
+        let dateString = `${day}/${month}/${year}`
+        const now = new Date()
+        // console.log(now)
+        // console.log(currentDate)
+        // console.log(diff_minutes(now, currentDate))
+        objTransac = {
+          subjectID: subject.subjectID,
+          uid: currentUser.uid,
+          schIndex: currentSch.schIndex,
+          timestamp: now,
+          status: diff_minutes(now, currentDate) <= 15 ? 'ok' : 'late',
+          uniqueID: '',
+          endTime: currentSch.end
+        }
+        // console.log(objTransac)
+        strDetail = `${dateString} ${startTime}-${endTime} น.`
+        // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
+        isDisable = !findBLE(currentSch.mac) ? true : false
+      }
+      return { subjectName: subject.subjectName, strDetail, objTransac, isDisable }
+    })
+    return compData
+  }
 
   return (
     <View style={styles.screen} navigation={props.navigation}>
@@ -146,41 +202,10 @@ const CheckInScreen = props => {
         <React.Fragment>
           {/* {loading ? <ActivityIndicator size="large" color={Color.primaryColor} /> : <Button title='refresh' onPress={getUserSubject} />} */}
           <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
-            {subjectsDetail.map((subject, i) => {
-              // check when schedule =0
-              const currentSch = currentSchedule(subject.schedule)[0]
-              let strDetail = ''
-              let objTransac = {}
-              let isDisable = true
-              if (currentSch != undefined) {
-                const currentDate = currentSch.date
-                const startTime = currentSch.start.toLocaleTimeString('en-GB').slice(0, -3)
-                const endTime = currentSch.end.toLocaleTimeString('en-GB').slice(0, -3)
-                // set for text 
-                const day = currentDate.getDate()
-                const month = currentDate.getMonth() + 1
-                const year = currentDate.getFullYear()
-                let dateString = `${day}/${month}/${year}`
-                const now = new Date()
-                // console.log(now)
-                // console.log(currentDate)
-                // console.log(diff_minutes(now, currentDate))
-                objTransac = {
-                  subjectID: subject.subjectID,
-                  uid: currentUser.uid,
-                  schIndex: currentSch.schIndex,
-                  timestamp: now,
-                  status: diff_minutes(now, currentDate) <= 15 ? 'ok' : 'late',
-                  uniqueID: '',
-                  endTime: currentSch.end
-                }
-                // console.log(objTransac)
-                strDetail = `${dateString} ${startTime}-${endTime} น.`
-                // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
-                isDisable = !findBLE(currentSch.mac) ? true : false
-              }
-              return <SubjectCheckIn key={i} disabled={isDisable} title={subject.subjectName} detail={strDetail} sendTransaction={() => sendCheckIn(objTransac)} />
-            })}
+            {
+              componentData.map((subject, i) => {
+                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac)} />
+              })}
           </ScrollView>
         </React.Fragment>
         :
