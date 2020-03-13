@@ -84,6 +84,7 @@ import Account from 'react-ionicons/lib/IosContact'
 import CreateUser from 'react-ionicons/lib/MdPersonAdd'
 import Subject from 'react-ionicons/lib/MdDocument'
 import Enroll from 'react-ionicons/lib/IosDownload'
+import Bluetooth from 'react-ionicons/lib/IosBluetooth'
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -123,6 +124,7 @@ export default function ClippedDrawer() {
     const classes = useStyles();
     const list = [
         { name: 'Generate Accout', icon: CreateUser, link: '/generate' },
+        { name: 'BLE Data', icon: Bluetooth, link: '/bledata' },
         { name: 'Enroll Student', icon: Enroll, link: '/enroll' },
         { name: 'Manage Account', icon: Account, link: '/viewStd' },
         { name: 'Create Subject', icon: CreateSub, link: '/createSub' },
@@ -145,8 +147,8 @@ export default function ClippedDrawer() {
                                 <menu.icon color='rgba(0, 0, 0, 0.54)' fontSize="23px" />
                                 <ListItemText className={classes.menuText} primary={menu.name} />
                             </ListItemLink>
-                            
-                            {i==2||i==0?<Divider />:''}
+
+                            {i == 3 || i == 1 ? <Divider /> : ''}
                         </React.Fragment>
 
                     )

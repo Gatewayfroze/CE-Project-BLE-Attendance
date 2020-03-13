@@ -12,14 +12,22 @@ import 'react-bulma-components/dist/react-bulma-components.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import MaskedInput from 'react-text-mask'
 import DatePicker from 'react-datepicker'
-import {Save,Add} from '@material-ui/icons';
+import { Save, Add } from '@material-ui/icons';
 import API from '../../api'
 
-const EditSch = ({ scheduleList,subjectID }, ...props) => {
+const EditSch = ({ scheduleList, subjectID }, ...props) => {
     const [schedule, setSchedule] = useState(scheduleList)
     const [tableBody, setTableBody] = useState()
     const [loading, setLoading] = useState(false)
-    useEffect(() => { setSchedule(scheduleList) }, [scheduleList])
+    const [currentSch, setCurrentSch] = useState()
+    useEffect(() => {
+        scheduleList.forEach((sch) => {
+            const currentDate = new Date(sch.date)
+            const now = new Date
+            if (now > currentDate) { setCurrentSch(sch.schIndex); }
+        })
+        setSchedule(scheduleList)
+    }, [scheduleList])
     useEffect(() => {
         if (schedule) {
             // console.log('=============================================')
@@ -67,17 +75,15 @@ const EditSch = ({ scheduleList,subjectID }, ...props) => {
     const deleteSchedule = schIndex => {
         const schTemp = [...schedule];
         schTemp.splice(schIndex, 1);
-        schTemp.forEach((sch,i)=>{
-            sch.schIndex=i
+        schTemp.forEach((sch, i) => {
+            sch.schIndex = i
         })
         setSchedule(schTemp)
     }
     const createTable = () => {
         let table = []
         for (let i = 0; i < schedule.length; i++) {
-            const now = new Date()
-            const isDisable=false
-            // const isDisable = now > schedule[i].date ? true : false
+            const isDisable = currentSch >= i ? true : false
             table.push(
                 <tr key={i}>
                     <td>
@@ -127,12 +133,12 @@ const EditSch = ({ scheduleList,subjectID }, ...props) => {
         }
         return table
     }
-    const updateSchedule=()=>{
+    const updateSchedule = () => {
         setLoading(true)
-        API.post('updateSchedule/',{subjectID,newschedule:schedule})
-        .then((res)=> {setLoading(false); console.log(res)})
-        .catch((err)=>console.log(err))
-        
+        API.post('updateSchedule/', { subjectID, newschedule: schedule })
+            .then((res) => { setLoading(false); console.log(res) })
+            .catch((err) => console.log(err))
+
     }
     return (
         <Card>
@@ -141,16 +147,16 @@ const EditSch = ({ scheduleList,subjectID }, ...props) => {
                     <Grid container spacing={1} alignItems="flex-end">
                         {loading && <CircularProgress />}
                         <Grid item>
-                            <Button variant='contained' color='secondary' onClick={() => addSchedule()}>Add <Add/></Button>
+                            <Button variant='contained' color='secondary' onClick={() => addSchedule()}>Add <Add /></Button>
                         </Grid>
                         <Grid item>
-                            <Button variant='contained' color='primary' onClick={() => updateSchedule()}>Save <Save/></Button>
+                            <Button variant='contained' color='primary' onClick={() => updateSchedule()}>Save <Save /></Button>
                         </Grid>
                     </Grid>
                 }
                 title="Schedule"
             />
-            <Divider/>
+            <Divider />
             <div style={{ margin: 15 }}>
 
                 <div style={styles.overFlowTab} >

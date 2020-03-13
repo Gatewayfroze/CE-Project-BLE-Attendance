@@ -83,8 +83,6 @@ const ViewSubjectPage = ({ match }, ...props) => {
                     </Grid>
                 </Grid>
             </div>
-
-
         </Layout>
     )
 }

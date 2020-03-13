@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import MainPage from "./Pages/index";
 import GenPage from "./Pages/genPage";
+import BLEData from './Pages/BLEDataPage'
 import EnrollPage from "./Pages/enrollPage";
 import ManageStd from "./Pages/viewStd";
 import ManageSub from "./Pages/viewSub";
@@ -23,22 +24,23 @@ import PrivateRoute from './privateRoute.js'
 
 function App() {
   return (
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <Router>
-          {/*All our Routes goes here!*/}
-          <Route exact path="/" component={MainPage} />
-          <PrivateRoute exact path="/enroll" component={EnrollPage} />
-          <PrivateRoute exact path="/generate" component={GenPage} />
-          <PrivateRoute exact path="/viewStd" component={ManageStd} />
-          <PrivateRoute exact path="/viewSub" component={ManageSub} />
-          <PrivateRoute exact path="/viewSub/:subjectID" component={SubjectDetailPage} />
-          <PrivateRoute exact path="/leave" component={LeavePage} />
-          <PrivateRoute exact path="/createSub" component={CreateSubPage} />
-          <PrivateRoute exact path="/export/:subjectID" component={ScheduleTable} />
-        </Router>
-      </ThemeProvider>
-    </AuthProvider>
+      <AuthProvider >
+        <ThemeProvider theme={theme}>
+          <Router>
+            {/*All our Routes goes here!*/}
+            <Route exact path="/" component={MainPage} />
+            <PrivateRoute exact path="/enroll" component={EnrollPage} />
+            <PrivateRoute exact path="/BLEdata" component={BLEData} />
+            <PrivateRoute exact path="/generate" component={GenPage} />
+            <PrivateRoute exact path="/viewStd" component={ManageStd} />
+            <PrivateRoute exact path="/viewSub" component={ManageSub} />
+            <PrivateRoute exact path="/viewSub/:subjectID" component={SubjectDetailPage} />
+            <PrivateRoute exact path="/leave" component={LeavePage} />
+            <PrivateRoute exact path="/createSub" component={CreateSubPage} />
+            <PrivateRoute exact path="/export/:subjectID" component={ScheduleTable} />
+          </Router>
+        </ThemeProvider>
+      </AuthProvider>
   );
 }
 

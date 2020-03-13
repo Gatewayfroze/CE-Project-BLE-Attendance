@@ -23,7 +23,7 @@ const SampleGrid = ({ match }, ...props) => {
     const [LabelDate, setLabel] = useState([])
     const [subjectName, setSubjectName] = useState('')
     const [studentData, setStudentData] = useState([])
-    const [transaction, setTransac] = useState([])
+    const [transaction, setTransac] = useState('')
     const [currentSch, setCurrentSch] = useState(0)
     useEffect(() => {
         fetchSubject()
@@ -42,10 +42,10 @@ const SampleGrid = ({ match }, ...props) => {
                 const year = currentDate.getFullYear()
                 let dateString = `${day}/${month}/${year}`
                 return {
-                    title: dateString, field: `sch${i}`, lookup: { 'ok': 'ok', 'Absent': 'Absent', 'Late': 'Late' },
+                    title: dateString, field: `sch${i}`, lookup: { 'ok': 'ok', 'absent': 'absent', 'late': 'late' },
                     cellStyle: rowData => {
-                        if (rowData == 'Absent') return { backgroundColor: 'rgb(255, 96, 79)' }
-                        else if (rowData == 'Late') return { backgroundColor: 'rgb(255, 152, 0)' }
+                        if (rowData == 'absent') return { backgroundColor: 'rgb(255, 96, 79)' }
+                        else if (rowData == 'late') return { backgroundColor: 'rgb(255, 152, 0)' }
                         else if (rowData == 'ok') { return { backgroundColor: 'rgb(0, 209, 178)' } }
                     },
                     editable: i <= current ? 'onUpdate' : 'never'
@@ -56,12 +56,15 @@ const SampleGrid = ({ match }, ...props) => {
         }
     }, [subjectData])
     useEffect(() => {
-        if (transaction.length != 0)
+        if (transaction !== '')
             fetchListStudent(subjectData.students, subjectData.schedule)
     }, [transaction])
 
     const fetchSubject = () => {
         setLoading(true)
+        setSubjectData('')
+        console.log('subjecttttttt')
+        columns = columns.slice(0, 2)
         API.post('getSubject/', { subjectID })
             .then((res) => {
                 setSubjectData(res.data)
@@ -72,6 +75,7 @@ const SampleGrid = ({ match }, ...props) => {
     }
     const fetchListStudent = async (stdList, scheduleList) => {
         setLoading(true)
+        console.log()
         const val = stdList.map(async (student) => {
             const detail = await API.post('getStudent/', { studentID: student })
             detail.data.name = detail.data.name + ' ' + detail.data.surname
@@ -85,7 +89,7 @@ const SampleGrid = ({ match }, ...props) => {
                 const transac = transaction.find((trans) => {
                     return trans.schIndex === i && trans.studentUID === std.uid
                 })
-                const defaultText = i <= currentSch ? 'Absent' : ''
+                const defaultText = i <= currentSch ? 'absent' : ''
                 return { status: transac ? transac.status : defaultText, schId: transac ? transac.id : '' }
             })
             let objTemp = {}
@@ -96,7 +100,6 @@ const SampleGrid = ({ match }, ...props) => {
         })
         console.log(temp)
         setStudentData(temp)
-
         // setLoading(false)
     }
     const fetchTrasaction = () => {
@@ -111,10 +114,8 @@ const SampleGrid = ({ match }, ...props) => {
     }
     return (
         <React.Fragment>
-
             {loading && <LinearProgress />}
             <Container maxWidth={"lg"}>
-
                 <MaterialTable
                     columns={columns}
                     data={studentData}
@@ -125,15 +126,31 @@ const SampleGrid = ({ match }, ...props) => {
                                 for (let i = 0; i <= currentSch; i++) {
                                     if (oldData[`sch${i}`] !== newData[`sch${i}`]) {
                                         // data change
-                                        if (oldData[`sch${i}`] === 'Absent') {
+                                        if (oldData[`sch${i}`] === 'absent' && oldData[`sch${i}ID`] === '') {
                                             // add new transaction
-                                            console.log('create transaction')
+                                            const now = new Date
+                                            let tempTransaction = {
+                                                subjectID: subjectID,
+                                                uid: oldData.uid,
+                                                schIndex: i,
+                                                timestamp: now,
+                                                status: newData[`sch${i}`].toLowerCase(),
+                                                uniqueID: '',
+                                                endTime: ''
+                                            }
+                                            console.log(tempTransaction)
+                                            API.post('createTransaction/', tempTransaction)
+                                                .then((res) => console.log(res))
+
                                         } else {
                                             // update transaction
                                             console.log(oldData[`sch${i}ID`])
+                                            API.post('updateStatusTransaction/', { id: oldData[`sch${i}ID`], status: newData[`sch${i}`].toLowerCase() })
+                                                .then((res) => console.log(res))
                                         }
                                     }
                                 }
+                                fetchSubject()
                                 resolve()
                             }),
 

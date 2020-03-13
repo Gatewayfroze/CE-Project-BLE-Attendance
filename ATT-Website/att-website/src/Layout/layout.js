@@ -52,7 +52,6 @@ const Layout = (props) => {
             <div>
                 <AppBar >
                     <Toolbar>
-                        
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <MenuIcon
                                 onClick={() => setDrawer(true)} />
