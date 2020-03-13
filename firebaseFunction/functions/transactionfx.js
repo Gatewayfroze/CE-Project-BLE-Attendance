@@ -49,7 +49,7 @@ app.post("/getTransactionSub", async (req, res) => {
     .where("subjectID", "==", req.body.subjectID)
     .get()
     .then(snapshot => {
-      res.send(snapshot.docs.map(doc => doc.data()));
+      res.send(snapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data())));
 
       return;
     })
