@@ -74,4 +74,16 @@ app.post("/getTransactionSubStu", async (req, res) => {
     });
 });
 
+
+app.post("/updateStatusTransaction",async (req,res)=>{
+  await db.collection("transactions").doc(req.body.id).update({
+    status:req.body.status
+  }).then(()=>{
+    res.end()
+    return
+  }).catch(error => {
+    console.log(error, toString());
+  });
+})
+
 module.exports = app;
