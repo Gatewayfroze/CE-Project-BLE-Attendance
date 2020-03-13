@@ -208,4 +208,13 @@ app.post('/addBoard',(req,res)=>{
 
 })
 
+app.post('/getBoard',(req,res)=>{
+  db.collection('boards').get().then((snapshot)=>{
+    res.send(snapshot.docs.map(doc => Object.assign({ id: doc.id }, doc.data())))
+    return
+  }).catch(error => {
+    console.log(error, toString());
+  });
+})
+
 
