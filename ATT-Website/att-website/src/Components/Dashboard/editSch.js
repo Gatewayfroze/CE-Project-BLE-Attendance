@@ -13,12 +13,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import MaskedInput from 'react-text-mask'
 import DatePicker from 'react-datepicker'
 import { Save, Add } from '@material-ui/icons';
+import Select from 'react-select';
 import API from '../../api'
 
 const EditSch = ({ scheduleList, subjectID }, ...props) => {
     const [schedule, setSchedule] = useState(scheduleList)
     const [tableBody, setTableBody] = useState()
     const [loading, setLoading] = useState(false)
+    const [boardData, setBoardData] = useState([])
     const [currentSch, setCurrentSch] = useState()
     useEffect(() => {
         scheduleList.forEach((sch) => {
@@ -27,6 +29,7 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
             if (now > currentDate) { setCurrentSch(sch.schIndex); }
         })
         setSchedule(scheduleList)
+        fetchBoard()
     }, [scheduleList])
     useEffect(() => {
         if (schedule) {
@@ -40,13 +43,25 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
             setTableBody(createTable())
         }
     }, [schedule])
+    const fetchBoard = () => {
+        setLoading(true)
+        API.post('getBoard/').then((res) => {
+            const temp = res.data.map((data) => {
+                return { value: data.mac, label: data.boardName }
+            })
+            console.log(temp)
+            setBoardData(temp)
+            setLoading(false)
+        })
+    }
     const addSchedule = () => {
         const period = {
             schIndex: 0,
             date: new Date(),
             start: new Date(),
             end: new Date(),
-            mac: '000000000000 '
+            mac: 'ECC-810',
+            board: boardData[0]
         }
         if (schedule.length > 0) {
             period.schIndex = schedule.length
@@ -55,6 +70,7 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
             period.start = schedule[schedule.length - 1].start
             period.end = schedule[schedule.length - 1].end
             period.mac = schedule[schedule.length - 1].mac
+            period.board = schedule[schedule.length - 1].board
         }
         setSchedule([...schedule, period])
         console.log(schedule)
@@ -65,12 +81,13 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
         setSchedule([...temp])
         console.log(schedule)
     }
-    const hadleMACadrr = (event, i) => {
-        const temp = schedule
-        temp[i].mac = event.target.value.replace(/\:/g, "")
-        console.log(temp[i].mac)
-        setSchedule([...temp])
-        console.log(schedule)
+    const hadleMACadrr = (i, val) => {
+        if (val !== null) {
+            const temp = schedule
+            temp[i].mac = val.value
+            temp[i].board = val
+            setSchedule([...temp])
+        }
     }
     const deleteSchedule = schIndex => {
         const schTemp = [...schedule];
@@ -116,12 +133,13 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
                                 disabled={isDisable} />
                         </div>
                     </td>
-                    <td>
-                        <div className='control' >
-                            <MaskedInput mask={[/[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/]}
-                                guide={false}
-                                className='input' type='input' value={schedule[i].mac} onChange={(event) => hadleMACadrr(event, i)} placeholder='MAC Addr' disabled={isDisable} />
-                        </div>
+                    <td style={{ width: 150 }}>
+                        <Select
+                            isDisabled={isDisable}
+                            value={schedule[i].board}
+                            onChange={val => hadleMACadrr(i, val)}
+                            options={boardData}
+                        />
                     </td>
                     <td style={{ alignItems: 'center', display: 'flex' }}>
                         <div className='control'>

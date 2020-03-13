@@ -19,10 +19,8 @@ const columns = [
 const BLEDataPage = () => {
     const [data, setJson] = useState([])
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
-    const [subjectDetail, setSubjectDetail] = useState('')
     const [textAlert, setTextAlert] = useState('')
     const [alert, isAlert] = useState(false)
-    const [subjectName, setSubjectName] = useState('')
     const [boardData, setBoardData] = useState([])
     const [loading, setLoading] = useState(false)
     useEffect(() => {

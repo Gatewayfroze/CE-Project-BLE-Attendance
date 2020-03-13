@@ -3,28 +3,36 @@ import 'react-bulma-components/dist/react-bulma-components.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import app from '../firebase'
 // import component 
-import Navbar from '../Components/Navbar'
-import Sidebar from '../Components/Sidebar'
 import Loader from '../Components/loader'
 import DatePicker from 'react-datepicker'
 import { Table } from '@material-ui/core';
-import MaskedInput from 'react-text-mask'
 import NumberFormat from 'react-number-format';
 import Layout from '../Layout/layout'
 import API from '../api'
+import Select from 'react-select';
+
+
 const CreateSubPage = props => {
+
+    const options = [
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' },
+    ];
     const [subjectDetail, setSubjectDetail] = useState({
         subjectID: '', subjectName: ''
     })
     const [schedule, setSchedule] = useState([])
     const [tableBody, setTableBody] = useState()
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [curUser, setcurUser] = useState(null)
+    const [boardData, setBoardData] = useState([])
     const [numSch, setNumSch] = useState(1)
     useEffect(() => {
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
                 setcurUser(user.uid)
+                fetchBoard()
             } else {
             }
         });
@@ -36,6 +44,17 @@ const CreateSubPage = props => {
 
     const handleChange = (event) => {
         setSubjectDetail({ ...subjectDetail, [event.target.name]: event.target.value })
+    }
+    const fetchBoard = () => {
+        setLoading(true)
+        API.post('getBoard/').then((res) => {
+            const temp = res.data.map((data) => {
+                return { value: data.mac, label: data.boardName }
+            })
+            console.log(temp)
+            setBoardData(temp)
+            setLoading(false)
+        })
     }
     // hadle submiting data
     const handleSubmit = () => {
@@ -69,7 +88,8 @@ const CreateSubPage = props => {
             date: new Date(),
             start: new Date(),
             end: new Date(),
-            mac: '000000000000 '
+            mac: 'ECC-810',
+            board: boardData[0]
         }
         let temp = schedule
         for (let i = 0; i < num; i++) {
@@ -80,6 +100,7 @@ const CreateSubPage = props => {
                 period.start = temp[temp.length - 1].start
                 period.end = temp[temp.length - 1].end
                 period.mac = temp[temp.length - 1].mac
+                period.board = temp[temp.length - 1].board
             }
             temp = [...temp, { ...period }]
             console.log(temp)
@@ -101,12 +122,13 @@ const CreateSubPage = props => {
         console.log(schTemp)
         setSchedule(schTemp)
     }
-    const hadleMACadrr = (event, i) => {
-        const temp = schedule
-        temp[i].mac = event.target.value.replace(/\:/g, "")
-        console.log(temp[i].mac)
-        setSchedule([...temp])
-        console.log(schedule)
+    const hadleMACadrr = (i, val) => {
+        if (val !== null) {
+            const temp = schedule
+            temp[i].mac = val.value
+            temp[i].board = val
+            setSchedule([...temp])
+        }
     }
     const handleNumChange = (event) => {
         setNumSch(event.target.value)
@@ -115,7 +137,7 @@ const CreateSubPage = props => {
         let table = []
         for (let i = 0; i < schedule.length; i++)
             table.push(
-                <tr key={i}>
+                <tr key={i} >
                     <td>
                         <p>{i + 1}</p>
                     </td>
@@ -144,12 +166,12 @@ const CreateSubPage = props => {
                                 dateFormat="h:mm aa" />
                         </div>
                     </td>
-                    <td>
-                        <div className='control' >
-                            <MaskedInput mask={[/[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/, ':', /[0-9|A-F]/, /[0-9|A-F]/]}
-                                guide={false}
-                                className='input' type='input' value={schedule[i].mac} onChange={(event) => hadleMACadrr(event, i)} placeholder='MAC Addr' />
-                        </div>
+                    <td style={{ width: 150 }}>
+                        <Select
+                            value={schedule[i].board}
+                            onChange={val => hadleMACadrr(i, val)}
+                            options={boardData}
+                        />
                     </td>
                     <td style={{ alignItems: 'center', display: 'flex' }}>
                         <div className='control'>
@@ -181,7 +203,7 @@ const CreateSubPage = props => {
                         <input className='input' type='number' value={numSch} onChange={handleNumChange} />
                     </div>
                     <div className='control'>
-                        <button className='button is-primary' type='button' onClick={() => addSchedule()}>Add</button>
+                        <button className='button is-primary' type='button' disabled={loading} onClick={() => addSchedule()}>Add</button>
                     </div>
                     <div className='control'>
                         <button className='button is-warning' type='button' onClick={() => clearSch()}>Clear</button>
