@@ -58,7 +58,6 @@ const StudentInSubject = ({ subjectData, subjectID }, ...props) => {
     }
     const dropStudent = (studentIndex) => {
         setLoadingStd(true)
-        console.log(stdDataSearch[studentIndex].studentID)
         API.post('drop/', { studentID: [studentData[studentIndex].studentID], subjectID })
             .then((response) => {
                 console.log(response)

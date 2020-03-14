@@ -10,7 +10,6 @@ import {
   ScrollView,
   StyleSheet,
   AsyncStorage,
-  Button,
   RefreshControl
 } from 'react-native'
 
@@ -18,9 +17,6 @@ import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 import Color from '../constants/Colors'
 import API from '../assets/API'
-import { TouchableHighlight } from 'react-native-gesture-handler'
-
-
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState('');
   const [subjectsID, setSubjectsID] = useState([])
@@ -42,7 +38,6 @@ const CheckInScreen = props => {
   useEffect(() => {
     if (currentUser !== '' && subjectsID !== []) {
       getSubjectDetail()
-      console.log('fecth data Detail')
     }
   }, [subjectsID])
 
@@ -88,7 +83,7 @@ const CheckInScreen = props => {
     setLoading(true)
     API.post('getSubjectByID/', { uid: currentUser.uid })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setCompData([])
         setSubjectsID(res.data)
       })
@@ -114,7 +109,7 @@ const CheckInScreen = props => {
       const currentSch = currentSchedule(schDetail.schedule)
       return { ...schDetail, schedule: currentSch }
     })
-    console.log(data)
+    // console.log(data)
     data = data.sort((a, b) => {
       return a.schedule[0].date - b.schedule[0].date
     })
@@ -197,7 +192,7 @@ const CheckInScreen = props => {
         // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
         isDisable = !findBLE(currentSch.mac) ? true : false
       }
-      return { subjectName: subject.subjectName, strDetail, objTransac, isDisable,room }
+      return { subjectName: subject.subjectName, strDetail, objTransac, isDisable, room }
     })
     return compData
   }

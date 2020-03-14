@@ -1,5 +1,5 @@
 import React from 'react'
-import { createAppContainer,createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { View, Text, StyleSheet } from 'react-native'
@@ -8,12 +8,10 @@ import Colors from '../constants/Colors';
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import CheckInScreen from '../screens/checkInScreen'
-import LeaveScreen from '../screens/leaveScreen'
+import SubjectScreen from '../screens/subjectScreen'
 import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
-import InputLeave from '../screens/inputLeaveScreen'
 import LoginScreen from '../screens/loginScreen'
-import detailLeave from '../screens/detailLeaveScreen'
 
 import StatDetail from '../screens/detailStatScreen'
 // const HomeNavigator =createStackNavigator({
@@ -32,20 +30,18 @@ const defaultStackNavOptions = {
 //================= stack screen ========================
 const checkInNavigator = createStackNavigator({
     checkIn: CheckInScreen,
-    statDetail:StatDetail
+    statDetail: StatDetail
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 
-const leaveNavigator = createStackNavigator({
-    checkIn: LeaveScreen,
-    inputLeave: InputLeave,
-    detailLeave:detailLeave
+const subjectNavigator = createStackNavigator({
+    main: SubjectScreen,
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 
 const statNavigator = createStackNavigator({
     checkIn: StatScreen,
-    statDetail:StatDetail
+    statDetail: StatDetail
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 
@@ -66,8 +62,8 @@ const tabScreenConfig = {
             }
         }
     },
-    Leave: {
-        screen: leaveNavigator,
+    Subject: {
+        screen: subjectNavigator,
         navigationOptions: {
             tabBarIcon: tabInfo => {
                 return (
@@ -105,16 +101,16 @@ const tabScreenConfig = {
 }
 const tabNavigation = createBottomTabNavigator(
     tabScreenConfig, {
-        tabBarOptions: {
-            style: {
-                paddingTop: 7,
-            },
-            labelStyle: {
-                fontSize: 14
-            },
-            activeTintColor: '#303030'
-        }
-    })
+    tabBarOptions: {
+        style: {
+            paddingTop: 7,
+        },
+        labelStyle: {
+            fontSize: 14
+        },
+        activeTintColor: '#303030'
+    }
+})
 const appNavigator = createSwitchNavigator({
     login: LoginScreen,
     inApp: tabNavigation

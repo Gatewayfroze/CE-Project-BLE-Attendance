@@ -30,9 +30,6 @@ const DetailStatScreen = ({ navigation }, ...props) => {
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5
     }
-
-
-
     useEffect(() => {
         fetchSubject()
     }, [])
@@ -65,14 +62,14 @@ const DetailStatScreen = ({ navigation }, ...props) => {
                 return [i + 1, sch, defaultTxt]
             })
             setDataSchedule(data)
-            fetchTrasaction(data)
+            fetchTrasaction(data, current)
         }
     }, [subjectData])
 
     useEffect(() => {
 
     }, [transaction])
-    const fetchTrasaction = (dataSch) => {
+    const fetchTrasaction = (dataSch, currentSch) => {
         setLoading(true)
         API.post('getTransactionSubStu/', { uid: currentUID, subjectID })
             .then((res) => {
@@ -80,18 +77,16 @@ const DetailStatScreen = ({ navigation }, ...props) => {
                 setTransaction(res.data)
                 let tempSch = dataSch
                 tempSch.forEach((sch, i) => {
-                    console.log(i)
                     const findTrans = res.data.find((trans) => {
                         return trans.schIndex == i
                     })
-                    console.log(findTrans)
                     if (findTrans) sch[sch.length - 1] = findTrans.status
                 })
-                setDataSchedule(tempSch)
-                let valStatus = { ok: 0, late: 0, absent: 0 }
+                let valStatus = { ok: 0, late: 0, absent: currentSch + 1 }
                 res.data.forEach((data) => {
                     valStatus[`${data.status}`] += 1
                 })
+                console.log(res.data)
                 setDataChart([{
                     name: "In time",
                     population: valStatus.ok,
