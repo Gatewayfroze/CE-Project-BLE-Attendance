@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     button: {
-        width: '85%',
-        height: '45%',
+        width: '95%',
+        height: '48%',
         borderRadius: 20,
     },
     subjectDetailContainer: {

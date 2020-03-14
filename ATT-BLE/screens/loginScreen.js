@@ -13,6 +13,7 @@ import Colors from '../constants/Colors'
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { config } from '../firebase';
+import { showMessage } from "react-native-flash-message";
 
 firebase.initializeApp(config);
 db = firebase.firestore()
@@ -25,16 +26,16 @@ const LoginScreen = props => {
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         AsyncStorage.getItem("userData").then((value) => {
-            if(value == null){
+            if (value == null) {
                 console.log(value)
-            }else{
+            } else {
                 props.navigation.navigate({
                     routeName: 'inApp'
                 })
-            }          
-        })        
+            }
+        })
     }, [])
-    
+
     useEffect(() => {
         if (email.length !== 0 && password.length !== 0) {
             setDisable(false)
@@ -52,53 +53,59 @@ const LoginScreen = props => {
 
     const getToken = async () => {
         try {
-          let userData = await AsyncStorage.getItem("userData");
-          let data = JSON.parse(userData);
-          console.log(data)
-          return data
+            let userData = await AsyncStorage.getItem("userData");
+            let data = JSON.parse(userData);
+            console.log(data)
+            return data
         } catch (error) {
-          console.log("Something went wrong", error);
+            console.log("Something went wrong", error);
         }
-      }
+    }
     handleLogin = () => {
-        
+
         setLoading(true)
         db.collection("users").where('email', '==', email).get().then((snapshot) => {
-            if(snapshot.docs.length==0){
+            if (snapshot.docs.length == 0) {
                 setLoading(false)
             }
-           else{
-            snapshot.docs.forEach(doc => {
-              
-              if (doc.data().role === 'student') {
-                try {
-                    firebase
-                    .auth()
-                    .signInWithEmailAndPassword(email, password)
-                    .then(async (data) => {
-                        await storeToken(data)
-                        await props.navigation.navigate({
-                            routeName: 'inApp'
-                        })
-                        
-                    })
-                    .catch(error => {setErrorMsg(error.message); setLoading(false)})
-                } catch (error) {
-                  
-                  
-                // alert(error);
-                setLoading(false)
-                }
-              } else {
-                alert('Need permission')
-                setLoading(false)
-                
-              }
-            })}
-          })
+            else {
+                snapshot.docs.forEach(doc => {
+
+                    if (doc.data().role === 'student') {
+                        try {
+                            firebase
+                                .auth()
+                                .signInWithEmailAndPassword(email, password)
+                                .then(async (data) => {
+                                    await storeToken(data)
+                                    console.log(data)
+                                    await showMessage({
+                                        message: `Welcome to Attenda`,
+                                        type: "success",
+                                    });
+                                    await props.navigation.navigate({
+                                        routeName: 'inApp'
+                                    })
+
+                                })
+                                .catch(error => { setErrorMsg(error.message); setLoading(false) })
+                        } catch (error) {
 
 
-        
+                            // alert(error);
+                            setLoading(false)
+                        }
+                    } else {
+                        alert('Need permission')
+                        setLoading(false)
+
+                    }
+                })
+            }
+        })
+
+
+
     }
     return (
         <View style={styles.screen}>
@@ -121,11 +128,11 @@ const LoginScreen = props => {
                 <Text style={styles.errorMsg}>{errorMsg}</Text>
             </View>
             {
-                loading?<ActivityIndicator style={{marginTop: 30}} size="large" color='white'/>:
-                <Button style={styles.button} disable={disable}
-                click={() => handleLogin()}>
-                <Text style={{ color: 'white' }}>Login</Text>
-            </Button>
+                loading ? <ActivityIndicator style={{ marginTop: 30 }} size="large" color='white' /> :
+                    <Button style={styles.button} disable={disable}
+                        click={() => handleLogin()}>
+                        <Text style={{ color: 'white' }}>Login</Text>
+                    </Button>
             }
         </View>
     )

@@ -16,7 +16,7 @@ import {
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 import Color from '../constants/Colors'
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import API from '../assets/API'
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState('');
@@ -128,9 +128,9 @@ const CheckInScreen = props => {
       let date = new Date(sch.date)
       const start = new Date(sch.start)
       // +7 time zoneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-      date.setHours(start.getHours())
-      date.setMinutes(start.getMinutes())
-      date.setSeconds(start.getSeconds())
+      // date.setHours(start.getHours())
+      // date.setMinutes(start.getMinutes())
+      // date.setSeconds(start.getSeconds())
       const now = new Date()
       // เวลาไม่เกินคาบครึ่งชม.
       if (diff_minutes(now, date) < 30)
@@ -141,10 +141,9 @@ const CheckInScreen = props => {
   }
   const sendCheckIn = (transaction, subjectName) => {
     console.log(transaction)
-    API.post('createTransaction/', transaction)
+    API.post('createTransaction/', { ...transaction, subjectName })
       .then((res) => {
         getCurrentSubject();
-        console.log(res)
         showMessage({
           message: `Checked In ${subjectName}`,
           type: "success",
@@ -204,13 +203,14 @@ const CheckInScreen = props => {
 
   return (
     <View style={styles.screen} navigation={props.navigation}>
-      <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 18 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
-      </View>
+
       {/* โชว์ status ที่กำลังเรียนอยู่ปัจจุบัน */}
       {/* <CurrentSubject/> */}
       {objIsEmpty(currentSubject) ?
         <React.Fragment>
+          <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ fontSize: 18 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
+          </View>
           {/* {loading ? <ActivityIndicator size="large" color={Color.primaryColor} /> : <Button title='refresh' onPress={getUserSubject} />} */}
           <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
             {
