@@ -62,7 +62,7 @@ const CheckInScreen = props => {
   }, [subjectsDetail])
   useEffect(() => {
     if (subjectsDetail.length !== 0) {
-      
+
     }
   }, [BLEstatus])
   // -----------------------------------------------------------------------------
@@ -110,7 +110,15 @@ const CheckInScreen = props => {
     })
     const results = await Promise.all(subDetail)
     setLoading(false)
-    setSubjectsDetail(results)
+    let data = results.map((schDetail) => {
+      const currentSch = currentSchedule(schDetail.schedule)
+      return { ...schDetail, schedule: currentSch }
+    })
+    console.log(data)
+    data = data.sort((a, b) => {
+      return a.schedule[0].date - b.schedule[0].date
+    })
+    setSubjectsDetail(data)
   }
 
   const currentSchedule = (scheduleSubject) => {
@@ -130,13 +138,12 @@ const CheckInScreen = props => {
       const now = new Date()
       // เวลาไม่เกินคาบครึ่งชม.
       if (diff_minutes(now, date) < 30)
-        return { date: date, start: new Date(sch.start), end: new Date(sch.end), schIndex: sch.schIndex, mac: sch.mac }
+        return { date: date, start: new Date(sch.start), end: new Date(sch.end), schIndex: sch.schIndex, mac: sch.mac, board: sch.board }
     })
     currentSche = currentSche.filter((sch) => sch !== undefined)
     return currentSche
   }
   const sendCheckIn = (transaction) => {
-    console.log('eiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
     console.log(transaction)
     API.post('createTransaction/', transaction)
       .then((res) => {
@@ -157,11 +164,13 @@ const CheckInScreen = props => {
   const genComponentData = () => {
     const compData = subjectsDetail.map((subject, i) => {
       // check when schedule =0
-      const currentSch = currentSchedule(subject.schedule)[0]
+      const currentSch = subject.schedule[0]
       let strDetail = ''
       let objTransac = {}
       let isDisable = true
+      let room = ''
       if (currentSch != undefined) {
+        room = currentSch.board.label
         const currentDate = currentSch.date
         const startTime = currentSch.start.toLocaleTimeString('en-GB').slice(0, -3)
         const endTime = currentSch.end.toLocaleTimeString('en-GB').slice(0, -3)
@@ -188,7 +197,7 @@ const CheckInScreen = props => {
         // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
         isDisable = !findBLE(currentSch.mac) ? true : false
       }
-      return { subjectName: subject.subjectName, strDetail, objTransac, isDisable }
+      return { subjectName: subject.subjectName, strDetail, objTransac, isDisable,room }
     })
     return compData
   }
@@ -206,7 +215,7 @@ const CheckInScreen = props => {
           <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
             {
               componentData.map((subject, i) => {
-                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac)} />
+                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac)} />
               })}
           </ScrollView>
         </React.Fragment>

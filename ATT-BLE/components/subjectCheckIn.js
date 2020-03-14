@@ -4,7 +4,7 @@ import { View, Text, TouchableHighlight, StyleSheet, TouchableOpacity } from 're
 import Colors from '../constants/Colors'
 import API from '../assets/API'
 const SubjectCheckIn = props => {
- 
+
     return (
         <View style={props.disabled ? { ...styles.itemSubject, backgroundColor: '#d1d1d1' } : { ...styles.itemSubject, backgroundColor: 'white' }}>
             <View style={styles.subjectDetailContainer}>
@@ -21,10 +21,12 @@ const SubjectCheckIn = props => {
                         borderBottomWidth: 2,
                     }} />
                 <View style={styles.subjectDetail}>
+                    {/* <TouchableOpacity disabled={props.disabled} style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={props.onClick}> */}
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: 5 }}>
+                        <Text style={{ fontSize: 13, color: 'orange' }}>{'ห้อง: ' + props.room}</Text>
+                    </View>
                     <Text style={{ fontSize: 13 }} >{props.detail}</Text>
-                    <TouchableOpacity disabled={props.disabled} style={{ justifyContent: 'center', alignItems: 'center', marginLeft: 10 }} onPress={props.onClick}>
-                        <Text style={{ fontSize: 13, color: 'orange' }}>เวลาเรียน 1/10 </Text>
-                    </TouchableOpacity>
+                    {/* </TouchableOpacity> */}
                 </View>
             </View>
             <View style={styles.buttonContainer}>
