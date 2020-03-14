@@ -53,6 +53,7 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
   }, [schedule])
   useEffect(() => {
     if (transaction !== '') {
+      console.log(studentNo)
       let tempChart = schedule.map((sch) => {
         let defaultObj = {
           ok: 0,
@@ -62,7 +63,7 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
         const foundTransacs = transaction.filter((trans, i) => {
           return sch.schIndex == trans.schIndex
         })
-        
+
         foundTransacs.forEach((foundTransac) => {
           if (foundTransac) {
             defaultObj[`${foundTransac.status}`] += 1
@@ -83,7 +84,9 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
         summary.late += data.late
         summary.absent += data.absent
       })
-      const all = studentNo * currentSch
+      let all = studentNo * currentSch
+      if (all == 0) all = 1
+      // ======================================= prevent case 0/0 == Nan
       summary.ok = summary.ok / all * 100
       summary.late = summary.late / all * 100
       summary.absent = summary.absent / all * 100
