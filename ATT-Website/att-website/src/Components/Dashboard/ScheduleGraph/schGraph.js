@@ -51,17 +51,19 @@ const ScheduleGraph = ({ subjectID, labelDate, scheduleList, className, studentN
     // console.log(transaction + '     ' + transaction.length)
     if (transaction !== '' && transacData.length !== 0) {
       transaction.forEach((transac) => {
-        const temp = [...transacData]
-        console.log(temp)
-        if (transac.status === 'ok') {
-          temp[transac.schIndex].inTime += 1
-          temp[transac.schIndex].absent -= 1
+        if (transac.schIndex < findLastSchedule()) {
+          const temp = [...transacData]
+          console.log(temp)
+          if (transac.status === 'ok') {
+            temp[transac.schIndex].inTime += 1
+            temp[transac.schIndex].absent -= 1
 
-        } else if (transac.status === 'late') {
-          temp[transac.schIndex].late += 1
-          temp[transac.schIndex].absent -= 1
+          } else if (transac.status === 'late') {
+            temp[transac.schIndex].late += 1
+            temp[transac.schIndex].absent -= 1
+          }
+          setTransacData(temp)
         }
-        setTransacData(temp)
       })
     }
   }, [transaction])

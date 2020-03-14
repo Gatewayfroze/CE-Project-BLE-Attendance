@@ -16,6 +16,7 @@ import {
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 import Color from '../constants/Colors'
+import { showMessage, hideMessage } from "react-native-flash-message";
 import API from '../assets/API'
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState('');
@@ -138,12 +139,16 @@ const CheckInScreen = props => {
     currentSche = currentSche.filter((sch) => sch !== undefined)
     return currentSche
   }
-  const sendCheckIn = (transaction) => {
+  const sendCheckIn = (transaction, subjectName) => {
     console.log(transaction)
     API.post('createTransaction/', transaction)
       .then((res) => {
         getCurrentSubject();
         console.log(res)
+        showMessage({
+          message: `Checked In ${subjectName}`,
+          type: "success",
+        });
       })
       .catch((err) =>
         console.log(err))
@@ -210,7 +215,7 @@ const CheckInScreen = props => {
           <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
             {
               componentData.map((subject, i) => {
-                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac)} />
+                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
               })}
           </ScrollView>
         </React.Fragment>

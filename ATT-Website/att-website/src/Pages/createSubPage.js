@@ -95,21 +95,57 @@ const CreateSubPage = props => {
         for (let i = 0; i < num; i++) {
             if (temp.length > 0) {
                 period.schIndex = temp.length
-                period.date = new Date(temp[temp.length - 1].date)
-                period.date.setDate(temp[temp.length - 1].date.getDate() + 7)
+                const dateTemp = new Date(temp[temp.length - 1].date)
+                dateTemp.setDate(temp[temp.length - 1].date.getDate() + 7)
+
+                console.log(dateTemp)
+                period.date = dateTemp
                 period.start = temp[temp.length - 1].start
                 period.end = temp[temp.length - 1].end
                 period.mac = temp[temp.length - 1].mac
                 period.board = temp[temp.length - 1].board
+
+
             }
             temp = [...temp, { ...period }]
-            console.log(temp)
         }
+        temp = temp.map((data) => {
+            const tempStart = new Date(data.start)
+            const tempEnd = new Date(data.end)
+            // start
+            tempStart.setDate(data.date.getDate())
+            tempStart.setMonth(data.date.getMonth())
+            tempStart.setFullYear(data.date.getFullYear())
+            // end
+            tempEnd.setDate(data.date.getDate())
+            tempEnd.setMonth(data.date.getMonth())
+            tempEnd.setFullYear(data.date.getFullYear())
+            return { ...data, start: tempStart, end: tempEnd }
+        })
+        console.log(temp)
         setSchedule(temp)
     }
     const setDate = (date, mode, i) => {
         const temp = schedule
-        temp[i][mode] = date
+        let tempDate = date
+        if (mode == 'start' || mode == 'end') {
+            tempDate.setDate(temp[i].date.getDate())
+            tempDate.setMonth(temp[i].date.getMonth())
+            tempDate.setFullYear(temp[i].date.getFullYear())
+            if (mode == 'start') {
+                temp[i].date.setHours(tempDate.getHours(), tempDate.getMinutes(), tempDate.getSeconds())
+            }
+        } else if (mode == 'date') {
+            temp[i].start.setDate(tempDate.getDate())
+            temp[i].start.setMonth(tempDate.getMonth())
+            temp[i].start.setFullYear(tempDate.getFullYear())
+
+            temp[i].end.setDate(tempDate.getDate())
+            temp[i].end.setMonth(tempDate.getMonth())
+            temp[i].end.setFullYear(tempDate.getFullYear())
+
+        }
+        temp[i][mode] = tempDate
         setSchedule([...temp])
         console.log(schedule)
     }

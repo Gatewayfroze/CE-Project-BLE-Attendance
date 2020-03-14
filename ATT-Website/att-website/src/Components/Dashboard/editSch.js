@@ -72,12 +72,46 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
             period.mac = schedule[schedule.length - 1].mac
             period.board = schedule[schedule.length - 1].board
         }
-        setSchedule([...schedule, period])
+        let data = { ...period }
+        const tempStart = new Date(data.start)
+        const tempEnd = new Date(data.end)
+        // start
+        tempStart.setDate(data.date.getDate())
+        tempStart.setMonth(data.date.getMonth())
+        tempStart.setFullYear(data.date.getFullYear())
+        // end
+        tempEnd.setDate(data.date.getDate())
+        tempEnd.setMonth(data.date.getMonth())
+        tempEnd.setFullYear(data.date.getFullYear())
+
+        setSchedule([...schedule, { ...data, start: tempStart, end: tempEnd }])
         console.log(schedule)
     }
     const setDate = (date, mode, i) => {
+        // const temp = schedule
+        // temp[i][mode] = date
+        // setSchedule([...temp])
+        // console.log(schedule)
         const temp = schedule
-        temp[i][mode] = date
+        let tempDate = date
+        if (mode == 'start' || mode == 'end') {
+            tempDate.setDate(temp[i].date.getDate())
+            tempDate.setMonth(temp[i].date.getMonth())
+            tempDate.setFullYear(temp[i].date.getFullYear())
+            if (mode == 'start') {
+                temp[i].date.setHours(tempDate.getHours(), tempDate.getMinutes(), tempDate.getSeconds())
+            }
+        } else if (mode == 'date') {
+            temp[i].start.setDate(tempDate.getDate())
+            temp[i].start.setMonth(tempDate.getMonth())
+            temp[i].start.setFullYear(tempDate.getFullYear())
+
+            temp[i].end.setDate(tempDate.getDate())
+            temp[i].end.setMonth(tempDate.getMonth())
+            temp[i].end.setFullYear(tempDate.getFullYear())
+
+        }
+        temp[i][mode] = tempDate
         setSchedule([...temp])
         console.log(schedule)
     }
