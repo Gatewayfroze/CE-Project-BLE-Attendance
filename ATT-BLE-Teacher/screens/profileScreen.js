@@ -1,21 +1,22 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, AsyncStorage } from 'react-native'
 import Colors from '../constants/Colors'
 
 import Button from '../components/button'
 
-const deleteToken= async() =>{
-    try {
-      await AsyncStorage.removeItem("userData").then(()=>{
-        props.navigation.navigate({
-            routeName: 'login'
-        })
-      })
-    } catch (err) {
-      console.log(`The error is: ${err}`)
-    }
-  }
+
 const ProfileScreen = props => {
+    const deleteToken = async () => {
+        try {
+            await AsyncStorage.removeItem("userData").then(() => {
+                props.navigation.navigate({
+                    routeName: 'login'
+                })
+            })
+        } catch (err) {
+            console.log(`The error is: ${err}`)
+        }
+    }
     return (
         <View style={styles.screen}>
             <View style={styles.profileContainer}>
@@ -31,8 +32,8 @@ const ProfileScreen = props => {
                 </View>
             </View>
             <Button style={styles.buttonSize} click={
-                ()=> deleteToken()
-                }>
+                () => deleteToken()
+            }>
                 <Text style={{ color: 'white', fontSize: 18 }}>
                     Logout
                 </Text>

@@ -3,7 +3,6 @@ import { createAppContainer,createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { View, Text, StyleSheet } from 'react-native'
-
 import Colors from '../constants/Colors';
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -65,18 +64,18 @@ const tabScreenConfig = {
             }
         }
     },
-    Leave: {
-        screen: leaveNavigator,
-        navigationOptions: {
-            tabBarIcon: tabInfo => {
-                return (
-                    <MaterialCommunityIcons name="calendar-text"
-                        size={22} color={tabInfo.tintColor}
-                    />
-                );
-            }
-        }
-    },
+    // Leave: {
+    //     screen: leaveNavigator,
+    //     navigationOptions: {
+    //         tabBarIcon: tabInfo => {
+    //             return (
+    //                 <MaterialCommunityIcons name="calendar-text"
+    //                     size={22} color={tabInfo.tintColor}
+    //                 />
+    //             );
+    //         }
+    //     }
+    // },
     Stat: {
         screen: statNavigator,
         navigationOptions: {

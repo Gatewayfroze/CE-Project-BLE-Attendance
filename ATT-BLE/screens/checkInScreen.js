@@ -50,6 +50,7 @@ const CheckInScreen = props => {
     if (subjectsDetail.length !== 0) {
       setLoading(true)
       console.log('find BLEEEEEEEEEEEEEEEEEEEEEEE')
+      setCompData(genComponentData())
       // ========================================================BLE is here 
       // ใช้ subject Data [0].mac หาไปก่อน 
       // เอาพอหอเสร็จ ตั้ง state ให้ BLE stauts แล้วเอาไปเช็คเงื่อนไข isDisable ที่ function  genComponentData()
@@ -61,7 +62,7 @@ const CheckInScreen = props => {
   }, [subjectsDetail])
   useEffect(() => {
     if (subjectsDetail.length !== 0) {
-      setCompData(genComponentData())
+      
     }
   }, [BLEstatus])
   // -----------------------------------------------------------------------------
@@ -88,6 +89,7 @@ const CheckInScreen = props => {
     API.post('getSubjectByID/', { uid: currentUser.uid })
       .then((res) => {
         console.log(res.data)
+        setCompData([])
         setSubjectsID(res.data)
       })
       .catch((err) =>

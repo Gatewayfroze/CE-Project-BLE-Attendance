@@ -52,6 +52,7 @@ const ScheduleGraph = ({ subjectID, labelDate, scheduleList, className, studentN
     if (transaction !== '' && transacData.length !== 0) {
       transaction.forEach((transac) => {
         const temp = [...transacData]
+        console.log(temp)
         if (transac.status === 'ok') {
           temp[transac.schIndex].inTime += 1
           temp[transac.schIndex].absent -= 1
