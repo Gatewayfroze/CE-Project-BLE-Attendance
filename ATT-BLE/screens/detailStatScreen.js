@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, RefreshControl } from 'react-native'
+import { StyleSheet, ScrollView, View, Text, RefreshControl } from 'react-native'
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import Colors from '../constants/Colors'
-import Button from '../components/button'
-import StatSubject from '../components/subjectStat'
-import { ScrollView } from 'react-native-gesture-handler';
+import { } from 'react-native-gesture-handler';
 import { PieChart } from "react-native-chart-kit"
 import API from '../assets/API'
 
@@ -19,7 +17,6 @@ const DetailStatScreen = ({ navigation }, ...props) => {
     const [dataChart, setDataChart] = useState([])
     const subjectID = navigation.state.params.subjectID
     const currentUID = navigation.state.params.uid
-
 
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
@@ -126,18 +123,6 @@ const DetailStatScreen = ({ navigation }, ...props) => {
         <ScrollView style={{ paddingHorizontal: 10 }} refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={fetchSubject} />}>
             <View style={styles.statValContain}>
                 <View style={styles.statContainer}>
-                    {/* <View style={styles.titleContainer}>
-                        <Text style={styles.titleText}>จำนวนครั้งที่เข้าเรียน</Text>
-                        <Text style={styles.titleText}>มา</Text>
-                        <Text style={styles.titleText}>สาย</Text>
-                        <Text style={styles.titleText}>ขาด</Text>
-                    </View>
-                    <View style={styles.detailContainer}>
-                        <Text style={styles.detailText}>10</Text>
-                        <Text style={styles.detailText}>10</Text>
-                        <Text style={styles.detailText}>0</Text>
-                        <Text style={styles.detailText}>0</Text>
-                    </View> */}
                     <PieChart
                         data={dataChart}
                         width={300}

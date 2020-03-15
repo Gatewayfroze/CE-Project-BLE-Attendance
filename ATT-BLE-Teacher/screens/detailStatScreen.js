@@ -1,23 +1,31 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import Colors from '../constants/Colors'
+import { PieChart } from "react-native-chart-kit"
+import API from '../assets/API'
 
-const DetailStatScreen = props => {
+const DetailStatScreen = ({ navigation }, ...props) => {
+    const subjectID = navigation.state.params.subjectID
+    const currentUID = navigation.state.params.uid
+    const subjectName = navigation.state.params.subjectName
+    const schedule = navigation.state.params.schedule
+
+    useEffect(() => {
+        console.log(schedule)
+    })
     return (
         <View style={styles.screen}>
             <View style={styles.statContainer}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>จำนวนครั้งที่เข้าเรียน</Text>
-                    <Text style={styles.titleText}>มา</Text>
-                    <Text style={styles.titleText}>สาย</Text>
-                    <Text style={styles.titleText}>ขาด</Text>
-                </View>
-                <View style={styles.detailContainer}>
-                    <Text style={styles.detailText}>10</Text>
-                    <Text style={styles.detailText}>90%</Text>
-                    <Text style={styles.detailText}>5%</Text>
-                    <Text style={styles.detailText}>5%</Text>
-                </View>
+                <PieChart
+                    data={dataChart}
+                    width={300}
+                    height={220}
+                    chartConfig={chartConfig}
+                    accessor="population"
+                    backgroundColor="transparent"
+                    paddingLeft="15"
+                    absolute
+                />
             </View>
         </View>
     )

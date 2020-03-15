@@ -11,9 +11,6 @@ import Button from '../components/button'
 import SubjectStat from '../components/subjectStat'
 import Colors from '../constants/Colors'
 import API from '../assets/API'
-import * as firebase from 'firebase';
-import 'firebase/firestore';
-import { config } from '../firebase';
 
 const StatScreen = ({ navigation }, ...props) => {
     const [currentUser, setCurrentUser] = useState('');
@@ -28,7 +25,6 @@ const StatScreen = ({ navigation }, ...props) => {
     useEffect(() => {
         if (currentUser !== '') {
             getUserSubject()
-            getCurrentSubject()
         }
     }, [currentUser])
     useEffect(() => {
@@ -68,11 +64,6 @@ const StatScreen = ({ navigation }, ...props) => {
                 console.log(err))
     }
 
-    const getCurrentSubject = () => {
-        API.post('getCurrentSubject/', { uid: currentUser.uid })
-            .then(res => setCurrentSubject(res.data))
-            .catch(err => console.log(err))
-    }
     const getSubjectDetail = async () => {
         setSubjectsDetail([])
         const subDetail = subjectsID.map(async (subject) => {
@@ -107,24 +98,6 @@ const StatScreen = ({ navigation }, ...props) => {
         currentSche = currentSche.filter((sch) => sch !== undefined)
         return currentSche
     }
-    const sendCheckIn = (transaction) => {
-        console.log('eiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
-        console.log(transaction)
-        API.post('createTransaction/', transaction)
-            .then((res) => {
-                getCurrentSubject();
-                console.log(res)
-            })
-            .catch((err) =>
-                console.log(err))
-    }
-    const checkOut = () => {
-        API.post('setCurrentSubject/', { uid: currentUser.uid, currentSubject: {} })
-            .then((res) => { getCurrentSubject(); console.log(res) })
-            .catch((err) => console.log(err))
-    }
-
-
     return (
         <View style={styles.screen}>
             <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
@@ -144,16 +117,6 @@ const StatScreen = ({ navigation }, ...props) => {
                         const year = currentDate.getFullYear()
                         let dateString = `${day}/${month}/${year}`
                         const now = new Date()
-                        objTransac = {
-                            subjectID: subject.subjectID,
-                            uid: currentUser.uid,
-                            schIndex: currentSch.schIndex,
-                            timestamp: now,
-                            status: diff_minutes(now, currentDate) <= 15 ? 'ok' : 'late',
-                            uniqueID: '',
-                            endTime: currentSch.end
-                        }
-                        // console.log(objTransac)
                         strDetail = `${dateString} ${startTime}-${endTime} น.`
                         isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 ? true : false
                     }

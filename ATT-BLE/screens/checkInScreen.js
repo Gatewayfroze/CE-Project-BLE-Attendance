@@ -1,7 +1,6 @@
 import React, {
   useState,
   useEffect,
-  useReducer,
 } from 'react'
 
 import {
@@ -12,11 +11,11 @@ import {
   AsyncStorage,
   RefreshControl
 } from 'react-native'
+import { showMessage } from "react-native-flash-message";
 
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 import Color from '../constants/Colors'
-import { showMessage } from "react-native-flash-message";
 import API from '../assets/API'
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState('');

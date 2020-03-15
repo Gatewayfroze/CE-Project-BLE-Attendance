@@ -1,46 +1,76 @@
-import React from 'react'
-import { Text, View, StyleSheet, TextInput } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import {
+    View,
+    Text,
+    ScrollView,
+    StyleSheet,
+} from 'react-native'
+
+
+import CheckBox from 'react-native-check-box'
+import Select from 'react-native-picker-select';
 import Colors from '../constants/Colors'
 import Button from '../components/button'
-const settingScreen = props => {
+import API from '../assets/API'
+
+const settingScreen = ({ navigation }, ...props) => {
+    const room = navigation.state.params.room
+    const mac = navigation.state.params.mac
+    const subjectList = navigation.state.params.subjectsDetail.map((data) => {
+        return { label: data.subjectName, value: data.subjectID }
+    })
+
+    const [selectedSubject, setSelectedSubject] = useState(null)
+
     return (
         <View>
             <View style={styles.itemSubject}>
                 <View style={styles.subjectDetailContainer}>
                     <View style={styles.subjectTitle}>
-                        <Text style={styles.textTitle}>ECC-811</Text>
+                        <Text style={styles.textTitle}>{room}</Text>
                     </View>
-                    {/* ดเสเ่หกสาเ่สากดห่ส่ */}
                     <View style={{
                         backgroundColor: 'red',
                         borderBottomColor: Colors.brigthCOlor,
                         borderBottomWidth: 2,
                     }} />
                     <View style={styles.subjectDetail}>
-                        <Text>MAC: 00-10-5A-44-12-B5</Text>
+                        <Text>MAC: {mac}</Text>
                     </View>
                 </View>
             </View>
-            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 20}}>เลือกวิชา</Text>
-                    <TextInput style={{ borderColor: 'black', borderWidth: 1,fontSize:20}} placeholder='เลือกวิชาที่ต้องการตั้งค่า' />
+                    <View style={styles.selectContainer}>
+                        <Text>Select Subject: </Text>
+                        <Select
+                            style={pickerSelectStyles}
+                            onValueChange={(value) => setSelectedSubject(value)}
+                            value={selectedSubject}
+                            items={subjectList}
+                        />
+                    </View>
                 </View>
-                <View style={{width:70,height:35,marginVertical:10}}>
+
+                <View style={{ width: 70, height: 35, marginVertical: 10 }}>
                     <Button style={{
-                        height:'100%'
+                        height: '100%'
                     }}>
                         <Text style={{ color: 'white', fontSize: 20 }}>Set</Text>
                     </Button>
                 </View>
-
+                <CheckBox
+                    style={{ flex: 1, padding: 10 }}
+                    isChecked={true}
+                    leftText={"CheckBox"}
+                />
             </View>
         </View>
     )
 }
 const styles = StyleSheet.create({
     itemSubject: {
-        height: 100,
+        height: 120,
         borderRadius: 15,
         padding: 10,
         marginVertical: 10,
@@ -70,6 +100,7 @@ const styles = StyleSheet.create({
     },
     subjectTitle: {
         flex: 2,
+        marginBottom: 5,
     },
     subjectDetail: {
         flex: 1,
@@ -80,6 +111,36 @@ const styles = StyleSheet.create({
     textTitle: {
         fontSize: 50,
         color: Colors.highLigthColor
-    }
+    },
+    selectContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
 })
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: '#d9d9d9',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+        width: 200,
+        height: 40
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+        borderWidth: 0.5,
+        borderColor: '#d9d9d9',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+});
 export default settingScreen

@@ -210,8 +210,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: 10,
-
-
     },
     button: {
         flexDirection: 'row',
