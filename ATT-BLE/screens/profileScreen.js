@@ -100,7 +100,7 @@ const ProfileScreen = props => {
 }
 ProfileScreen.navigationOptions = navData => {
     return {
-        headerTitle: 'Profile'
+        headerTitle: 'Profile      '
     }
 }
 const styles = StyleSheet.create({

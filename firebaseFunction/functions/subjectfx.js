@@ -15,8 +15,23 @@ app.post("/createSubject", (req, res) => {
       schedule: req.body.schedule,
       students: [],
       teacher: req.body.teacherUID
+    }).then(()=>{
+      db
+      .collection("users")
+      .doc(req.body.teacherUID)
+      .update({
+        subject: admin.firestore.FieldValue.arrayUnion(req.body.subjectID)
+      }).then(()=>{
+        res.end()
+        return
+      }) .catch(error => {
+        console.log(error, toString())
+      })
+      return
+    }) .catch(error => {
+      console.log(error, toString())
     })
-  res.end()
+  
 })
 app.get("/getAllSubject", (req, res) => {
   db.collection("subjects")

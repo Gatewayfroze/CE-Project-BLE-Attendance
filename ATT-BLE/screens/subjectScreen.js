@@ -175,7 +175,7 @@ const SubjectScreen = props => {
 }
 SubjectScreen.navigationOptions = navData => {
     return {
-        headerTitle: 'Manage Subject'
+        headerTitle: 'Manage Subject      '
     }
 }
 const styles = StyleSheet.create({

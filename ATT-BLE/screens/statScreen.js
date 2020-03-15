@@ -172,7 +172,7 @@ const StatScreen = ({ navigation }, ...props) => {
 }
 StatScreen.navigationOptions = navData => {
     return {
-        headerTitle: 'Select Subject to View Stat'
+        headerTitle: 'Select Subject to View Stat        '
     }
 }
 const styles = StyleSheet.create({

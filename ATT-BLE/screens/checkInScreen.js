@@ -227,7 +227,7 @@ const CheckInScreen = props => {
 }
 CheckInScreen.navigationOptions = navData => {
   return {
-    headerTitle: 'ATTENDA'
+    headerTitle: 'ATTENDA   '
   }
 }
 const styles = StyleSheet.create({
