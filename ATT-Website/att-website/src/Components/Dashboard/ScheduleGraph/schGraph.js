@@ -68,12 +68,14 @@ const ScheduleGraph = ({ subjectID, labelDate, scheduleList, className, studentN
     }
   }, [transaction])
   const findLastSchedule = () => {
+    const now = new Date
     for (let i = 0; i < schedule.length; i++) {
       let sch = schedule[i]
-      const now = new Date
       const date = new Date(sch.date)
       if (date > now) {
         return i
+      } else if (i === schedule.length - 1 && now >= date) {
+        return schedule.length
       }
     }
     return 0

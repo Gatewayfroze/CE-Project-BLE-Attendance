@@ -53,7 +53,6 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
   }, [schedule])
   useEffect(() => {
     if (transaction !== '') {
-      console.log(studentNo)
       let tempChart = schedule.map((sch) => {
         let defaultObj = {
           ok: 0,
@@ -74,8 +73,11 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
         return defaultObj
       })
       const currentSch = findLastSchedule()
-      console.log(tempChart)
+      // console.log(tempChart)
+      // console.log(currentSch)
       tempChart = tempChart.slice(0, currentSch)
+      // console.log(tempChart)
+
       let summary =
         { ok: 0, late: 0, absent: 0 }
 
@@ -95,12 +97,14 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
     }
   }, [transaction])
   const findLastSchedule = () => {
+    const now = new Date
     for (let i = 0; i < schedule.length; i++) {
       let sch = schedule[i]
-      const now = new Date
       const date = new Date(sch.date)
       if (date > now) {
         return i
+      } else if (i === schedule.length - 1 && now >= date) {
+        return schedule.length
       }
     }
     return 0

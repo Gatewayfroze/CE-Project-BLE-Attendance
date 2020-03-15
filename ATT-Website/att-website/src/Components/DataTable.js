@@ -31,6 +31,7 @@ const DataTable = (props) => {
     const columns = props.columns
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        console.log(newPage)
     };
 
     const handleChangeRowsPerPage = event => {
@@ -74,12 +75,13 @@ const DataTable = (props) => {
                                     {/* <TableCell><Button className='is-danger' onClick={()=>props.del(i)} >Delete</Button></TableCell> */}
                                     {props.extraCol.map((ButtonCol) => {
                                         return (
-                                            ButtonCol.link?
-                                                <TableCell><a className={`button ${ButtonCol.class}`} style={{textDecoration: 'none'}} href={ButtonCol.link?`viewSub/${ButtonCol.link(i)}`:'#'} >{ButtonCol.text}</a></TableCell>
-                                            :
-                                                <TableCell><a className={`button ${ButtonCol.class}`} style={{textDecoration: 'none'}} onClick={()=>ButtonCol.function(i)} >{ButtonCol.text}</a></TableCell>
-                                            
-                                    )})}
+                                            ButtonCol.link ?
+                                                <TableCell><a className={`button ${ButtonCol.class}`} style={{ textDecoration: 'none' }} href={ButtonCol.link ? `viewSub/${ButtonCol.link(page * rowsPerPage + i)}` : '#'} >{ButtonCol.text}</a></TableCell>
+                                                :
+                                                <TableCell><a className={`button ${ButtonCol.class}`} style={{ textDecoration: 'none' }} onClick={() => ButtonCol.function(page * rowsPerPage + i)} >{ButtonCol.text}</a></TableCell>
+
+                                        )
+                                    })}
                                 </TableRow>
                             );
                         })}

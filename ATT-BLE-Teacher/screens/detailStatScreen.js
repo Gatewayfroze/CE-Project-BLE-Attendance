@@ -3,29 +3,91 @@ import { StyleSheet, View, Text } from 'react-native'
 import Colors from '../constants/Colors'
 import { PieChart } from "react-native-chart-kit"
 import API from '../assets/API'
-
+const chartConfig = {
+    backgroundGradientFrom: "#1E2923",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: "#08130D",
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5
+}
 const DetailStatScreen = ({ navigation }, ...props) => {
     const subjectID = navigation.state.params.subjectID
     const currentUID = navigation.state.params.uid
     const subjectName = navigation.state.params.subjectName
     const schedule = navigation.state.params.schedule
-
+    const studentNo = navigation.state.params.studentNo
+    const [transaction, setTransac] = useState('')
+    // find current subject
+    const findCurrentSchedule = () => {
+        for (let i = 0; i < schedule.length; i++) {
+            let sch = schedule[i]
+            const now = new Date
+            const date = new Date(sch.date)
+            if (date > now) {
+                return i
+            }
+        }
+        return 0
+    }
+    const currentSch = findCurrentSchedule()
     useEffect(() => {
-        console.log(schedule)
-    })
+        fetchTrasaction()
+    }, [])
+    useEffect(() => {
+        if (transaction !== '') {
+            let tempChart = schedule.map((sch) => {
+                let defaultObj = {
+                    ok: 0,
+                    late: 0,
+                    absent: studentNo
+                }
+                const foundTransacs = transaction.filter((trans, i) => {
+                    return sch.schIndex == trans.schIndex
+                })
+
+                foundTransacs.forEach((foundTransac) => {
+                    if (foundTransac) {
+                        defaultObj[`${foundTransac.status}`] += 1
+                        defaultObj.absent -= 1
+                    }
+                })
+
+                return defaultObj
+            })
+
+            tempChart = tempChart.slice(0, currentSch)
+            let summary =
+                { ok: 0, late: 0, absent: 0 }
+
+            tempChart.forEach((data) => {
+                summary.ok += data.ok
+                summary.late += data.late
+                summary.absent += data.absent
+            })
+            let all = studentNo * currentSch
+            if (all == 0) all = 1
+            // ======================================= prevent case 0/0 == Nan
+            summary.ok = summary.ok / all * 100
+            summary.late = summary.late / all * 100
+            summary.absent = summary.absent / all * 100
+            console.log(summary)
+        }
+
+    }, [transaction])
+
+    const fetchTrasaction = () => {
+        API.post('getTransactionSub/', { subjectID })
+            .then((res) => {
+                setTransac(res.data)
+            })
+            .catch((err) => console.log(err))
+    }
     return (
         <View style={styles.screen}>
             <View style={styles.statContainer}>
-                <PieChart
-                    data={dataChart}
-                    width={300}
-                    height={220}
-                    chartConfig={chartConfig}
-                    accessor="population"
-                    backgroundColor="transparent"
-                    paddingLeft="15"
-                    absolute
-                />
+
             </View>
         </View>
     )

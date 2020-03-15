@@ -24,19 +24,22 @@ const SampleGrid = ({ match }, ...props) => {
     const [subjectName, setSubjectName] = useState('')
     const [studentData, setStudentData] = useState([])
     const [transaction, setTransac] = useState('')
-    const [currentSch, setCurrentSch] = useState(0)
+    const [currentSch, setCurrentSch] = useState(-1)
     useEffect(() => {
         fetchSubject()
     }, [])
     useEffect(() => {
         if (subjectData !== '') {
             const schedule = subjectData.schedule
-            let current = 0
+            let current = -1
             const schCol = schedule.map((sch, i) => {
                 const currentDate = new Date(sch.date)
                 const now = new Date
                 // checkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-                if (now > currentDate) { setCurrentSch(i); current = i }
+                if (now > currentDate) {
+                    setCurrentSch(i);
+                    current = i
+                }
                 const day = currentDate.getDate()
                 const month = currentDate.getMonth() + 1
                 const year = currentDate.getFullYear()

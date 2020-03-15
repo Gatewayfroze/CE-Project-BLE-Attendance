@@ -46,6 +46,7 @@ const ViewSubjectPage = ({ match }, ...props) => {
             })
     }
     const getLink = (subjectID) => {
+        console.log(subjectID)
         return subjects[subjectID].subjectID
     }
     const tableExtend = []
