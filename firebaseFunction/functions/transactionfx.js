@@ -14,7 +14,8 @@ app.post("/createTransaction", (req, res) => {
       status: req.body.status,
       studentUID: req.body.uid,
       subjectID: req.body.subjectID,
-      uniqueID: req.body.uniqueID
+      uniqueID: req.body.uniqueID,
+      subjectName:req.body.subjectName
     })
     .then(async () => {
       
