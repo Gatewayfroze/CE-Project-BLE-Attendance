@@ -59,11 +59,11 @@ const settingScreen = ({ navigation }, ...props) => {
                         <Text style={{ color: 'white', fontSize: 20 }}>Set</Text>
                     </Button>
                 </View>
-                <CheckBox
+                {/* <CheckBox
                     style={{ flex: 1, padding: 10 }}
                     isChecked={true}
                     leftText={"CheckBox"}
-                />
+                /> */}
             </View>
         </View>
     )

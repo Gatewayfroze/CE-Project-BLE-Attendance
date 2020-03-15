@@ -3,38 +3,64 @@ import { StyleSheet, View, Text } from 'react-native'
 import Colors from '../constants/Colors'
 import { PieChart } from "react-native-chart-kit"
 import API from '../assets/API'
-const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5
-}
+import Select from 'react-native-picker-select';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+
 const DetailStatScreen = ({ navigation }, ...props) => {
+    const chartConfig = {
+        backgroundGradientFrom: "#1E2923",
+        backgroundGradientFromOpacity: 0,
+        backgroundGradientTo: "#08130D",
+        backgroundGradientToOpacity: 0.5,
+        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        strokeWidth: 2, // optional, default 3
+        barPercentage: 0.5
+    }
     const subjectID = navigation.state.params.subjectID
     const currentUID = navigation.state.params.uid
     const subjectName = navigation.state.params.subjectName
     const schedule = navigation.state.params.schedule
-    const studentNo = navigation.state.params.studentNo
+    const students = navigation.state.params.students.sort()
+    const studentNo = students.length
+    const [dataChart, setDataChart] = useState([])
     const [transaction, setTransac] = useState('')
+    const [studentsData, setStudetnsData] = useState()
+    const [selected, setSelected] = useState(null)
+    const [tableData, setTableData] = useState([])
     // find current subject
     const findCurrentSchedule = () => {
+        const now = new Date
         for (let i = 0; i < schedule.length; i++) {
             let sch = schedule[i]
-            const now = new Date
             const date = new Date(sch.date)
             if (date > now) {
                 return i
+            } else if (i === schedule.length - 1 && now >= date) {
+                return schedule.length
             }
         }
         return 0
     }
+    const convertDateStr = (date) => {
+        const dateObj = new Date(date)
+        const day = dateObj.getDate()
+        const month = dateObj.getMonth() + 1
+        const year = dateObj.getFullYear()
+        return `${day}/${month}/${year}`
+
+    }
     const currentSch = findCurrentSchedule()
+    let scheduleList = schedule.slice(0, currentSch).map((data) => ({ label: convertDateStr(data.date), value: data.schIndex }))
+    scheduleList.sort((a, b) => {
+        return a.value - b.value //sort by date ascending
+    })
     useEffect(() => {
         fetchTrasaction()
+
     }, [])
+    useEffect(() => {
+        fetchListStudent()
+    }, [transaction])
     useEffect(() => {
         if (transaction !== '') {
             let tempChart = schedule.map((sch) => {
@@ -56,7 +82,6 @@ const DetailStatScreen = ({ navigation }, ...props) => {
 
                 return defaultObj
             })
-
             tempChart = tempChart.slice(0, currentSch)
             let summary =
                 { ok: 0, late: 0, absent: 0 }
@@ -73,10 +98,44 @@ const DetailStatScreen = ({ navigation }, ...props) => {
             summary.late = summary.late / all * 100
             summary.absent = summary.absent / all * 100
             console.log(summary)
+            setDataChart([{
+                name: "% In time",
+                population: summary.ok,
+                color: Colors.primaryColor,
+                legendFontColor: "#7F7F7F",
+                legendFontSize: 15
+            },
+            {
+                name: "% Late",
+                population: summary.late,
+                color: Colors.secondaryColor,
+                legendFontColor: "#7F7F7F",
+                legendFontSize: 15
+            },
+            {
+                name: "% Absent",
+                population: summary.absent,
+                color: "#F00",
+                legendFontColor: "#7F7F7F",
+                legendFontSize: 15
+            }])
         }
 
-    }, [transaction])
-
+    }, [studentsData])
+    useEffect(() => {
+        console.log(selected)
+        if (selected !== null) {
+            const schData = studentsData.map((std) => {
+                const found = transaction.find((trans) => {
+                    return trans.schIndex == selected && trans.studentUID == std.uid
+                })
+                let defaultTxt = 'absent'
+                // return { ...std, status: found ? found.status : defaultTxt }
+                return [std.studentID, std.name, found ? found.status : defaultTxt]
+            })
+            setTableData(schData)
+        }
+    }, [selected])
     const fetchTrasaction = () => {
         API.post('getTransactionSub/', { subjectID })
             .then((res) => {
@@ -84,10 +143,48 @@ const DetailStatScreen = ({ navigation }, ...props) => {
             })
             .catch((err) => console.log(err))
     }
+    const fetchListStudent = async () => {
+        // setLoading(true)
+        const val = students.map(async (student) => {
+            const detail = await API.post('getStudent/', { studentID: student })
+            const name = detail.data.name + ' ' + detail.data.surname
+            const studentID = detail.data.email.replace('@kmitl.ac.th', '')
+            // setLoading(false)
+            return { name, studentID, uid: detail.data.uid }
+        })
+        const results = await Promise.all(val)
+        setStudetnsData(results)
+    }
     return (
         <View style={styles.screen}>
             <View style={styles.statContainer}>
+                <PieChart
+                    data={dataChart}
+                    width={300}
+                    height={220}
+                    chartConfig={chartConfig}
+                    accessor="population"
+                    backgroundColor="transparent"
+                    paddingLeft="15"
+                    absolute
+                />
+            </View>
+            <View style={styles.selectContainer}>
+                <Text>Select Subject: </Text>
+                <Select
+                    style={pickerSelectStyles}
+                    onValueChange={(value) => setSelected(value)}
+                    value={selected}
+                    items={scheduleList}
+                />
 
+            </View>
+            <View style={styles.tableContainer}>
+
+                <Table borderStyle={{ borderWidth: 1.5, borderColor: '#bababa' }}>
+                    <Row data={['ID', 'name', 'status']} style={styles.head} textStyle={styles.textHeader} />
+                    <Rows data={tableData} textStyle={styles.text} />
+                </Table>
             </View>
         </View>
     )
@@ -103,6 +200,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
     },
+    tableContainer: {
+        paddingHorizontal: 35,
+        width:'100%'
+    },
+    head: { height: 40, backgroundColor: '#deffed' },
+    text: { margin: 6, marginLeft: 15 },
     statContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -149,6 +252,36 @@ const styles = StyleSheet.create({
     buttonSize: {
         height: 35,
         width: '30%'
-    }
+    },
+    selectContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
 })
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: '#d9d9d9',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+        width: 200,
+        height: 40
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+        borderWidth: 0.5,
+        borderColor: '#d9d9d9',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+});
 export default DetailStatScreen

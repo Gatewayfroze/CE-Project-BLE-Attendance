@@ -123,7 +123,7 @@ const StatScreen = ({ navigation }, ...props) => {
                             subjectName: subject.subjectName,
                             uid: currentUser.uid,
                             schedule: subject.schedule,
-                            studentNo: subject.students.length
+                            students: subject.students
                         }
                         )
                     }} />

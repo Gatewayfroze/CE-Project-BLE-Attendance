@@ -142,7 +142,7 @@ const SampleGrid = ({ match }, ...props) => {
                                                 endTime: ''
                                             }
                                             console.log(tempTransaction)
-                                            API.post('createTransaction/', tempTransaction)
+                                            API.post('createTempTransaction/', tempTransaction)
                                                 .then((res) => console.log(res))
 
                                         } else {

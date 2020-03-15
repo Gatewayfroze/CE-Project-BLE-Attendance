@@ -108,7 +108,6 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
       }
     }
     return 0
-
   }
   const fetchTrasaction = () => {
     API.post('getTransactionSub/', { subjectID })

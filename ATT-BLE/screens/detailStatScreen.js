@@ -10,7 +10,7 @@ import API from '../assets/API'
 
 const DetailStatScreen = ({ navigation }, ...props) => {
     const [subjectData, setSubjectData] = useState('')
-    const [currentSchedule, setCurrentSch] = useState()
+    const [currentSchedule, setCurrentSch] = useState(-1)
     const [transaction, setTransaction] = useState([])
     const [dataSchedule, setDataSchedule] = useState([])
     const [loading, setLoading] = useState(false)
@@ -33,7 +33,7 @@ const DetailStatScreen = ({ navigation }, ...props) => {
     useEffect(() => {
         if (subjectData !== '') {
             const schedule = subjectData.schedule
-            let current = 0
+            let current = -1
             const now = new Date
             const schCol = schedule.map((sch, i) => {
                 const currentDate = new Date(sch.date)
