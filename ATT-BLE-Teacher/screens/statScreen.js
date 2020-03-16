@@ -117,7 +117,9 @@ const StatScreen = ({ navigation }, ...props) => {
                         strDetail = `${dateString} ${startTime}-${endTime} น.`
                         isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 ? true : false
                     }
-                    return <SubjectStat key={i} title={subject.subjectName} detail={strDetail} onClick={() => {
+                    let tempName = subject.subjectName
+                    tempName = tempName.length > 20 ? `${tempName.slice(0, 20)}...` : tempName
+                    return <SubjectStat key={i} title={tempName} detail={strDetail} onClick={() => {
                         navigation.navigate('statDetail', {
                             subjectID: subject.subjectID,
                             subjectName: subject.subjectName,

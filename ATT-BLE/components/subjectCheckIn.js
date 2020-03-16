@@ -4,12 +4,13 @@ import { View, Text, TouchableHighlight, StyleSheet, TouchableOpacity } from 're
 import Colors from '../constants/Colors'
 import API from '../assets/API'
 const SubjectCheckIn = props => {
-
+    let tempName = props.title
+    tempName = tempName.length > 20 ? `${tempName.slice(0, 20)}...` : tempName
     return (
         <View style={props.disabled ? { ...styles.itemSubject, backgroundColor: '#d1d1d1' } : { ...styles.itemSubject, backgroundColor: 'white' }}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={props.disabled ? { ...styles.textTitle, color: 'gray' } : { ...styles.textTitle, color: Colors.highLigthColor }}>{props.title}</Text>
+                    <Text style={props.disabled ? { ...styles.textTitle, color: 'gray' } : { ...styles.textTitle, color: Colors.highLigthColor }}>{tempName}</Text>
                 </View>
                 <View style={props.disabled ? {
                     flex: 1,
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textTitle: {
-        fontSize: 20,
+        fontSize: 18,
     }
 })
 export default SubjectCheckIn

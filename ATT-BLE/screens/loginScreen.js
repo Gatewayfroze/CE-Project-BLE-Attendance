@@ -110,7 +110,7 @@ const LoginScreen = props => {
     return (
         <View style={styles.screen}>
             <Text style={styles.logo}>
-                ATTENDAa 
+                {'ATTENDA '}
             </Text>
             <View style={styles.inputView}>
                 <TextInput style={styles.textInput}

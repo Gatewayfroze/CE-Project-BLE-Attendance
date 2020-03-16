@@ -68,6 +68,7 @@ const CreateSubPage = props => {
                 setLoading(false)
             })
             .catch(function (error) {
+                setLoading(false)
                 console.log(error)
             })
     }

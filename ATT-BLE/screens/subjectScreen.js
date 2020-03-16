@@ -124,7 +124,7 @@ const SubjectScreen = props => {
                     <Text>Enter SubjectID: </Text>
                     {subjectName !== '' ?
                         <View style={styles.subNameContainer}>
-                            <Text style={styles.subjectName}>{subjectName}</Text>
+                            <Text style={styles.subjectName}>{subjectName.length > 12 ? subjectName.slice(0, 12) + '...' : subjectName}</Text>
                             <TouchableOpacity onPress={() => { setSubjectName(''); setIDInput('') }}>
                                 <Entypo name="circle-with-cross"
                                     size={22} color='gray'
@@ -260,6 +260,8 @@ const pickerSelectStyles = StyleSheet.create({
         borderRadius: 8,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon
+        width: 200,
+        height: 40
     },
 });
 export default SubjectScreen

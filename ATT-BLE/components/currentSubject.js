@@ -24,18 +24,18 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         }
     }, [currentSubject])
     const getCurrentSubject = () => {
-        API.post('getCurrentSubject', { uid: currentUser.uid }).then((res) => { res.data.endTime = new Date(res.data.endTime); setCurrentSubject(res.data) })
+        API.post('getCurrentSubject', { uid: currentUser.uid }).then((res) => { res.data.endTime = new Date(res.data.endTime); setCurrentSubject(res.data); console.log(res.data) })
     }
     const convertDateStr = (currentDate) => {
         const day = currentDate.getDate()
         const month = currentDate.getMonth() + 1
         const year = currentDate.getFullYear()
         let dateString = `${day}/${month}/${year}`
-        return 'หมดเวลา: '+dateString + ' ' + currentDate.toLocaleTimeString()
+        return 'หมดเวลา: ' + dateString + ' ' + currentDate.toLocaleTimeString()
     }
     return (
         <View style={styles.currentSubjectContainer}>
-            <Text style={styles.title}>{`กำลังเรียน: ${currentSubject.subjectID}`}</Text>
+            <Text style={styles.title}>{`กำลังเรียน: ${currentSubject.subjectName}`}</Text>
             <View style={styles.clockContainer}>
                 <AntDesign name="clockcircleo"
                     size={30} color='gray'
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         color: Colors.secondaryColor
     },
     button: {
-        marginTop:10,
+        marginTop: 10,
         flexDirection: 'row',
         borderRadius: 10,
         justifyContent: 'center',

@@ -3,11 +3,13 @@ import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
 import Colors from '../constants/Colors'
 import Button from '../components/button'
 const StatSubject = props => {
+    let tempName = props.title
+    tempName = tempName.length > 20 ? `${tempName.slice(0, 20)}...` : tempName
     return (
         <View style={styles.itemSubject}>
             <View style={styles.subjectDetailContainer}>
                 <View style={styles.subjectTitle}>
-                    <Text style={styles.textTitle}>{props.title}</Text>
+                    <Text style={styles.textTitle}>{tempName}</Text>
                 </View>
                 <View style={{
                     flex: 1,
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     textTitle: {
-        fontSize: 20,
+        fontSize: 18,
         color: Colors.highLigthColor
     }
 })
