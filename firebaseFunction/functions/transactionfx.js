@@ -55,7 +55,8 @@ app.post("/createTransaction", (req, res) => {
         subjectID: req.body.subjectID,
         schIndex: req.body.schIndex,
         endTime: req.body.endTime,
-        subjectName:req.body.subjectName
+        subjectName:req.body.subjectName,
+        mac:req.body.mac
       }
       await db
         .collection("users")
