@@ -24,6 +24,7 @@ import PrivateRoute from './privateRoute.js'
 
 function App() {
   return (
+    <div style={{ background: 'white' }}>
       <AuthProvider >
         <ThemeProvider theme={theme}>
           <Router>
@@ -41,6 +42,7 @@ function App() {
           </Router>
         </ThemeProvider>
       </AuthProvider>
+    </div>
   );
 }
 

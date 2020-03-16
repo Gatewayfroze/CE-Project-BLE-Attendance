@@ -5,6 +5,7 @@ import { PieChart } from "react-native-chart-kit"
 import API from '../assets/API'
 import Select from 'react-native-picker-select';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { ScrollView } from 'react-native-gesture-handler'
 
 const DetailStatScreen = ({ navigation }, ...props) => {
     const chartConfig = {
@@ -94,10 +95,9 @@ const DetailStatScreen = ({ navigation }, ...props) => {
             let all = studentNo * currentSch
             if (all == 0) all = 1
             // ======================================= prevent case 0/0 == Nan
-            summary.ok = summary.ok / all * 100
-            summary.late = summary.late / all * 100
-            summary.absent = summary.absent / all * 100
-            console.log(summary)
+            summary.ok = parseInt((summary.ok / all * 100))
+            summary.late = parseInt((summary.late / all * 100))
+            summary.absent = 100 - summary.ok - summary.late
             setDataChart([{
                 name: "% In time",
                 population: summary.ok,
@@ -156,37 +156,40 @@ const DetailStatScreen = ({ navigation }, ...props) => {
         setStudetnsData(results)
     }
     return (
-        <View style={styles.screen}>
-            <View style={styles.statContainer}>
-                <PieChart
-                    data={dataChart}
-                    width={300}
-                    height={220}
-                    chartConfig={chartConfig}
-                    accessor="population"
-                    backgroundColor="transparent"
-                    paddingLeft="15"
-                    absolute
-                />
-            </View>
-            <View style={styles.selectContainer}>
-                <Text>Select Subject: </Text>
-                <Select
-                    style={pickerSelectStyles}
-                    onValueChange={(value) => setSelected(value)}
-                    value={selected}
-                    items={scheduleList}
-                />
+        <ScrollView>
+            <View style={styles.screen}>
+                <View style={styles.statContainer}>
+                    <PieChart
+                        data={dataChart}
+                        width={300}
+                        height={220}
+                        chartConfig={chartConfig}
+                        accessor="population"
+                        backgroundColor="transparent"
+                        paddingLeft="15"
+                        absolute
+                    />
+                </View>
+                <View style={styles.selectContainer}>
+                    <Text>Select Schedule: </Text>
+                    <Select
+                        style={pickerSelectStyles}
+                        onValueChange={(value) => setSelected(value)}
+                        value={selected}
+                        items={scheduleList}
+                    />
 
-            </View>
-            <View style={styles.tableContainer}>
+                </View>
+                <View style={styles.tableContainer}>
 
-                <Table borderStyle={{ borderWidth: 1.5, borderColor: '#bababa' }}>
-                    <Row data={['ID', 'name', 'status']} style={styles.head} textStyle={styles.textHeader} />
-                    <Rows data={tableData} textStyle={styles.text} />
-                </Table>
+                    <Table borderStyle={{ borderWidth: 1.5, borderColor: '#bababa' }}>
+                        <Row data={['ID', 'name', 'status']} style={styles.head} textStyle={styles.textHeader} />
+                        <Rows data={tableData} textStyle={styles.text} />
+                    </Table>
+                </View>
             </View>
-        </View>
+        </ScrollView>
+
     )
 }
 DetailStatScreen.navigationOptions = navData => {
@@ -202,9 +205,10 @@ const styles = StyleSheet.create({
     },
     tableContainer: {
         paddingHorizontal: 35,
-        width:'100%'
+        width: '100%'
     },
-    head: { height: 40, backgroundColor: '#deffed' },
+    textHeader: { textAlign: 'center' },
+    head: { height: 40, backgroundColor: '#ffca80' },
     text: { margin: 6, marginLeft: 15 },
     statContainer: {
         flexDirection: 'row',
@@ -213,7 +217,7 @@ const styles = StyleSheet.create({
         height: '45%',
         width: '80%',
         paddingVertical: 50,
-        paddingLeft: '10%',
+        paddingLeft: '2%',
         borderRadius: 20,
         marginVertical: 20,
         // shadow
@@ -239,8 +243,6 @@ const styles = StyleSheet.create({
         // backgroundColor: 'green',
         width: '100%',
         height: '100%'
-    },
-    text: {
     },
     titleText: {
         color: Colors.highLigthColor,

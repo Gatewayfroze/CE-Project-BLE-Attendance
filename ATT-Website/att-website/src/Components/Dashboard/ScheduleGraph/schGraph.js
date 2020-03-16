@@ -15,7 +15,9 @@ import { options } from './chart';
 import API from '../../../api'
 
 const useStyles = makeStyles(() => ({
-  root: {},
+  root: {
+    height: '100%'
+  },
   chartContainer: {
     height: 400,
     position: 'relative'

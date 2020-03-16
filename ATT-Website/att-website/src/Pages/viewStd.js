@@ -10,7 +10,6 @@ const ManagePage = () => {
     const [data, setJson] = useState([])
     const [loading, setLoading] = useState(false)
     const [genRole, setRole] = useState('Student')
-
     useEffect(() => {
         fetchData(genRole)
     }, [genRole])
@@ -37,11 +36,20 @@ const ManagePage = () => {
                 console.log(error)
             })
     }
-    const columnDefault = [
-        { id: 'id', label: 'ID', minWidth: 100 },
-        { id: 'name', label: 'Name', minWidth: 100 },
-        { id: 'surname', label: 'Surname', minWidth: 100 },
-    ]
+    const column = {
+        Student: [
+            { id: 'id', label: 'ID', minWidth: 100 },
+            { id: 'name', label: 'Name', minWidth: 100 },
+            { id: 'surname', label: 'Surname', minWidth: 100 },
+        ],
+        Teacher: [
+            { id: 'email', label: 'Email', minWidth: 100 },
+            { id: 'name', label: 'Name', minWidth: 100 },
+            { id: 'surname', label: 'Surname', minWidth: 100 },
+        ]
+    }
+    let columnDefault = column[genRole]
+
     const tableExtend = []
     const deleteUser = (userIndex) => {
         setLoading(true)

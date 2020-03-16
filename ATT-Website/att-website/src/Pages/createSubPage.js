@@ -253,7 +253,7 @@ const CreateSubPage = props => {
                                 <th>Date</th>
                                 <th>Start</th>
                                 <th>End</th>
-                                <th>MAC Addr.</th>
+                                <th>Room</th>
                                 <th></th>
                             </tr>
                         </thead>

@@ -118,7 +118,7 @@ const SampleGrid = ({ match }, ...props) => {
     return (
         <React.Fragment>
             {loading && <LinearProgress />}
-            <Container maxWidth={"lg"}>
+            <Container maxWidth={"lg"} style={{marginTop:35}}>
                 <MaterialTable
                     columns={columns}
                     data={studentData}

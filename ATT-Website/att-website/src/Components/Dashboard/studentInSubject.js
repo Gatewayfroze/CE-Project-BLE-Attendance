@@ -75,7 +75,7 @@ const StudentInSubject = ({ subjectData, subjectID }, ...props) => {
     const tableExtend = []
     tableExtend.push({ text: 'Delete', class: 'is-danger', function: dropStudent })
     return (
-        <Card>
+        <Card style={{ height:500 }}>
             <CardHeader
                 action={
                     <Grid container spacing={1} alignItems="flex-end">
@@ -90,8 +90,8 @@ const StudentInSubject = ({ subjectData, subjectID }, ...props) => {
                 }
                 title="Student In Class"
             />
-            <Divider/>
-            <DataTable maxHeight={400} columns={columnDefault} data={stdDataSearch} extraHeader={['Delete']} extraCol={tableExtend} />
+            <Divider />
+            <DataTable maxHeight={350} columns={columnDefault} data={stdDataSearch} extraHeader={['Delete']} extraCol={tableExtend} />
         </Card>)
 }
 export default StudentInSubject

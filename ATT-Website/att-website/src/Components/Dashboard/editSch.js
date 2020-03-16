@@ -193,7 +193,7 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
 
     }
     return (
-        <Card>
+        <Card style={{ height: 500 }}>
             <CardHeader
                 action={
                     <Grid container spacing={1} alignItems="flex-end">
@@ -235,7 +235,7 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
 const styles = {
     overFlowTab: {
         width: '100%',
-        height: '250px',
+        height: '400px',
         // maxHeight: '300px',
         overflow: 'auto',
     }

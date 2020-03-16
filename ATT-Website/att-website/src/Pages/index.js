@@ -75,9 +75,7 @@ const MainPage = ({ history }) => {
                   <p className='control'>
                     <button className='button is-primary' type="submit">Log in</button>
                   </p>
-                  <p className='control'>
-                    <button className='button is-default is-outlined'>Change Password</button>
-                  </p>
+               
                 </div>
               </div>
             </form>

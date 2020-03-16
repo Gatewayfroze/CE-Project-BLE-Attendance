@@ -89,10 +89,9 @@ const PercentInClass = ({ subjectID, labelDate, scheduleList, className, student
       let all = studentNo * currentSch
       if (all == 0) all = 1
       // ======================================= prevent case 0/0 == Nan
-      summary.ok = summary.ok / all * 100
-      summary.late = summary.late / all * 100
-      summary.absent = summary.absent / all * 100
-      console.log(summary)
+      summary.ok = parseInt((summary.ok / all * 100))
+      summary.late = parseInt((summary.late / all * 100))
+      summary.absent = 100 - summary.ok - summary.late
       setDataChart(summary)
     }
   }, [transaction])

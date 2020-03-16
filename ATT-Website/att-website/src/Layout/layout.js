@@ -91,7 +91,7 @@ const Layout = (props) => {
         )
     }
     return (
-        <div className={classes.root} style={{backgroundColor:'#f7f7f7'}}>
+        <div className={classes.root} >
             {drawerActivate ? createDrawer() : destroyDrawer()}
             <main className={classes.content}>
                 <div className={classes.toolbar} />
