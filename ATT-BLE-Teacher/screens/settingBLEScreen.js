@@ -21,7 +21,69 @@ const settingScreen = ({ navigation }, ...props) => {
     })
 
     const [selectedSubject, setSelectedSubject] = useState(null)
+    const [schData, setScheData] = useState([])
+    const [renderData, setRenderData] = useState([])
+    const [checkAll, setCheckAll] = useState(false)
+    const [schedule, setSchedule] = useState([])
 
+    useEffect(() => {
+        if (selectedSubject !== null) {
+            fetchSubject()
+        }
+    }, [selectedSubject])
+    useEffect(() => {
+        console.log('renderData')
+        setRenderData(schData)
+    }, [schData])
+    const fetchSubject = () => {
+        API.post('getSubject/', { subjectID: selectedSubject })
+            .then((res) => {
+                const temp = res.data.schedule.map((sch) => {
+                    return { date: convertDateStr(sch.date), room: sch.board.label, checked: false }
+                })
+                setScheData(temp)
+                setSchedule(res.data.schedule)
+                setRenderData(temp)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+    }
+    const updateSchedule = () => {
+        console.log(selectedSubject)
+        const listChecked = findCheck()
+        let temp = schedule.map((sch, i) => {
+            if (listChecked.includes(i)) {
+                return {
+                    ...sch, mac: mac, board: { label: room, value: mac }
+                }
+            } else {
+                return sch
+            }
+        })
+        API.post('updateSchedule/', { subjectID: selectedSubject, newschedule: temp })
+            .then((res) => { console.log(res) })
+            .catch((err) => console.log(err))
+    }
+    const findCheck = () => {
+        let list = []
+        renderData.forEach((data, i) => {
+            if (data.checked === true) {
+                list = [...list, i]
+            }
+        })
+        return list
+
+    }
+    const convertDateStr = (date) => {
+        const dateObj = new Date(date)
+        const day = dateObj.getDate()
+        const month = dateObj.getMonth() + 1
+        const year = dateObj.getFullYear()
+        return `${day}/${month}/${year}`
+
+    }
     return (
         <View>
             <View style={styles.itemSubject}>
@@ -51,21 +113,46 @@ const settingScreen = ({ navigation }, ...props) => {
                         />
                     </View>
                 </View>
+                <View style={styles.checkContainer}>
+                    <CheckBox
+                        onClick={() => {
+                            const temp = [...renderData]
+                            setScheData(temp.map((t) => {
+                                return { ...t, checked: !checkAll }
+                            }))
+                            setCheckAll(!checkAll)
+                        }}
+                        isChecked={checkAll}
 
+                    />
+                    <Text style={styles.textCheck}>{'Check All'}</Text>
+                </View>
+                {renderData.map((sch, i) => {
+                    return (
+                        <View key={i} style={styles.checkContainer}>
+                            <CheckBox
+                                onClick={() => {
+                                    const temp = [...renderData]
+                                    temp[i].checked = !temp[i].checked
+                                    setScheData(temp)
+                                }}
+                                isChecked={sch.checked}
+
+                            />
+                            <Text style={styles.textCheck}>{`${sch.date} ${sch.room}`}</Text>
+                        </View>
+                    )
+                })}
                 <View style={{ width: 70, height: 35, marginVertical: 10 }}>
-                    <Button style={{
+                    <Button disable={selectedSubject === null} click={updateSchedule} style={{
                         height: '100%'
                     }}>
                         <Text style={{ color: 'white', fontSize: 20 }}>Set</Text>
                     </Button>
                 </View>
-                {/* <CheckBox
-                    style={{ flex: 1, padding: 10 }}
-                    isChecked={true}
-                    leftText={"CheckBox"}
-                /> */}
+
             </View>
-        </View>
+        </View >
     )
 }
 const styles = StyleSheet.create({
@@ -118,6 +205,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 10,
     },
+    checkContainer: {
+        width: '60%',
+        paddingLeft: 20,
+        marginBottom: 10,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    textCheck: {
+        fontSize: 16,
+        paddingLeft: 5
+    }
 })
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
