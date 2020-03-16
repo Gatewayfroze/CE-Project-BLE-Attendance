@@ -22,7 +22,8 @@ app.post("/createTransaction", (req, res) => {
       const map= {
         subjectID: req.body.subjectID,
         schIndex: req.body.schIndex,
-        endTime: req.body.endTime
+        endTime: req.body.endTime,
+        subjectName:req.body.subjectName
       }
       await db
         .collection("users")

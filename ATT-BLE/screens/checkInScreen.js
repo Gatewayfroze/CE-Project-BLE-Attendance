@@ -45,7 +45,10 @@ const CheckInScreen = props => {
     if (subjectsDetail.length !== 0) {
       setLoading(true)
       console.log('find BLEEEEEEEEEEEEEEEEEEEEEEE')
-      setCompData(genComponentData())
+      const comp = genComponentData()
+      setCompData(comp)
+      console.log(comp[0].mac)
+      console.log('aaaaa')
       // ========================================================BLE is here 
       // ใช้ subject Data [0].mac หาไปก่อน 
       // เอาพอหอเสร็จ ตั้ง state ให้ BLE stauts แล้วเอาไปเช็คเงื่อนไข isDisable ที่ function  genComponentData()
@@ -139,7 +142,8 @@ const CheckInScreen = props => {
     return currentSche
   }
   const sendCheckIn = (transaction, subjectName) => {
-    console.log(transaction)
+    // console.log(transaction)
+
     API.post('createTransaction/', { ...transaction, subjectName })
       .then((res) => {
         getCurrentSubject();
@@ -167,8 +171,10 @@ const CheckInScreen = props => {
       let objTransac = {}
       let isDisable = true
       let room = ''
+      let mac = ''
       if (currentSch != undefined) {
         room = currentSch.board.label
+        mac = currentSch.mac
         const currentDate = currentSch.date
         const startTime = currentSch.start.toLocaleTimeString('en-GB').slice(0, -3)
         const endTime = currentSch.end.toLocaleTimeString('en-GB').slice(0, -3)
@@ -193,9 +199,9 @@ const CheckInScreen = props => {
         // console.log(objTransac)
         strDetail = `${dateString} ${startTime}-${endTime} น.`
         // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
-        isDisable = !findBLE(currentSch.mac) ? true : false
+        isDisable = false
       }
-      return { subjectName: subject.subjectName, strDetail, objTransac, isDisable, room }
+      return { subjectName: subject.subjectName, strDetail, objTransac, isDisable, room, mac }
     })
     return compData
   }
