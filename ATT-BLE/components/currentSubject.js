@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    ScrollView,
+    RefreshControl
+} from 'react-native'
 import API from '../assets/API'
 import Colors from '../constants/Colors'
 import { AntDesign } from '@expo/vector-icons';
@@ -8,6 +15,9 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
     const [curTime, setTime] = useState(
         new Date().toLocaleTimeString()
     )
+    const [loading, setLoading] = useState(false)
+    const [BLEstatus, setBLEStatus] = useState(false)
+    // ถ้า BLE status == true จะกด check out ได้
     const [currentSubject, setCurrentSubject] = useState('')
     useEffect(() => {
         getCurrentSubject()
@@ -24,7 +34,14 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         }
     }, [currentSubject])
     const getCurrentSubject = () => {
-        API.post('getCurrentSubject', { uid: currentUser.uid }).then((res) => { res.data.endTime = new Date(res.data.endTime); setCurrentSubject(res.data); console.log(res.data) })
+        setLoading(true)
+        API.post('getCurrentSubject', { uid: currentUser.uid })
+            .then((res) => {
+                res.data.endTime = new Date(res.data.endTime);
+                setCurrentSubject(res.data);
+                console.log(res.data)
+                setLoading(false)
+            })
     }
     const convertDateStr = (currentDate) => {
         const day = currentDate.getDate()
@@ -33,29 +50,38 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         let dateString = `${day}/${month}/${year}`
         return 'หมดเวลา: ' + dateString + ' ' + currentDate.toLocaleTimeString()
     }
+    const findBLE = () => {
+        setLoading(true)
+        setTimeout(() => {
+            setBLEStatus(true)
+            setLoading(false)
+        }, 5000)
+    }
     return (
-        <View style={styles.currentSubjectContainer}>
-            <Text style={styles.title}>{`กำลังเรียน: ${currentSubject.subjectName}`}</Text>
-            <View style={styles.clockContainer}>
-                <AntDesign name="clockcircleo"
-                    size={30} color='gray'
-                    style={{ paddingRight: 10 }}
-                />
-                <Text style={styles.time}>{curTime}</Text>
-            </View>
-            <Text style={styles.endTime}>{currentSubject.endTime ? convertDateStr(currentSubject.endTime) : ''}</Text>
+        <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={findBLE} />}>
+            <View style={styles.currentSubjectContainer}>
+                <Text style={styles.title}>{`กำลังเรียน: ${currentSubject.subjectName}`}</Text>
+                <View style={styles.clockContainer}>
+                    <AntDesign name="clockcircleo"
+                        size={30} color='gray'
+                        style={{ paddingRight: 10 }}
+                    />
+                    <Text style={styles.time}>{curTime}</Text>
+                </View>
+                <Text style={styles.endTime}>{currentSubject.endTime ? convertDateStr(currentSubject.endTime) : ''}</Text>
 
-            <TouchableOpacity style={{ ...styles.button, ...currentSubject.endTime && new Date() > currentSubject.endTime ? { backgroundColor: Colors.primaryColor } : { backgroundColor: 'grey' } }}
-                disabled={currentSubject.endTime && new Date() > currentSubject.endTime ? false : true}
-                onPress={checkOut}>
-                <Text style={{ color: 'white' }}>Check out</Text>
-            </TouchableOpacity >
-        </View >
+                <TouchableOpacity style={{ ...styles.button, ...BLEstatus && (currentSubject.endTime && new Date() > currentSubject.endTime) ? { backgroundColor: Colors.primaryColor } : { backgroundColor: 'grey' } }}
+                    disabled={!BLEstatus || (currentSubject.endTime && new Date() > currentSubject.endTime ? false : true)}
+                    onPress={() => console.log('aaaa')}>
+                    <Text style={{ color: 'white' }}>Check out</Text>
+                </TouchableOpacity >
+            </View >
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({
     title: {
-        fontSize: 30
+        fontSize: 22
     },
     time: {
         fontSize: 40,

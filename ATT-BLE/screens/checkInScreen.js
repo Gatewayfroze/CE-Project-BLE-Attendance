@@ -55,14 +55,10 @@ const CheckInScreen = props => {
       setTimeout(() => {
         setBLEStatus(true)
         setLoading(false)
-      }, 1000)
+      }, 10000)
     }
   }, [subjectsDetail])
-  useEffect(() => {
-    if (subjectsDetail.length !== 0) {
 
-    }
-  }, [BLEstatus])
   // -----------------------------------------------------------------------------
   getToken = async () => {
     try {
@@ -194,9 +190,10 @@ const CheckInScreen = props => {
           timestamp: now,
           status: diff_minutes(now, currentDate) <= 15 ? 'ok' : 'late',
           uniqueID: '',
-          endTime: currentSch.end
+          endTime: currentSch.end,
+          mac: mac
         }
-        // console.log(objTransac)
+        console.log(objTransac)
         strDetail = `${dateString} ${startTime}-${endTime} น.`
         // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
         isDisable = false
@@ -216,11 +213,10 @@ const CheckInScreen = props => {
           <View style={{ marginHorizontal: 20, justifyContent: "center", alignItems: "center" }}>
             <Text style={{ fontSize: 18 }}>กดปุ่ม CheckIn เพื่อเช็คชื่อในรายวิชาที่เลือก</Text>
           </View>
-          {/* {loading ? <ActivityIndicator size="large" color={Color.primaryColor} /> : <Button title='refresh' onPress={getUserSubject} />} */}
           <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
             {
               componentData.map((subject, i) => {
-                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
+                return <SubjectCheckIn key={i} disabled={!BLEstatus || subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
               })}
           </ScrollView>
         </React.Fragment>

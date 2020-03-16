@@ -93,7 +93,7 @@ const SampleGrid = ({ match }, ...props) => {
                     return trans.schIndex === i && trans.studentUID === std.uid
                 })
                 const defaultText = i <= currentSch ? 'absent' : ''
-                return { status: transac ? transac.status : defaultText, schId: transac ? transac.id : '' }
+                return { status: transac && ['late', 'ok'].includes(transac.status) ? transac.status : defaultText, schId: transac ? transac.id : '' }
             })
             let objTemp = {}
             schData.forEach((sch, i) => {
@@ -118,7 +118,7 @@ const SampleGrid = ({ match }, ...props) => {
     return (
         <React.Fragment>
             {loading && <LinearProgress />}
-            <Container maxWidth={"lg"} style={{marginTop:35}}>
+            <Container maxWidth={"lg"} style={{ marginTop: 35 }}>
                 <MaterialTable
                     columns={columns}
                     data={studentData}
