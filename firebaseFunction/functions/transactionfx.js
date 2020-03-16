@@ -6,6 +6,38 @@ const fireConfig = require("./config");
 app.use(cors);
 const db = fireConfig.firestore();
 
+app.post("/checkout", (req, res) => {
+  db.collection("users")
+    .doc(req.body.uid)
+    .get()
+    .then(snapshot => {
+      current = snapshot.data().currentSubject;
+      db.collection("transactions")
+        .where("studentUID", "==", req.body.uid)
+        .where("subjectID", "==", current.subjectID)
+        .where("schIndex", "==", current.schIndex).get().then(snapshot=>{
+          snapshot.docs.map(doc => doc.id).forEach(tran=>{
+            db.collection("transactions").doc(tran).update({
+              status:current.status
+            }).then(()=>{
+              res.end()
+              return
+            }).catch(error => {
+              console.log(error, toString());
+            });
+           })
+          return
+          
+        }).catch(error => {
+      console.log(error, toString());
+    });
+      return;
+    })
+    .catch(error => {
+      console.log(error, toString());
+    });
+});
+
 app.post("/createTransaction", (req, res) => {
   db.collection("transactions")
     .add({
