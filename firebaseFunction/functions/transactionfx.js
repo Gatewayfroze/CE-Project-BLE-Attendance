@@ -20,7 +20,15 @@ app.post("/checkout", (req, res) => {
             db.collection("transactions").doc(tran).update({
               status:current.status
             }).then(()=>{
-              res.end()
+              db.collection('users').doc(req.body.uid).update({
+                currentSubject:{}
+              }).then(()=>{
+                res.end()
+                return
+              }).catch(error => {
+                console.log(error, toString());
+              });
+              
               return
             }).catch(error => {
               console.log(error, toString());
@@ -43,7 +51,7 @@ app.post("/createTransaction", (req, res) => {
     .add({
       timestamp: req.body.timestamp,
       schIndex: req.body.schIndex,
-      status: req.body.status,
+      status: "inclass",
       studentUID: req.body.uid,
       subjectID: req.body.subjectID,
       uniqueID: req.body.uniqueID,
