@@ -65,4 +65,19 @@ app.post("/getStudent", (req, res) => {
     });
 });
 
+app.post("/updateStudent",(req,res)=>{
+  db.collection("users").doc(req.body.uid).update({
+    name:req.body.name,
+    surname:req.body.surname,
+    year:req.body.year,
+    faculty:req.body.faculty,
+    
+  }).then(()=>{
+    res.end()
+    return
+  }).catch(error => {
+    console.log(error, toString());
+  });
+})
+
 module.exports = app

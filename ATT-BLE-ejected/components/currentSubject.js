@@ -72,7 +72,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
 
                 <TouchableOpacity style={{ ...styles.button, ...BLEstatus && (currentSubject.endTime && new Date() > currentSubject.endTime) ? { backgroundColor: Colors.primaryColor } : { backgroundColor: 'grey' } }}
                     disabled={!BLEstatus || (currentSubject.endTime && new Date() > currentSubject.endTime ? false : true)}
-                    onPress={() => console.log('aaaa')}>
+                    onPress={checkOut}>
                     <Text style={{ color: 'white' }}>Check out</Text>
                 </TouchableOpacity >
             </View >
