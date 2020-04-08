@@ -57,7 +57,7 @@ const CheckInScreen = props => {
           return;
         }
         
-        //console.log(device.id)
+        
 
         if (device.id == comp[0].mac) {
           clearTimeout(time);
@@ -71,27 +71,22 @@ const CheckInScreen = props => {
             console.log(result)
 
             if(result > 15){
+              console.log('not in range')
               setBLEStatus(true);
               setLoading(false);
 
             }else if(result<=15){
-              console.log('inrange')
+              console.log('in range')
               setBLEStatus(false);
               setLoading(false);
             }
             console.log(
               device.name + " : " + device.serviceUUIDs + " : " + result
-            );
-            
-          }
-
-          
+            );            
+          }          
         }
       });
-
-      // ========================================================BLE is here
-      // ใช้ subject Data [0].mac หาไปก่อน
-      // เอาพอหอเสร็จ ตั้ง state ให้ BLE stauts แล้วเอาไปเช็คเงื่อนไข isDisable ที่ function  genComponentData()
+     
       time = setTimeout(() => {
         manager.stopDeviceScan();
         console.log("not found");
