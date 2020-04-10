@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\ATT-BLE-ejected\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-or\\values-or.xml",
+            "outputFile": "D:\\CE-Project-BLE-Attendance\\ATT-BLE-ejected\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-or\\values-or.xml",
             "map": [
                 {
                     "source": "C:\\Users\\59010781\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.0.0.aar\\70ddc371d67a0ef51224a72e29d7507f\\res\\values-or\\values-or.xml",

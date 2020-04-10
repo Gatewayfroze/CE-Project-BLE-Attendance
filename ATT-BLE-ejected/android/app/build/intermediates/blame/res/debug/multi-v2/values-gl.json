@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\ATT-BLE-ejected\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-gl\\values-gl.xml",
+            "outputFile": "D:\\CE-Project-BLE-Attendance\\ATT-BLE-ejected\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-gl\\values-gl.xml",
             "map": [
                 {
                     "source": "C:\\Users\\59010781\\.gradle\\caches\\transforms-1\\files-1.1\\jetified-play-services-base-16.0.1.aar\\ea7f3de3bbf94f1b643ad4fad1f57f26\\res\\values-gl\\values.xml",

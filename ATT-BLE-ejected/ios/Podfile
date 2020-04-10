@@ -34,4 +34,6 @@ target 'ATT' do
 
   pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
 end

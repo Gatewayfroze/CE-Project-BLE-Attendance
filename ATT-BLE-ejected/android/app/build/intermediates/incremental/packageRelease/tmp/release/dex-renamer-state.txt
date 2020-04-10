@@ -1,0 +1,4 @@
+#Fri Apr 10 12:23:53 ICT 2020
+base.0=D\:\\CE-Project-BLE-Attendance\\ATT-BLE-ejected\\android\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
+renamed.0=classes.dex
+path.0=classes.dex

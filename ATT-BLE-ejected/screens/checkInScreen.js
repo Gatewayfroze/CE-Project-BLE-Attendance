@@ -195,16 +195,14 @@ const CheckInScreen = props => {
       .catch(err => console.log(err));
   };
   const checkOut = () => {
-    API.post("setCurrentSubject/", { uid: currentUser.uid, currentSubject: {} })
+    API.post("checkout/", { uid: currentUser.uid })
       .then(res => {
         getCurrentSubject();
         //console.log(res);
       })
       .catch(err => console.log(err));
   };
-  const findBLE = () => {
-    return true;
-  };
+  
   const genComponentData = () => {
     const compData = subjectsDetail.map((subject, i) => {
       // check when schedule =0
