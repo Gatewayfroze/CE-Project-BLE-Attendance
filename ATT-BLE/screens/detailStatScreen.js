@@ -35,8 +35,10 @@ const DetailStatScreen = ({ navigation }, ...props) => {
             const schedule = subjectData.schedule
             let current = -1
             const now = new Date
+
             const schCol = schedule.map((sch, i) => {
                 const currentDate = new Date(sch.date)
+                console.log(currentDate.toString())
                 if (now > currentDate) {
                     setCurrentSch(i)
                     current = i
@@ -55,7 +57,7 @@ const DetailStatScreen = ({ navigation }, ...props) => {
                 // console.log(now.toString())
                 // console.log(dateSch < now)
                 // console.log('----------------------')
-                if (dateSch < now) defaultTxt = 'Absent'
+                if (i <= current) defaultTxt = 'Absent'
                 return [i + 1, sch, defaultTxt]
             })
             setDataSchedule(data)

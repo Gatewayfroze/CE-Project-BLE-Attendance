@@ -44,11 +44,9 @@ const CheckInScreen = props => {
   useEffect(() => {
     if (subjectsDetail.length !== 0) {
       setLoading(true)
-      console.log('find BLEEEEEEEEEEEEEEEEEEEEEEE')
       const comp = genComponentData()
       setCompData(comp)
       console.log(comp[0].mac)
-      console.log('aaaaa')
       // ========================================================BLE is here 
       // ใช้ subject Data [0].mac หาไปก่อน 
       // เอาพอหอเสร็จ ตั้ง state ให้ BLE stauts แล้วเอาไปเช็คเงื่อนไข isDisable ที่ function  genComponentData()
@@ -82,8 +80,7 @@ const CheckInScreen = props => {
     setLoading(true)
     API.post('getSubjectByID/', { uid: currentUser.uid })
       .then((res) => {
-        // console.log(res.data)
-        setCompData([])
+         setCompData([])
         setSubjectsID(res.data)
       })
       .catch((err) =>
@@ -152,7 +149,7 @@ const CheckInScreen = props => {
         console.log(err))
   }
   const checkOut = () => {
-    API.post('setCurrentSubject/', { uid: currentUser.uid, currentSubject: {} })
+    API.post('checkout/', { uid: currentUser.uid })
       .then((res) => { getCurrentSubject(); console.log(res) })
       .catch((err) => console.log(err))
   }
@@ -195,8 +192,9 @@ const CheckInScreen = props => {
         }
         console.log(objTransac)
         strDetail = `${dateString} ${startTime}-${endTime} น.`
+        isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 
         // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
-        isDisable = false
+        // isDisable = false
       }
       return { subjectName: subject.subjectName, strDetail, objTransac, isDisable, room, mac }
     })
@@ -216,7 +214,8 @@ const CheckInScreen = props => {
           <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
             {
               componentData.map((subject, i) => {
-                return <SubjectCheckIn key={i} disabled={!BLEstatus || subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
+                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
+                // return <SubjectCheckIn key={i} disabled={!BLEstatus || subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
               })}
           </ScrollView>
         </React.Fragment>

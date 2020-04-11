@@ -12,8 +12,9 @@ import SubjectScreen from '../screens/subjectScreen'
 import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
 import LoginScreen from '../screens/loginScreen'
-
+import EditDataScreen from '../screens/editDataPage'
 import StatDetail from '../screens/detailStatScreen'
+import EditPage from '../screens/editDataPage';
 // const HomeNavigator =createStackNavigator({
 //     Select
 // })
@@ -46,7 +47,8 @@ const statNavigator = createStackNavigator({
 )
 
 const profileNavigator = createStackNavigator({
-    checkIn: ProfileScreen
+    profile: ProfileScreen,
+    editProfile: EditPage
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 // =======================tab navigator ===================

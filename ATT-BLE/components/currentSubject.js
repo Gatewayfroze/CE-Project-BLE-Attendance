@@ -16,7 +16,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         new Date().toLocaleTimeString()
     )
     const [loading, setLoading] = useState(false)
-    const [BLEstatus, setBLEStatus] = useState(false)
+    const [BLEstatus, setBLEStatus] = useState(true)
     // ถ้า BLE status == true จะกด check out ได้
     const [currentSubject, setCurrentSubject] = useState('')
     useEffect(() => {
@@ -27,6 +27,11 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
             setTime(new Date().toLocaleTimeString())
         }, 1000)
     })
+    useEffect(() => {
+        if (currentSubject !== '') {
+            findBLE()
+        }
+    }, [currentSubject])
     useEffect(() => {
         if (currentSubject !== '') {
             console.log(typeof currentSubject.endTime)
@@ -58,7 +63,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         }, 5000)
     }
     return (
-        <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={findBLE} />}>
+        <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={getCurrentSubject} />}>
             <View style={styles.currentSubjectContainer}>
                 <Text style={styles.title}>{`กำลังเรียน: ${currentSubject.subjectName}`}</Text>
                 <View style={styles.clockContainer}>
@@ -72,7 +77,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
 
                 <TouchableOpacity style={{ ...styles.button, ...BLEstatus && (currentSubject.endTime && new Date() > currentSubject.endTime) ? { backgroundColor: Colors.primaryColor } : { backgroundColor: 'grey' } }}
                     disabled={!BLEstatus || (currentSubject.endTime && new Date() > currentSubject.endTime ? false : true)}
-                    onPress={() => console.log('aaaa')}>
+                    onPress={checkOut}>
                     <Text style={{ color: 'white' }}>Check out</Text>
                 </TouchableOpacity >
             </View >
