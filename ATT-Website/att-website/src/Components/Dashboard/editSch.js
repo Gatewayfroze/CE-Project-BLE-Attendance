@@ -63,6 +63,7 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
             mac: 'ECC-810',
             board: boardData[0]
         }
+        period.end.setMinutes(period.end.getMinutes() + 30)
         if (schedule.length > 0) {
             period.schIndex = schedule.length
             period.date = new Date(schedule[schedule.length - 1].date)
@@ -112,8 +113,15 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
 
         }
         temp[i][mode] = tempDate
-        setSchedule([...temp])
+        if (diff_minutes(temp[i].end, temp[i].start) >= 30) {
+            setSchedule([...temp])
+        }
         console.log(schedule)
+    }
+    const diff_minutes = (dt2, dt1) => {
+        var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+        diff /= 60;
+        return Math.round(diff);
     }
     const hadleMACadrr = (i, val) => {
         if (val !== null) {

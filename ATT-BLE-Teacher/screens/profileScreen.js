@@ -1,11 +1,55 @@
-import React from 'react'
-import { View, Text, StyleSheet, AsyncStorage } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import {
+    View,
+    Text,
+    ActivityIndicator,
+    StyleSheet,
+    AsyncStorage
+} from 'react-native'
 import Colors from '../constants/Colors'
-
+import API from '../assets/API'
 import Button from '../components/button'
 
 
 const ProfileScreen = props => {
+    const [currentUser, setCurrentUser] = useState('');
+    const [userDetail, setUserDetail] = useState('');
+    const [loading, setLoading] = useState(true)
+    useEffect(() => {
+        getToken()
+    }, []);
+    useEffect(() => {
+        if (currentUser !== '') {
+            getCurrentUserDetail()
+        }
+    }, [currentUser])
+
+    getToken = async () => {
+        try {
+            let userData = await AsyncStorage.getItem("userData");
+            let data = JSON.parse(userData);
+            console.log(data.user)
+            setCurrentUser(data.user)
+        } catch (error) {
+            console.log("Something went wrong", error);
+        }
+    }
+    const getCurrentUserDetail = () => {
+        setLoading(true)
+        API.post('getUser/', { email: currentUser.email })
+            .then((res) => {
+                console.log(res.data)
+                setUserDetail(res.data)
+                setLoading(false)
+
+            })
+            .catch((err) => {
+                console.log(err)
+                setLoading(false)
+            }
+            )
+    }
+
     const deleteToken = async () => {
         try {
             await AsyncStorage.removeItem("userData").then(() => {
@@ -26,12 +70,14 @@ const ProfileScreen = props => {
                     {/* <Text style={styles.titleText}>คณะ</Text> */}
                 </View>
                 <View style={styles.detailContainer}>
-                    <Text style={styles.detailText}>นิตินนท์ เพ็งเลา</Text>
-                    <Text style={styles.detailText}>5910734</Text>
-                    {/* <Text style={styles.detailText}>วิศวกรรมศาสตร์</Text> */}
+                    {!loading ? <React.Fragment>
+                        <Text style={styles.detailText}>{userDetail.name} {userDetail.surname}</Text>
+                        <Text style={styles.detailText}>{userDetail.email}</Text>
+                    </React.Fragment> : <ActivityIndicator />
+                    }
                 </View>
             </View>
-            <Button style={styles.buttonSize} click={
+            <Button style={styles.buttonSize} disable={loading} click={
                 () => deleteToken()
             }>
                 <Text style={{ color: 'white', fontSize: 18 }}>

@@ -92,6 +92,7 @@ const CreateSubPage = props => {
             mac: 'ECC-810',
             board: boardData[0]
         }
+        period.end.setMinutes(period.end.getMinutes()+30)
         let temp = schedule
         for (let i = 0; i < num; i++) {
             if (temp.length > 0) {
@@ -136,6 +137,7 @@ const CreateSubPage = props => {
             if (mode == 'start') {
                 temp[i].date.setHours(tempDate.getHours(), tempDate.getMinutes(), tempDate.getSeconds())
             }
+
         } else if (mode == 'date') {
             temp[i].start.setDate(tempDate.getDate())
             temp[i].start.setMonth(tempDate.getMonth())
@@ -147,8 +149,15 @@ const CreateSubPage = props => {
 
         }
         temp[i][mode] = tempDate
-        setSchedule([...temp])
+        if(diff_minutes(temp[i].end,temp[i].start)>=30){
+            setSchedule([...temp])
+        }
         console.log(schedule)
+    }
+    const diff_minutes = (dt2, dt1) => {
+        var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+        diff /= 60;
+        return Math.round(diff);
     }
     const deleteSchedule = schIndex => {
         const schTemp = [...schedule];
