@@ -10,10 +10,10 @@ import Colors from '../constants/Colors'
 import API from '../assets/API'
 import Color from '../constants/Colors'
 import Button from '../components/button'
-const ProfileScreen = props => {
+const ProfileScreen = ({ navigation }, ...props) => {
     const [currentUser, setCurrentUser] = useState('');
     const [userDetail, setUserDetail] = useState('');
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         getToken()
     }, []);
@@ -44,23 +44,29 @@ const ProfileScreen = props => {
         const stdID = currentUser.email.replace('@kmitl.ac.th', '')
         API.post('getStudent/', { studentID: stdID })
             .then((res) => {
+                console.log(res.data)
                 setUserDetail(res.data)
+                setLoading(false)
+
             })
-            .catch((err) =>
-                console.log(err))
+            .catch((err) => {
+                console.log(err)
+                setLoading(false)
+            }
+            )
     }
 
-    const deleteToken= async() =>{
+    const deleteToken = async () => {
         try {
-          await AsyncStorage.removeItem("userData").then(()=>{
-            props.navigation.navigate({
-                routeName: 'login'
+            await AsyncStorage.removeItem("userData").then(() => {
+                navigation.navigate({
+                    routeName: 'login'
+                })
             })
-          })
         } catch (err) {
-          console.log(`The error is: ${err}`)
+            console.log(`The error is: ${err}`)
         }
-      }
+    }
     return (
         <View style={styles.screen}>
             <View style={styles.profileContainer}>
@@ -71,7 +77,7 @@ const ProfileScreen = props => {
                     <Text style={styles.titleText}>ชั้นปี</Text>
                 </View>
                 <View style={styles.detailContainer}>
-                    {userDetail !== '' ? <React.Fragment>
+                    {!loading ? <React.Fragment>
                         <Text style={styles.detailText}>{userDetail.name} {userDetail.surname}</Text>
                         <Text style={styles.detailText}>{userDetail.email.replace('@kmitl.ac.th', '')}</Text>
                         <Text style={styles.detailText}>{userDetail.faculty}</Text>
@@ -81,17 +87,24 @@ const ProfileScreen = props => {
                 </View>
             </View>
 
-            <Button style={styles.buttonSize} click={changePassword}>
+            <Button style={styles.buttonSize} click={changePassword} >
                 <Text style={{ color: 'white', fontSize: 18 }}>
                     Change Password
                 </Text>
             </Button>
-
-            <Button style={styles.buttonSize} click={
-                () => deleteToken()
-                
+            <Button style={styles.buttonSize} disable={loading} click={() =>
+                navigation.navigate('editProfile', {
+                    userData: userDetail,
+                    uid: currentUser.uid,
+                    refreshFN: () => { getCurrentUserDetail() }
+                })
             }>
-                <Text style={{ color: 'white',fontSize: 18 }}>
+                <Text style={{ color: 'white', fontSize: 18 }}>
+                    Edit Profile
+                </Text>
+            </Button>
+            <Button style={styles.buttonSize} disable={loading} click={() => deleteToken()}>
+                <Text style={{ color: 'white', fontSize: 18 }}>
                     Logout
                 </Text>
             </Button>
@@ -113,7 +126,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '40%',
+        height: 250,
         width: '80%',
         paddingVertical: 30,
         paddingLeft: '10%',
@@ -155,8 +168,9 @@ const styles = StyleSheet.create({
     },
     buttonSize: {
         height: 45,
-        width: '40%',
-        marginBottom: 15
+        width: '60%',
+        marginBottom: 15,
+        borderRadius: 25
     }
 });
 export default ProfileScreen

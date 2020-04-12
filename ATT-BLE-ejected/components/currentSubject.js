@@ -58,7 +58,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         }, 5000)
     }
     return (
-        <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={findBLE} />}>
+        <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={getCurrentSubject} />}> 
             <View style={styles.currentSubjectContainer}>
                 <Text style={styles.title}>{`กำลังเรียน: ${currentSubject.subjectName}`}</Text>
                 <View style={styles.clockContainer}>

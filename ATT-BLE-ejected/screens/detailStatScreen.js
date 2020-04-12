@@ -55,7 +55,7 @@ const DetailStatScreen = ({ navigation }, ...props) => {
                 // console.log(now.toString())
                 // console.log(dateSch < now)
                 // console.log('----------------------')
-                if (dateSch < now) defaultTxt = 'Absent'
+                if (i <= current) defaultTxt = 'Absent' 
                 return [i + 1, sch, defaultTxt]
             })
             setDataSchedule(data)

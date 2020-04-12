@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {
     View,
-    StyleSheet,
     Text,
+    Keyboard,
     TextInput,
+    StyleSheet,
     AsyncStorage,
     ActivityIndicator,
+    TouchableWithoutFeedback,
     ColorPropType
 } from 'react-native'
 import Button from '../components/button'
@@ -14,15 +16,17 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { config } from '../firebase';
 import { showMessage } from "react-native-flash-message";
-
+import RegisterPage from './registerForm'
+import { reset } from 'expo/build/AR';
 firebase.initializeApp(config);
 db = firebase.firestore()
 
 const LoginScreen = props => {
     const [email, setEmail] = useState("59010734@kmitl.ac.th")
-    const [password, setPassword] = useState("cafab4829a")
+    const [password, setPassword] = useState("00000000")
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
+    const [regis, setRegis] = useState(false)
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         AsyncStorage.getItem("userData").then((value) => {
@@ -62,7 +66,6 @@ const LoginScreen = props => {
         }
     }
     handleLogin = () => {
-
         setLoading(true)
         db.collection("users").where('email', '==', email).get().then((snapshot) => {
             if (snapshot.docs.length == 0) {
@@ -103,38 +106,66 @@ const LoginScreen = props => {
                 })
             }
         })
-
-
-
     }
     return (
-        <View style={styles.screen}>
-            <Text style={styles.logo}>
-                {'ATTENDA '}
-            </Text>
-            <View style={styles.inputView}>
-                <TextInput style={styles.textInput}
-                    placeholder="Email"
-                    value={email}
-                    placeholderTextColor="grey" onChangeText={email => setEmail(email)} />
-            </View>
-            <View style={styles.inputView}>
-                <TextInput style={styles.textInput}
-                    placeholder="Password" placeholderTextColor="grey" secureTextEntry={true}
-                    value={password}
-                    onChangeText={password => setPassword(password)} />
-            </View>
-            <View style={styles.errorMsgContainer}>
-                <Text style={styles.errorMsg}>{errorMsg}</Text>
-            </View>
-            {
-                loading ? <ActivityIndicator style={{ marginTop: 30 }} size="large" color='white' /> :
-                    <Button style={styles.button} disable={disable}
-                        click={() => handleLogin()}>
-                        <Text style={{ color: 'white' }}>Login</Text>
-                    </Button>
-            }
-        </View>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false}>
+
+            <View style={styles.screen} >
+                {
+                    regis ?
+                        <RegisterPage close={setRegis} />
+                        :
+                        <React.Fragment>
+                            <Text style={styles.logo}>
+                                {'ATTENDA '}
+                            </Text>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.textInput}
+                                    placeholder="Email"
+                                    value={email}
+                                    placeholderTextColor="grey" onChangeText={email => setEmail(email)} />
+                            </View>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.textInput}
+                                    placeholder="Password" placeholderTextColor="grey" secureTextEntry={true}
+                                    value={password}
+                                    onChangeText={password => setPassword(password)} />
+                            </View>
+                            <View style={styles.errorMsgContainer}>
+                                <Text style={styles.errorMsg}>{errorMsg}</Text>
+                            </View>
+                            <View style={{ marginTop: 30, width: '100%', alignItems: 'center' }}>
+                                {
+                                    loading ? <ActivityIndicator style={{ marginTop: 30 }} size="large" color='white' />
+                                        :
+                                        <Button style={styles.button} disable={disable}
+                                            click={() => handleLogin()}>
+                                            <Text style={{ color: 'white' }}>Login</Text>
+                                        </Button>
+                                }
+                                <View style={{ width: '65%', marginVertical: 5 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ borderBottomColor: 'white', borderBottomWidth: 2, width: '45%', height: 2 }} />
+                                        <Text style={{ color: 'white' }}>{' OR '}</Text>
+                                        <View style={{ borderBottomColor: 'white', borderBottomWidth: 2, width: '45%', height: 2 }} />
+                                    </View>
+                                </View>
+
+                                <Button style={{
+                                    ...styles.button,
+                                    backgroundColor: 'rgb(69, 172, 156)',
+                                    borderWidth: 1,
+                                    borderColor: '#fff'
+                                }}
+                                    click={() => setRegis(true)}>
+                                    <Text style={{ color: 'white' }}>Register</Text>
+                                </Button>
+                            </View>
+                        </React.Fragment>
+                }
+            </View >
+        </TouchableWithoutFeedback>
+
     )
 }
 const styles = StyleSheet.create({
@@ -167,7 +198,7 @@ const styles = StyleSheet.create({
         height: 40,
         width: '65%',
         borderRadius: 25,
-        marginTop: 30
+        marginVertical: 5
     },
     errorMsgContainer: {
         width: '65%'

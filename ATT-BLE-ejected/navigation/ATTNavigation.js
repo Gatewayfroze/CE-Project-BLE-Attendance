@@ -12,6 +12,8 @@ import SubjectScreen from '../screens/subjectScreen'
 import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
 import LoginScreen from '../screens/loginScreen'
+import EditDataScreen from '../screens/editDataPage' 
+import EditPage from '../screens/editDataPage'; 
 
 import StatDetail from '../screens/detailStatScreen'
 // const HomeNavigator =createStackNavigator({
@@ -46,7 +48,9 @@ const statNavigator = createStackNavigator({
 )
 
 const profileNavigator = createStackNavigator({
-    checkIn: ProfileScreen
+   
+    profile: ProfileScreen, 
+    editProfile: EditPage 
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 // =======================tab navigator ===================
