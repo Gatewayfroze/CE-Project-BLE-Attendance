@@ -10,9 +10,28 @@ const ManagePage = () => {
     const [data, setJson] = useState([])
     const [loading, setLoading] = useState(false)
     const [genRole, setRole] = useState('Student')
+    const [searchData, setSearch] = useState('')
+    const [dataSearch, setDataSearch] = useState([])
     useEffect(() => {
         fetchData(genRole)
     }, [genRole])
+
+    useEffect(() => {
+        if (searchData != '') {
+            const search = data.filter(user => {
+                console.log(user)
+                if (genRole == 'student')
+                    return user.id.includes(searchData) || user.name.includes(searchData) || user.surname.includes(searchData)
+                else
+                    return user.email.includes(searchData) || user.name.includes(searchData) || user.surname.includes(searchData)
+
+            })
+            setDataSearch(search)
+        } else {
+            setDataSearch(data)
+        }
+    }, [searchData, data])
+
     // set element extend table in Datatable
     const fetchData = (role) => {
         setLoading(true)
@@ -36,14 +55,19 @@ const ManagePage = () => {
                 console.log(error)
             })
     }
+    const handleSearch = (e) => {
+        setSearch(e.target.value)
+    }
     const column = {
         Student: [
             { id: 'id', label: 'ID', minWidth: 100 },
             { id: 'name', label: 'Name', minWidth: 100 },
             { id: 'surname', label: 'Surname', minWidth: 100 },
+            { id: 'faculty', label: 'Faculty', minWidth: 100 },
+            { id: 'year', label: 'Year', minWidth: 100 },
         ],
         Teacher: [
-            { id: 'email', label: 'Email', minWidth: 100 },
+            { id: 'email', label: 'Email', minWidth: 80 },
             { id: 'name', label: 'Name', minWidth: 100 },
             { id: 'surname', label: 'Surname', minWidth: 100 },
         ]
@@ -53,7 +77,7 @@ const ManagePage = () => {
     const tableExtend = []
     const deleteUser = (userIndex) => {
         setLoading(true)
-        console.log(data[userIndex].uid)
+        console.log(dataSearch[userIndex].uid)
         API.delete('deleteAccount/', { data: { uid: data[userIndex].uid } })
             .then(function (response) {
                 console.log(response)
@@ -86,11 +110,11 @@ const ManagePage = () => {
                 </div>
                 <label className='label '>Enter Data to search</label>
                 <div class="field is-grouped has-addons">
-                    <input class='input is-primary' placeholder='ID,name' />
+                    <input class='input is-primary' value={searchData} onChange={handleSearch} placeholder='ID,name' />
                     <Button>Search</Button>
                 </div>
             </div>
-            <DataTable columns={columnDefault} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
+            <DataTable columns={columnDefault} data={dataSearch} extraHeader={['Delete']} extraCol={tableExtend} />
         </Layout>
     )
 }

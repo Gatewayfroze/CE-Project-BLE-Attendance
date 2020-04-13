@@ -13,7 +13,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-
+import isAdmin from '../constant/adminUID'
 // icon
 import CreateSub from 'react-ionicons/lib/IosCreate'
 import Account from 'react-ionicons/lib/IosContact'
@@ -21,6 +21,8 @@ import CreateUser from 'react-ionicons/lib/MdPersonAdd'
 import Subject from 'react-ionicons/lib/MdDocument'
 import Enroll from 'react-ionicons/lib/IosDownload'
 import Bluetooth from 'react-ionicons/lib/IosBluetooth'
+
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -56,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
 }
-export default function ClippedDrawer() {
+export default function ClippedDrawer(props) {
     const classes = useStyles();
     const list = [
         { name: 'Generate Accout', icon: CreateUser, link: '/generate' },
@@ -66,7 +68,25 @@ export default function ClippedDrawer() {
         { name: 'Create Subject', icon: CreateSub, link: '/createSub' },
         { name: 'Manage Subject', icon: Subject, link: '/viewSub' },
     ]
-   
+    const adminMenu=[1,3]
+    const listMenu = list.map((menu, i) => {
+        console.log(props.currentUser)
+        if (!(i in adminMenu)||(i in adminMenu&&isAdmin(props.currentUser))) {
+            return (
+                <React.Fragment>
+                    <ListItemLink className={classes.menuList} href={menu.link}>
+                        <menu.icon color='rgba(0, 0, 0, 0.54)' fontSize="23px" />
+                        <ListItemText className={classes.menuText} primary={menu.name} />
+                    </ListItemLink>
+                    {i == 3 || i == 1 ? <Divider /> : ''}
+                </React.Fragment>
+            )
+        } else {
+            return null
+        }
+
+    })
+
     return (
         <Drawer
             className={classes.drawer}
@@ -77,19 +97,7 @@ export default function ClippedDrawer() {
         >
             <div className={classes.toolbar} />
             <List style={{ marginTop: 20 }} component="nav" >
-                {list.map((menu, i) => {
-                    return (
-                        <React.Fragment>
-                            <ListItemLink className={classes.menuList} href={menu.link}>
-                                <menu.icon color='rgba(0, 0, 0, 0.54)' fontSize="23px" />
-                                <ListItemText className={classes.menuText} primary={menu.name} />
-                            </ListItemLink>
-
-                            {i == 3 || i == 1 ? <Divider /> : ''}
-                        </React.Fragment>
-
-                    )
-                })}
+                {listMenu}
             </List>
 
         </Drawer>

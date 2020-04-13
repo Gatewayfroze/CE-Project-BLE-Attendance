@@ -78,7 +78,8 @@ const GenPage = () => {
         { id: 'year', label: 'Year', minWidth: 100 },
     ];
     const columnsTch = [
-        ...columnDefault,
+        { id: 'name', label: 'Name', minWidth: 100 },
+        { id: 'surname', label: 'Surname', minWidth: 100 },
         { id: 'email', label: 'Email', minWidth: 100 },
     ];
     const tableExtend = []

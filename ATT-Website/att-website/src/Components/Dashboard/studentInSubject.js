@@ -75,7 +75,7 @@ const StudentInSubject = ({ subjectData, subjectID }, ...props) => {
     const tableExtend = []
     tableExtend.push({ text: 'Delete', class: 'is-danger', function: dropStudent })
     return (
-        <Card style={{ height:500 }}>
+        <Card style={{ height: 500 }}>
             <CardHeader
                 action={
                     <Grid container spacing={1} alignItems="flex-end">

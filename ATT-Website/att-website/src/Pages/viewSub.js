@@ -1,32 +1,56 @@
 import React, { useState, useEffect } from 'react'
 // import component 
 import API from '../api'
+import firebase from '../firebase'
 import Layout from '../Layout/layout'
 import DataTable from '../Components/DataTable'
 import Loader from '../Components/loader'
-import { Typography, Grid, Button } from '@material-ui/core';
-import Dashboard from '../Components/viewSubjectPage'
-import { getThemeProps } from '@material-ui/styles'
-import { Link } from 'react-router-dom'
+import isAdmin from '../constant/adminUID'
+import { Button } from '@material-ui/core';
 const ViewSubjectPage = ({ match }, ...props) => {
     const [subjects, setSubjects] = useState([])
     const [loading, setLoading] = useState(false)
-    const [currentSubject, setCurrentSub] = useState('')
-    const [currentSubjectID, setCurrentSubID] = useState('')
+    const [uid, setUid] = useState('')
+    const [searchData, setSearch] = useState('')
+    const [dataSearch, setDataSearch] = useState([])
+
     useEffect(() => {
-        fetchSubject()
-        console.log('sssss')
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                setUid(user.uid)
+            } else {
+            }
+        });
     }, [])
+    useEffect(() => {
+        if (uid != '') {
+            fetchSubject()
+        }
+    }, [uid])
+    useEffect(() => {
+        if (searchData != '') {
+            const search = subjects.filter(subject => {
+                return subject.subjectName.includes(searchData)||subject.subjectID.includes(searchData)
+            })
+            setDataSearch(search)
+        } else {
+            setDataSearch(subjects)
+        }
+    }, [searchData, subjects])
+
     const fetchSubject = () => {
         setLoading(true)
         API.get('getAllSubject/').then((res) => {
-            console.log('fetchhhhhhhhhhhhhhhhhh')
             setLoading(false)
-            setSubjects(res.data)
-            console.log(res.data)
+            setSubjects(isAdmin(uid) ? res.data : res.data.filter((subject) => {
+                return subject.teacher === uid
+            }))
         }).catch((err) => {
             console.log(err)
         })
+    }
+    const handleSearch = (e) => {
+        setSearch(e.target.value)
     }
     const columnDefault = [
         { id: 'subjectID', label: 'Subject ID', minWidth: 100 },
@@ -58,11 +82,11 @@ const ViewSubjectPage = ({ match }, ...props) => {
             <div class='box'>
                 <label className='label '>Enter Data to search</label>
                 <div class="field is-grouped has-addons">
-                    <input class='input is-primary' placeholder='ID,name' />
+                    <input class='input is-primary' value={searchData} onChange={handleSearch}  placeholder='ID,name' />
                     <Button>Search</Button>
                 </div>
             </div>
-            <DataTable maxHeight={350} columns={columnDefault} data={subjects} extraHeader={['View', 'Delete']} extraCol={tableExtend} />
+            <DataTable maxHeight={350} columns={columnDefault} data={dataSearch} extraHeader={['View', 'Delete']} extraCol={tableExtend} />
         </Layout>
     )
 }

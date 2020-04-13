@@ -34,19 +34,7 @@ const useStyles = makeStyles(theme => ({
 }))
 const Navbar = (props) => {
     const classes = useStyles()
-    const [curUser, setcurUser] = useState(null)
-
-    useEffect(() => {
-        app.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                setcurUser(user.email)
-            } else {
-
-            }
-        });
-
-    }, [])
-
+    
     return (
         <React.Fragment>
             <AppBar position='fixed' className={classes.appBar}>
@@ -58,7 +46,7 @@ const Navbar = (props) => {
                     </div>
                     <div className={classes.rightMenu}>
                         <Person onClick={() => alert('Hi!')} fontSize="30px" />
-                        {curUser}
+                        {props.currentUser}
                         <Button variant="contained" className={classes.button} color='secondary' onClick={() => app.auth().signOut()}>logout</Button>
                     </div>
                 </Toolbar>

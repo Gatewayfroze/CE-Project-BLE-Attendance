@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
 import DataTable from '../Components/DataTable'
 import Container from '@material-ui/core/Container'
+import app from '../firebase'
 // import component 
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
@@ -25,13 +26,25 @@ const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
     title: {
         flexGrow: 1,
-        color:'white'
-      },
+        color: 'white'
+    },
 }))
 const Layout = (props) => {
     const classes = useStyles()
     const [drawerActivate, setDrawerActivate] = useState(false)
     const [drawer, setDrawer] = useState(false)
+    const [curUser, setcurUser] = useState(null)
+    const [uid, setUID] = useState('')
+    useEffect(() => {
+        app.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                setcurUser(user.email)
+                setUID(user.uid)
+            } else {
+
+            }
+        });
+    }, [])
 
     useEffect(() => {
         if (window.innerWidth <= 700) {
@@ -82,9 +95,9 @@ const Layout = (props) => {
     const destroyDrawer = () => {
         return (
             <React.Fragment>
-                <Navbar loading={props.loading} />
+                <Navbar currentUser={curUser} loading={props.loading} />
                 <Toolbar disableGutters>
-                    <Sidebar />
+                    <Sidebar currentUser={uid} />
                 </Toolbar>
                 <div className={classes.toolbarMargin} />
             </React.Fragment>
