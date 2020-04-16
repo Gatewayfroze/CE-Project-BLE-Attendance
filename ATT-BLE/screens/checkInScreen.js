@@ -31,8 +31,8 @@ const CheckInScreen = props => {
   }, []);
   useEffect(() => {
     if (currentUser !== '') {
-    // get uid ตรงนี้
-      setUniqueID('aaaaa')
+      // get uid ตรงนี้
+      setUniqueID('aaa')
     }
   }, [currentUser])
   useEffect(() => {
@@ -59,7 +59,7 @@ const CheckInScreen = props => {
       setTimeout(() => {
         setBLEStatus(true)
         setLoading(false)
-      }, 10000)
+      }, 100)
     }
   }, [subjectsDetail])
 
@@ -142,7 +142,7 @@ const CheckInScreen = props => {
   }
   const sendCheckIn = (transaction, subjectName) => {
     // console.log(transaction)
-
+    console.log('yay')
     API.post('createTransaction/', { ...transaction, subjectName })
       .then((res) => {
         getCurrentSubject();
@@ -151,8 +151,12 @@ const CheckInScreen = props => {
           type: "success",
         });
       })
-      .catch((err) =>
-        console.log(err))
+      .catch((err) => {
+        showMessage({
+          message: `${err.message}`,
+          type: "error",
+        });
+      })
   }
   const checkOut = () => {
     API.post('checkout/', { uid: currentUser.uid })
@@ -220,7 +224,9 @@ const CheckInScreen = props => {
           <ScrollView refreshControl={<RefreshControl color={Color.primaryColor} refreshing={loading} onRefresh={getUserSubject} />}>
             {
               componentData.map((subject, i) => {
-                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
+                // เอา disable ออกไปไว้เทส
+                return <SubjectCheckIn key={i} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
+                // return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
                 // return <SubjectCheckIn key={i} disabled={!BLEstatus || subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
               })}
           </ScrollView>

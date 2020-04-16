@@ -91,9 +91,19 @@ const LoginScreen = props => {
                                     })
 
                                 })
-                                .catch(error => { setErrorMsg(error.message); setLoading(false) })
-                        } catch (error) {
+                                .catch(error => {
+                                    showMessage({
+                                        message: error.message,
+                                        type: "danger",
+                                    });
 
+                                    setLoading(false)
+                                })
+                        } catch (error) {
+                            showMessage({
+                                message: error.message,
+                                type: "danger",
+                            });
 
                             // alert(error);
                             setLoading(false)
