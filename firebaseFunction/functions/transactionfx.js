@@ -150,4 +150,25 @@ app.post("/updateStatusTransaction",async (req,res)=>{
   });
 })
 
+function checkIfDuplicateExists(w){
+  return new Set(w).size !== w.length 
+}
+
+app.post('/checkDuplicate',(req,res)=>{
+  db.collection('transactions')
+  .where("subjectID", "==", req.body.subjectID)  
+  .where("schIndex", "==", req.body.schIndex)
+  .get()
+  .then(snapshot => {
+    if(checkIfDuplicateExists(snapshot.docs.map(doc => doc.data().uniqueID)) === false ){
+    res.end();}else{
+      res.status(500).send('Duplicate')
+    }
+
+    return;
+  }).catch(error => {
+    console.log(error, toString());
+  });
+})
+
 module.exports = app;

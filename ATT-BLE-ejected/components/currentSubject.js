@@ -16,7 +16,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         new Date().toLocaleTimeString()
     )
     const [loading, setLoading] = useState(false)
-    const [BLEstatus, setBLEStatus] = useState(false)
+    const [BLEstatus, setBLEStatus] = useState(true)
     // ถ้า BLE status == true จะกด check out ได้
     const [currentSubject, setCurrentSubject] = useState('')
     useEffect(() => {
@@ -55,7 +55,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         setTimeout(() => {
             setBLEStatus(true)
             setLoading(false)
-        }, 5000)
+        }, 1000)
     }
     return (
         <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={getCurrentSubject} />}> 
