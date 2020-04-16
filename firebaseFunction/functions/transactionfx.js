@@ -47,7 +47,14 @@ app.post("/checkout", (req, res) => {
 });
 
 app.post("/createTransaction", (req, res) => {
-  db.collection("transactions")
+
+  db.collection('transactions')
+  .where("subjectID", "==", req.body.subjectID)  
+  .where("schIndex", "==", req.body.schIndex)
+  .get()
+  .then(snapshot => {
+    if(checkIfDuplicateExists(snapshot.docs.map(doc => doc.data().uniqueID)) === false ){
+    db.collection("transactions")
     .add({
       timestamp: req.body.timestamp,
       schIndex: req.body.schIndex,
@@ -85,6 +92,17 @@ app.post("/createTransaction", (req, res) => {
     .catch(error => {
       console.log(error, toString());
     });
+  }
+    else{
+      res.status(500).send('Duplicate')
+    }
+
+    return;
+  }).catch(error => {
+    console.log(error, toString());
+  });
+
+  
 });
 
 app.post("/createTempTransaction", (req, res) => {
