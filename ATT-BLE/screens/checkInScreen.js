@@ -25,16 +25,22 @@ const CheckInScreen = props => {
   const [BLEstatus, setBLEStatus] = useState(false)
   const [currentSubject, setCurrentSubject] = useState({})
   const [componentData, setCompData] = useState([])
+  const [uniqueID, setUniqueID] = useState('')
   useEffect(() => {
     getToken()
   }, []);
-
   useEffect(() => {
     if (currentUser !== '') {
+    // get uid ตรงนี้
+      setUniqueID('aaaaa')
+    }
+  }, [currentUser])
+  useEffect(() => {
+    if (uniqueID !== '') {
       getUserSubject()
       getCurrentSubject()
     }
-  }, [currentUser])
+  }, [uniqueID])
   useEffect(() => {
     if (currentUser !== '' && subjectsID !== []) {
       getSubjectDetail()
@@ -80,7 +86,7 @@ const CheckInScreen = props => {
     setLoading(true)
     API.post('getSubjectByID/', { uid: currentUser.uid })
       .then((res) => {
-         setCompData([])
+        setCompData([])
         setSubjectsID(res.data)
       })
       .catch((err) =>
@@ -186,13 +192,13 @@ const CheckInScreen = props => {
           schIndex: currentSch.schIndex,
           timestamp: now,
           status: diff_minutes(now, currentDate) <= 15 ? 'ok' : 'late',
-          uniqueID: '',
+          uniqueID: uniqueID,
           endTime: currentSch.end,
           mac: mac
         }
         console.log(objTransac)
         strDetail = `${dateString} ${startTime}-${endTime} น.`
-        isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 
+        isDisable = Math.abs(diff_minutes(now, currentDate)) > 30
         // isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !findBLE(currentSch.mac) ? true : false
         // isDisable = false
       }
