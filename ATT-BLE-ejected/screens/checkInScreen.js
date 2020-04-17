@@ -15,6 +15,7 @@ import SubjectCheckIn from "../components/subjectCheckIn";
 import CurrentSubject from "../components/currentSubject";
 import Color from "../constants/Colors";
 import API from "../assets/API";
+import DeviceInfo from 'react-native-device-info';
 const manager = new BleManager();
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState("");
@@ -24,17 +25,26 @@ const CheckInScreen = props => {
   const [BLEstatus, setBLEStatus] = useState("");
   const [currentSubject, setCurrentSubject] = useState({});
   const [componentData, setCompData] = useState([]);
+  const [uniqueID, setUniqueID] = useState('') 
   
   useEffect(() => {
     getToken();
   }, []);
 
   useEffect(() => {
-    if (currentUser !== "") {
-      getUserSubject();
-      getCurrentSubject();
+    if (currentUser !== '') {
+      let uniqueId = DeviceInfo.getUniqueId();
+      setUniqueID(uniqueId)
     }
-  }, [currentUser]);
+  }, [currentUser])
+
+  useEffect(() => {
+    if (uniqueID !== '') {
+      getUserSubject()
+      getCurrentSubject()
+    }
+  }, [uniqueID])
+
   useEffect(() => {
     if (currentUser !== "" && subjectsID !== []) {
       getSubjectDetail();
@@ -192,7 +202,12 @@ const CheckInScreen = props => {
           type: "success"
         });
       })
-      .catch(err => console.log(err));
+      .catch((err) => { 
+        showMessage({ 
+          message: `${err.message}`, 
+          type: "error", 
+        }); 
+      }) 
   };
   const checkOut = () => {
     API.post("checkout/", { uid: currentUser.uid })
@@ -237,7 +252,7 @@ const CheckInScreen = props => {
           schIndex: currentSch.schIndex,
           timestamp: now,
           status: diff_minutes(now, currentDate) <= 15 ? "ok" : "late",
-          uniqueID: "",
+          uniqueID: uniqueID,
           endTime: currentSch.end,
           mac: mac
         };
