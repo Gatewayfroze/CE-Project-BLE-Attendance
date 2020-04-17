@@ -51,9 +51,12 @@ app.post("/createTransaction", (req, res) => {
   db.collection('transactions')
   .where("subjectID", "==", req.body.subjectID)  
   .where("schIndex", "==", req.body.schIndex)
+  .where("uniqueID","==",req.body.uniqueID)
   .get()
   .then(snapshot => {
-    if(checkIfDuplicateExists(snapshot.docs.map(doc => doc.data().uniqueID)) === false ){
+    
+    
+    if(snapshot.empty ){
     db.collection("transactions")
     .add({
       timestamp: req.body.timestamp,
@@ -172,16 +175,28 @@ function checkIfDuplicateExists(w){
   return new Set(w).size !== w.length 
 }
 
+
 app.post('/checkDuplicate',(req,res)=>{
   db.collection('transactions')
   .where("subjectID", "==", req.body.subjectID)  
   .where("schIndex", "==", req.body.schIndex)
+  .where("uniqueID","==",req.body.uniqueID)
   .get()
   .then(snapshot => {
-    if(checkIfDuplicateExists(snapshot.docs.map(doc => doc.data().uniqueID)) === false ){
-    res.end();}else{
-      res.status(500).send('Duplicate')
+    // if(checkIfDuplicateExists(snapshot.docs.map(doc => doc.data().uniqueID)) === false ){
+    // res.end();}else{
+    //   res.status(500).send('Duplicate')
+    // }
+    var kuy = (snapshot.docs.map(doc => doc.data().uniqueID))
+    
+    
+    if(snapshot.empty){
+      res.send("can create")
+    }else{
+      res.send("cant create")
     }
+    
+    
 
     return;
   }).catch(error => {
