@@ -57,8 +57,8 @@ const ViewSubjectPage = ({ match }, ...props) => {
         { id: 'subjectName', label: 'Name', minWidth: 100 },
     ]
     const deleteSubject = (subjectID) => {
+        if(window.confirm(`Do you want to delete ${subjects[subjectID].subjectName}`)){
         setLoading(true)
-        console.log(subjects[subjectID].subjectID)
         API.delete('deleteSubject/', { data: { subjectID: subjects[subjectID].subjectID } })
             .then((response) => {
                 console.log(response)
@@ -68,6 +68,7 @@ const ViewSubjectPage = ({ match }, ...props) => {
             .catch(function (error) {
                 console.log(error)
             })
+        }
     }
     const getLink = (subjectID) => {
         console.log(subjectID)

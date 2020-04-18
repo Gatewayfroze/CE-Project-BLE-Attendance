@@ -76,19 +76,21 @@ const ManagePage = () => {
 
     const tableExtend = []
     const deleteUser = (userIndex) => {
-        setLoading(true)
-        console.log(dataSearch[userIndex].uid)
-        API.delete('deleteAccount/', { data: { uid: data[userIndex].uid } })
-            .then(function (response) {
-                console.log(response)
-                // setJson(response.data)
-                console.log('here')
-                fetchData(genRole)
-                setLoading(false)
-            })
-            .catch(function (error) {
-                console.log(error)
-            })
+        if (window.confirm(`Do you want to delete ${dataSearch[userIndex].name}`)) {
+            setLoading(true)
+            API.delete('deleteAccount/', { data: { uid: data[userIndex].uid } })
+                .then(function (response) {
+                    console.log(response)
+                    // setJson(response.data)
+                    console.log('here')
+                    fetchData(genRole)
+                    setLoading(false)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+        }
+
     }
     tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteUser })
     // toggle role of account

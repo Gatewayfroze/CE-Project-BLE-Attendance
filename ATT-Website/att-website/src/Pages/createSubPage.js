@@ -63,7 +63,7 @@ const CreateSubPage = props => {
         setLoading(true)
         API.post('createSubject/', subjectData)
             .then(function (response) {
-                console.log("success")
+                window.alert(`Create ${subjectDetail.subjectName} successfully`)
                 resetInput()
                 setLoading(false)
             })

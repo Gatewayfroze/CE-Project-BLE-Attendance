@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import 'react-bulma-components/dist/react-bulma-components.min.css';
-import DataTable from '../Components/DataTable'
 import Container from '@material-ui/core/Container'
 import app from '../firebase'
 // import component 

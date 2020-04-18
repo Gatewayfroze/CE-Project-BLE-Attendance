@@ -7,7 +7,6 @@ import NumberFormat from 'react-number-format';
 import DataTable from '../Components/DataTable'
 import API from '../api'
 // import component 
-import Alert from '../Components/Alert'
 import Layout from '../Layout/layout'
 import Spinner from '../Components/Spinner'
 import Loader from '../Components/loader'
@@ -16,7 +15,6 @@ const Enrollpage = () => {
     const [fileName, setFileNamed] = useState(<p>Click here to upload .CSV file</p>)
     const [subjectDetail, setSubjectDetail] = useState('')
     const [textAlert, setTextAlert] = useState('')
-    const [alert, isAlert] = useState(false)
     const [subjectName, setSubjectName] = useState('')
     const [loading, setLoading] = useState(false)
     useEffect(() => {
@@ -84,8 +82,7 @@ const Enrollpage = () => {
         // set File name 
         const temp = fileName.split('.')
         if (temp[temp.length - 1].toLowerCase() !== 'csv') {
-            setTextAlert('Please upload CSV file only')
-            isAlert(true)
+            alert('Please upload CSV file only');
             return
         }
         reader.onload = () => {
@@ -98,8 +95,7 @@ const Enrollpage = () => {
                     const studentKey = ['id', 'name', 'surname', 'faculty', 'year']
                     // const teacherKey = ['id','name', 'surname', 'Email']
                     if (!(JSON.stringify(key.sort()) === JSON.stringify(studentKey.sort()))) {
-                        setTextAlert('eiei')
-                        isAlert(true)
+                        alert('Data field don\'t match')
                         return
                     }
                     setJson(results.data)
@@ -108,13 +104,8 @@ const Enrollpage = () => {
             });
         };
     }
-    const hadelClose = () => {
-        isAlert(false)
-        setTextAlert('')
-    }
     return (
-        <Layout loading={loading && subjectName !== '' && <Loader />}>
-            <Alert text={textAlert} enable={alert} close={hadelClose} />
+        <Layout loading={loading && subjectName !== '' && <Loader />} text={textAlert}>
             <h1 style={{ color: 'rgb(69, 172, 156)', fontSize: 30, margin: 20 }}>Enroll Student</h1>
             <div class='box'>
                 <div className='field'>
