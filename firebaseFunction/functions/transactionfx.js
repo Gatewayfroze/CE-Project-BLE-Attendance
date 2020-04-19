@@ -97,7 +97,7 @@ app.post("/createTransaction", (req, res) => {
     });
   }
     else{
-      res.status(500).send('Duplicate')
+      res.send(500, { error: "Duplicated" });
     }
 
     return;

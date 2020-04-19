@@ -258,7 +258,8 @@ const CheckInScreen = props => {
         };
         //console.log(objTransac);
         strDetail = `${dateString} ${startTime}-${endTime} น.`;
-         isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !BLEstatus ? true : false
+        //  isDisable = Math.abs(diff_minutes(now, currentDate)) > 30 && !BLEstatus ? true : false
+         isDisable = Math.abs(diff_minutes(now, currentDate)) > 30
         // isDisable = BLEstatus;
       }
       return {
