@@ -22,7 +22,7 @@ const CheckInScreen = props => {
   const [subjectsID, setSubjectsID] = useState([]);
   const [subjectsDetail, setSubjectsDetail] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [BLEstatus, setBLEStatus] = useState("");
+  const [BLEstatus, setBLEStatus] = useState("true");
   const [currentSubject, setCurrentSubject] = useState({});
   const [componentData, setCompData] = useState([]);
   const [uniqueID, setUniqueID] = useState('') 
@@ -54,21 +54,16 @@ const CheckInScreen = props => {
   useEffect(() => {
     if (subjectsDetail.length !== 0) {
       setLoading(true);
-      //console.log("find BLEEEEEEEEEEEEEEEEEEEEEEE");
+     
       const comp = genComponentData();
-      setCompData(comp);
+      setCompData(comp);   
       
-      console.log("aaaaa");
-      //console.log(comp[0]);
       var num = new Array();
       manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
           console.log(error.message);
           return;
         }
-        
-        
-
         if (device.id == comp[0].mac) {
           clearTimeout(time);
           num.push(Math.pow(10, (-62 - device.rssi) / 20));
@@ -80,7 +75,7 @@ const CheckInScreen = props => {
             }, 0);
             console.log(result)
 
-            if(result > 15){
+            if(result > 15){ //-92
               console.log('not in range')
               setBLEStatus(true);
               setLoading(false);

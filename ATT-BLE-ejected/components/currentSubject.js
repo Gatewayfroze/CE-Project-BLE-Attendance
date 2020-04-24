@@ -10,6 +10,8 @@ import {
 import API from '../assets/API'
 import Colors from '../constants/Colors'
 import { AntDesign } from '@expo/vector-icons';
+import {BleManager} from 'react-native-ble-plx';
+const manager = new BleManager();
 
 const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
     const [curTime, setTime] = useState(
@@ -51,14 +53,33 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         return 'หมดเวลา: ' + dateString + ' ' + currentDate.toLocaleTimeString()
     }
     const findBLE = () => {
+        console.log('kuy')
         setLoading(true)
-        setTimeout(() => {
-            setBLEStatus(true)
-            setLoading(false)
-        }, 1000)
+
+        manager.startDeviceScan(null, null, (error, device) => {
+            if (error) {
+              console.log(error.message);
+              return;
+            }
+            if (device.id == '24:0A:C4:AA:CD:32' || device.id == '30:AE:A4:F7:4C:F2' ) {
+                console.log("yay")
+                manager.stopDeviceScan();
+                setLoading(false)  
+                clearTimeout(time);
+                setBLEStatus(true)  
+                   
+            }
+          });
+        
+          time = setTimeout(() => {
+            manager.stopDeviceScan();
+            console.log("not found");
+            setBLEStatus(false);
+            setLoading(false);
+          }, 5000);
     }
     return (
-        <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={getCurrentSubject} />}> 
+        <ScrollView refreshControl={<RefreshControl color={Colors.primaryColor} refreshing={loading} onRefresh={findBLE} />}> 
             <View style={styles.currentSubjectContainer}>
                 <Text style={styles.title}>{`กำลังเรียน: ${currentSubject.subjectName}`}</Text>
                 <View style={styles.clockContainer}>
