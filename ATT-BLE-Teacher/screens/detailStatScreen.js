@@ -192,9 +192,11 @@ const DetailStatScreen = ({ navigation }, ...props) => {
 
     )
 }
-DetailStatScreen.navigationOptions = navData => {
+DetailStatScreen.navigationOptions = ({ navigation }) => {
+    const subjectName = navigation.state.params.subjectName
+    // const subjectName = navData.state.params.subjectName
     return {
-        headerTitle: 'รายละเอียดการเข้าเรียน'
+        headerTitle: subjectName
     }
 }
 const styles = StyleSheet.create({

@@ -26,6 +26,7 @@ const GenPage = () => {
         // calculate timeout (psuedo)
         setTimeout(() => {
             setLoading(false)
+            window.alert('generate successfully')
         }, 1000 * data.length);
     }
     const createAccount = (dataUser) => {

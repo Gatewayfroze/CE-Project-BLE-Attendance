@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '50%',
+        height: '30%',
         marginVertical: 10
     },
     statContainer: {

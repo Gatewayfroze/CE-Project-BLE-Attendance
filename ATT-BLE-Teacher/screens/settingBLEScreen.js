@@ -12,6 +12,7 @@ import Select from 'react-native-picker-select';
 import Colors from '../constants/Colors'
 import Button from '../components/button'
 import API from '../assets/API'
+import { showMessage } from "react-native-flash-message";
 
 const settingScreen = ({ navigation }, ...props) => {
     const room = navigation.state.params.room
@@ -25,12 +26,12 @@ const settingScreen = ({ navigation }, ...props) => {
     const [renderData, setRenderData] = useState([])
     const [checkAll, setCheckAll] = useState(false)
     const [schedule, setSchedule] = useState([])
-
+    const [tickker, setTrickker] = useState()
     useEffect(() => {
         if (selectedSubject !== null) {
             fetchSubject()
         }
-    }, [selectedSubject])
+    }, [selectedSubject, tickker])
     useEffect(() => {
         console.log('renderData')
         setRenderData(schData)
@@ -63,7 +64,13 @@ const settingScreen = ({ navigation }, ...props) => {
             }
         })
         API.post('updateSchedule/', { subjectID: selectedSubject, newschedule: temp })
-            .then((res) => { console.log(res) })
+            .then((res) => {
+                showMessage({
+                    message: `Edit Complete`,
+                    type: "success",
+                });
+                setTrickker(true)
+            })
             .catch((err) => console.log(err))
     }
     const findCheck = () => {
@@ -101,7 +108,7 @@ const settingScreen = ({ navigation }, ...props) => {
                     </View>
                 </View>
             </View>
-            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', height: 500 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={styles.selectContainer}>
                         <Text>Select Subject: </Text>
@@ -113,36 +120,41 @@ const settingScreen = ({ navigation }, ...props) => {
                         />
                     </View>
                 </View>
-                <View style={styles.checkContainer}>
-                    <CheckBox
-                        onClick={() => {
-                            const temp = [...renderData]
-                            setScheData(temp.map((t) => {
-                                return { ...t, checked: !checkAll }
-                            }))
-                            setCheckAll(!checkAll)
-                        }}
-                        isChecked={checkAll}
-
-                    />
-                    <Text style={styles.textCheck}>{'Check All'}</Text>
-                </View>
-                {renderData.map((sch, i) => {
-                    return (
-                        <View key={i} style={styles.checkContainer}>
+                <View style={styles.scrollContainer}>
+                    <ScrollView style={{ width: '100%' }}>
+                        <View style={styles.checkContainer}>
                             <CheckBox
                                 onClick={() => {
                                     const temp = [...renderData]
-                                    temp[i].checked = !temp[i].checked
-                                    setScheData(temp)
+                                    setScheData(temp.map((t) => {
+                                        return { ...t, checked: !checkAll }
+                                    }))
+                                    setCheckAll(!checkAll)
                                 }}
-                                isChecked={sch.checked}
+                                isChecked={checkAll}
 
                             />
-                            <Text style={styles.textCheck}>{`${sch.date} ${sch.room}`}</Text>
+                            <Text style={styles.textCheck}>{'Check All'}</Text>
                         </View>
-                    )
-                })}
+                        {renderData.map((sch, i) => {
+                            return (
+                                <View key={i} style={styles.checkContainer}>
+                                    <CheckBox
+                                        onClick={() => {
+                                            const temp = [...renderData]
+                                            temp[i].checked = !temp[i].checked
+                                            setScheData(temp)
+                                        }}
+                                        isChecked={sch.checked}
+
+                                    />
+                                    <Text style={styles.textCheck}>{`${sch.date} ${sch.room}`}</Text>
+                                </View>
+                            )
+                        })}
+                    </ScrollView>
+                </View>
+
                 <View style={{ width: 70, height: 35, marginVertical: 10 }}>
                     <Button disable={selectedSubject === null} click={updateSchedule} style={{
                         height: '100%'
@@ -206,7 +218,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     checkContainer: {
-        width: '60%',
+        width: '100%',
         paddingLeft: 20,
         marginBottom: 10,
         flexDirection: 'row',
@@ -214,7 +226,11 @@ const styles = StyleSheet.create({
     },
     textCheck: {
         fontSize: 16,
-        paddingLeft: 5
+        paddingLeft: 5,
+    },
+    scrollContainer: {
+        maxHeight: 300,
+        width: 250,
     }
 })
 const pickerSelectStyles = StyleSheet.create({
@@ -240,5 +256,6 @@ const pickerSelectStyles = StyleSheet.create({
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon
     },
+
 });
 export default settingScreen

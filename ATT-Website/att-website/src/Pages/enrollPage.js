@@ -25,7 +25,6 @@ const Enrollpage = () => {
             console.log(subjectDetail)
             API.post('getSubject/', { subjectID: subjectDetail })
                 .then(function (response) {
-                    console.log(response.data)
                     setSubjectName(response.data.subjectName)
                     setLoading(false)
                 })
@@ -50,12 +49,11 @@ const Enrollpage = () => {
         const studentsID = data.map((student) => (
             student.id
         ))
-        console.log(subjectDetail)
-        console.log(studentsID)
         API.post('enroll/', { subjectID: subjectDetail, studentsID: studentsID })
             .then(function (response) {
                 setLoading(false)
                 console.log(response.data)
+                window.alert('enroll successfully')
             })
             .catch(function (error) {
                 setLoading(false)
@@ -135,7 +133,7 @@ const Enrollpage = () => {
             </div>
             <DataTable columns={columnsStd} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
             <div style={{ marginTop: 10 }}>
-                <Button class='button is-primary' onClick={enrollStudent} disabled={subjectDetail.replace(/ /g, "").length !== 8 || data.length === 0 ? true : false}>Enroll</Button>
+                <Button class='button is-primary' onClick={enrollStudent} disabled={subjectName===undefined||subjectName === '' || data.length === 0 ? true : false}>Enroll</Button>
             </div>
         </Layout>
     )

@@ -115,6 +115,8 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
         temp[i][mode] = tempDate
         if (diff_minutes(temp[i].end, temp[i].start) >= 30) {
             setSchedule([...temp])
+        }else{
+            window.alert('end time must greater than start time at least 30 min.')
         }
         console.log(schedule)
     }
@@ -196,7 +198,7 @@ const EditSch = ({ scheduleList, subjectID }, ...props) => {
     const updateSchedule = () => {
         setLoading(true)
         API.post('updateSchedule/', { subjectID, newschedule: schedule })
-            .then((res) => { setLoading(false); console.log(res) })
+            .then((res) => { setLoading(false); window.alert('save complete')})
             .catch((err) => console.log(err))
 
     }

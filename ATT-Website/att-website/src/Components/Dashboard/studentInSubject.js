@@ -57,16 +57,18 @@ const StudentInSubject = ({ subjectData, subjectID }, ...props) => {
         setSearch(e.target.value)
     }
     const dropStudent = (studentIndex) => {
-        setLoadingStd(true)
-        API.post('drop/', { studentID: [studentData[studentIndex].studentID], subjectID })
-            .then((response) => {
-                console.log(response)
-                setStdList(stdList.filter((std) => { return std !== stdDataSearch[studentIndex].studentID }))
-                setLoadingStd(false)
-            })
-            .catch(function (error) {
-                console.log(error)
-            })
+        if (window.confirm(`Do you want to drop ${studentData[studentIndex].studentID} ${studentData[studentIndex].name}`)) {
+            setLoadingStd(true)
+            API.post('drop/', { studentID: [studentData[studentIndex].studentID], subjectID })
+                .then((response) => {
+                    console.log(response)
+                    setStdList(stdList.filter((std) => { return std !== stdDataSearch[studentIndex].studentID }))
+                    setLoadingStd(false)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+        }
     }
     const columnDefault = [
         { id: 'studentID', label: 'Student ID', minWidth: 100 },

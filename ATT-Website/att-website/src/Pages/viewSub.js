@@ -84,7 +84,6 @@ const ViewSubjectPage = ({ match }, ...props) => {
                 <label className='label '>Enter Data to search</label>
                 <div class="field is-grouped has-addons">
                     <input class='input is-primary' value={searchData} onChange={handleSearch}  placeholder='ID,name' />
-                    <Button>Search</Button>
                 </div>
             </div>
             <DataTable maxHeight={350} columns={columnDefault} data={dataSearch} extraHeader={['View', 'Delete']} extraCol={tableExtend} />

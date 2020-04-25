@@ -225,8 +225,7 @@ const CheckInScreen = props => {
             {
               componentData.map((subject, i) => {
                 // เอา disable ออกไปไว้เทส
-                return <SubjectCheckIn key={i} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
-                // return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
+                return <SubjectCheckIn key={i} disabled={subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
                 // return <SubjectCheckIn key={i} disabled={!BLEstatus || subject.isDisable} title={subject.subjectName} room={subject.room} detail={subject.strDetail} sendTransaction={() => sendCheckIn(subject.objTransac, subject.subjectName)} />
               })}
           </ScrollView>

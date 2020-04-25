@@ -18,8 +18,8 @@ import { showMessage } from "react-native-flash-message";
 firebase.initializeApp(config)
 
 const LoginScreen = props => {
-    const [email, setEmail] = useState("nitinon623@gmail.com")
-    const [password, setPassword] = useState("Nitinon.556")
+    const [email, setEmail] = useState("panotsodsri@gmail.com")
+    const [password, setPassword] = useState("00000000")
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)
@@ -84,9 +84,11 @@ const LoginScreen = props => {
     }
     return (
         <View style={styles.screen}>
-            <Text style={styles.logo}>
-                ATTENDA
-            </Text>
+            <View style={{ alignItems: 'flex-end',marginBottom:30}}>
+                <Text style={styles.logo}>{'ATTENDA'}</Text>
+                <Text style={{ color: Colors.primaryColor, fontSize: 30 }}>{'TCHR'}</Text>
+            </View>
+
             <View style={styles.inputView}>
                 <TextInput style={styles.textInput}
                     placeholder="Email"
@@ -122,9 +124,9 @@ const styles = StyleSheet.create({
     logo: {
         fontWeight: "bold",
         fontSize: 50,
-        marginBottom: 40,
         fontWeight: 'bold',
-        color: Colors.highLigthColor
+        color: Colors.highLigthColor,
+        marginBottom:-10
     },
     textInput: {
         height: 50,

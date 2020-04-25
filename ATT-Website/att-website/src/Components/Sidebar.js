@@ -70,7 +70,7 @@ export default function ClippedDrawer(props) {
     ]
     const adminMenu=[1,3]
     const listMenu = list.map((menu, i) => {
-        console.log(props.currentUser)
+        // console.log(props.currentUser)
         if (!(i in adminMenu)||(i in adminMenu&&isAdmin(props.currentUser))) {
             return (
                 <React.Fragment>

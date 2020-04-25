@@ -49,6 +49,11 @@ const ProfileScreen = props => {
             }
             )
     }
+    const changePassword = () => {
+        API.post('/changePassword', { uid: currentUser.uid })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
+    }
 
     const deleteToken = async () => {
         try {
@@ -77,6 +82,11 @@ const ProfileScreen = props => {
                     }
                 </View>
             </View>
+            <Button style={styles.buttonSize} click={changePassword} >
+                <Text style={{ color: 'white', fontSize: 18 }}>
+                    Change Password
+                </Text>
+            </Button>
             <Button style={styles.buttonSize} disable={loading} click={
                 () => deleteToken()
             }>
@@ -143,8 +153,9 @@ const styles = StyleSheet.create({
     },
     buttonSize: {
         height: 45,
-        width: '40%',
-        marginBottom: 15
+        width: '60%',
+        marginBottom: 15,
+        borderRadius: 25
     }
 });
 export default ProfileScreen

@@ -19,7 +19,6 @@ const ManagePage = () => {
     useEffect(() => {
         if (searchData != '') {
             const search = data.filter(user => {
-                console.log(user)
                 if (genRole == 'student')
                     return user.id.includes(searchData) || user.name.includes(searchData) || user.surname.includes(searchData)
                 else
@@ -36,7 +35,6 @@ const ManagePage = () => {
     const fetchData = (role) => {
         setLoading(true)
         API.get(`getAll${role}/`).then(function (response) {
-            console.log(response)
             if (role == 'Student') {
                 const dd = response.data.map(student => {
                     const studetnObj = {
@@ -45,8 +43,10 @@ const ManagePage = () => {
                     }
                     return studetnObj
                 })
+                dd.sort((a, b) => (a.id > b.id) ? 1 : -1)
                 setJson(dd)
             } else {
+                response.data.sort((a, b) => (a.name > b.name) ? 1 : -1)
                 setJson(response.data)
             }
             setLoading(false)
@@ -80,9 +80,7 @@ const ManagePage = () => {
             setLoading(true)
             API.delete('deleteAccount/', { data: { uid: data[userIndex].uid } })
                 .then(function (response) {
-                    console.log(response)
                     // setJson(response.data)
-                    console.log('here')
                     fetchData(genRole)
                     setLoading(false)
                 })
@@ -99,7 +97,7 @@ const ManagePage = () => {
     const handleRole = (role) => {
         setRole(role)
         setJson([])
-        console.log(genRole)
+        // console.log(genRole)
     }
     return (
         <Layout loading={loading && <Loader />}>
@@ -113,7 +111,6 @@ const ManagePage = () => {
                 <label className='label '>Enter Data to search</label>
                 <div class="field is-grouped has-addons">
                     <input class='input is-primary' value={searchData} onChange={handleSearch} placeholder='ID,name' />
-                    <Button>Search</Button>
                 </div>
             </div>
             <DataTable columns={columnDefault} data={dataSearch} extraHeader={['Delete']} extraCol={tableExtend} />
