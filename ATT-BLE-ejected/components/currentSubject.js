@@ -23,6 +23,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
     const [currentSubject, setCurrentSubject] = useState('')
     useEffect(() => {
         getCurrentSubject()
+        
     }, [])
     useEffect(() => {
         setInterval(() => {
@@ -33,6 +34,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
         if (currentSubject !== '') {
             console.log(typeof currentSubject.endTime)
             console.log(currentSubject.endTime.toString())
+            // findBLE()
         }
     }, [currentSubject])
     const getCurrentSubject = () => {
@@ -44,6 +46,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
                 console.log(res.data)
                 setLoading(false)
             })
+            // findBLE()
     }
     const convertDateStr = (currentDate) => {
         const day = currentDate.getDate()
@@ -62,7 +65,7 @@ const CurrentSubject = ({ currentUser, checkOut }, ...props) => {
               return;
             }
             if (device.id == '24:0A:C4:AA:CD:32' || device.id == '30:AE:A4:F7:4C:F2' ) {
-                console.log("yay")
+                
                 manager.stopDeviceScan();
                 setLoading(false)  
                 clearTimeout(time);

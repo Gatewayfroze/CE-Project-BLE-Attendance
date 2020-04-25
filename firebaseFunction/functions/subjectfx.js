@@ -106,48 +106,148 @@ app.delete("/deleteSubject", async (req, res) => {
 })
 })
 
-app.post("/enroll", async (req, res) => {
-  students = req.body.studentsID
-  subject = req.body.subjectID
+Array.prototype.diff = function(arr2) {
+  var ret = [];
+  for(var i in this) {   
+      if(arr2.indexOf(this[i]) > -1){
+          ret.push(this[i]);
+      }
+  }
+  return ret;
+};
 
-  studentID = students.map(data => data + "@kmitl.ac.th")
+// app.post("/enroll", async (req, res) => {
+//   students = req.body.studentsID
+//   subject = req.body.subjectID
 
-  studentID.forEach(async data => {
-    await db
-      .collection("users")
-      .where("email", "==", data)
-      .get()
-      .then(async snapshot => {
-        await snapshot.forEach(async docs => {
-          await db
-            .collection("users")
-            .doc(docs.id)
-            .update({
-              subject: admin.firestore.FieldValue.arrayUnion(req.body.subjectID)
-            })
-            .then(() => {
-              students.forEach(async (doc) => {
-                await db
-                  .collection("subjects")
-                  .doc(req.body.subjectID)
-                  .update({
-                    students: admin.firestore.FieldValue.arrayUnion(doc)
-                  })
-                  .catch(error => {
-                    console.log(error, toString())
-                  })
+//   studentID = students.map(data => data + "@kmitl.ac.th")
+
+
+//   //  db.collection("users")
+//   // .where("role", "==", "student")
+//   // .get()
+//   // .then(snapshot => {
+//   //   allstu = snapshot.docs.map(doc => doc.data().email)
+//   //   students = allstu.diff(studentID).map(temp => temp.slice(0,8))
+      
+//   //   return;
+//   // })
+//   // .catch(error => {
+//   //   console.log(error, toString());
+//   // });
+
+//   studentID.forEach(async data => {
+//     await db
+//       .collection("users")
+//       .where("email", "==", data)
+//       .get()
+//       .then(async snapshot => {
+//         await snapshot.forEach(async docs => {
+//           await db
+//             .collection("users")
+//             .doc(docs.id)
+//             .update({
+//               subject: admin.firestore.FieldValue.arrayUnion(req.body.subjectID)
+//             })
+//             .then(() => {
+//               students.forEach(async (doc) => {
+//                 await db
+//                   .collection("subjects")
+//                   .doc(req.body.subjectID)
+//                   .update({
+//                     students: admin.firestore.FieldValue.arrayUnion(doc)
+//                   })
+//                   .catch(error => {
+//                     console.log(error, toString())
+//                   })
+//               })
+//               return
+//             })
+//         })
+//         res.end()
+//         return
+
+//       })
+//       .catch(error => {
+//         console.log(error, toString())
+//       })
+//   })
+// })
+
+
+ 
+
+app.post('/enroll',(req,res)=>{ 
+  studentsOld = req.body.studentsID
+
+  studentIDOld = studentsOld .map(data => data + "@kmitl.ac.th")
+
+  db.collection("users")
+  .where("role", "==", "student")
+  .get()
+  .then(snapshot => {
+    allstu = snapshot.docs.map(doc => doc.data().email)
+    students = allstu.diff(studentIDOld).map(temp => temp.slice(0,8))
+    studentID = students.map(data => data + "@kmitl.ac.th") 
+
+    difference = studentsOld.filter(x => !students.includes(x));
+    if(students.length === 0){
+      res.send(400, { error: "Unlisted student" });
+    }else if(students.length < studentsOld.length){
+      res.send(400, { error: difference });
+    }
+    
+    studentID.forEach(async data => {
+      await db
+        .collection("users")
+        .where("email", "==", data)
+        .get()
+        .then(async snapshot => {
+          await snapshot.forEach(async docs => {
+            await db
+              .collection("users")
+              .doc(docs.id)
+              .update({
+                subject: admin.firestore.FieldValue.arrayUnion(req.body.subjectID)
               })
-              return
-            })
+              .then(() => {
+                students.forEach(async (doc) => {
+                  await db
+                    .collection("subjects")
+                    .doc(req.body.subjectID)
+                    .update({
+                      students: admin.firestore.FieldValue.arrayUnion(doc)
+                    })
+                    .catch(error => {
+                      console.log(error, toString())
+                    })
+                })
+                return
+              })
+          })
+          res.end()
+          return
+  
         })
-        res.end()
-        return
+        .catch(error => {
+          console.log(error, toString())
+        })
+    })
 
-      })
-      .catch(error => {
-        console.log(error, toString())
-      })
+
+
+    return;
   })
+  .catch(error => {
+    console.log(error, toString());
+  });
+
+  
+
+  
+  
+
+
 })
 
 app.post("/drop", async (req, res) => {

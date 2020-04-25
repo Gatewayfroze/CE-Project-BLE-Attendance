@@ -67,7 +67,7 @@ const CheckInScreen = props => {
         if (device.id == comp[0].mac) {
           clearTimeout(time);
           num.push(Math.pow(10, (-62 - device.rssi) / 20));
-          if (num.length == 20) {
+          if (num.length == 15) {
             clearTimeout(time);
             manager.stopDeviceScan();
             const result = num.reduce((sum, number) => {
@@ -97,7 +97,7 @@ const CheckInScreen = props => {
         console.log("not found");
         setBLEStatus(true);
         setLoading(false);
-      }, 10000);
+      }, 8000);
     }
   }, [subjectsDetail]);
 
