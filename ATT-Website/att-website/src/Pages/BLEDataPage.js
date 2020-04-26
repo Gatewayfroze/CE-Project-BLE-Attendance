@@ -29,14 +29,12 @@ const BLEDataPage = () => {
     const fetchBoard = () => {
         API.post('getBoard/').then((res) => {
             setBoardData(res.data)
-            console.log(res.data)
         })
     }
     const deleteUser = userIndex => {
         const userTemp = [...data];
         userTemp.splice(userIndex, 1);
         setJson(userTemp)
-        console.log(data)
     };
     const columnDefault = [
         { id: 'boardName', label: 'Room', minWidth: 100 },
@@ -91,10 +89,8 @@ const BLEDataPage = () => {
         }, 1000 * data.length);
     }
     const createdata = (dataBLE, fn = (() => { })) => {
-        console.log(dataBLE)
         API.post('addBoard/', dataBLE)
             .then(function (response) {
-                console.log(response)
                 fetchBoard()
                 fn()
             })

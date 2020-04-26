@@ -18,8 +18,8 @@ import { showMessage } from "react-native-flash-message";
 firebase.initializeApp(config)
 
 const LoginScreen = props => {
-    const [email, setEmail] = useState("panotsodsri@gmail.com")
-    const [password, setPassword] = useState("00000000")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [disable, setDisable] = useState(true)
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)

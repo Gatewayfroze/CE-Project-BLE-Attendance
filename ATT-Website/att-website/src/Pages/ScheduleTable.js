@@ -66,7 +66,7 @@ const SampleGrid = ({ match }, ...props) => {
     const fetchSubject = () => {
         setLoading(true)
         setSubjectData('')
-        console.log('subjecttttttt')
+        // console.log('subjecttttttt')
         columns = columns.slice(0, 2)
         API.post('getSubject/', { subjectID })
             .then((res) => {
@@ -78,7 +78,7 @@ const SampleGrid = ({ match }, ...props) => {
     }
     const fetchListStudent = async (stdList, scheduleList) => {
         setLoading(true)
-        console.log()
+        
         const val = stdList.map(async (student) => {
             const detail = await API.post('getStudent/', { studentID: student })
             detail.data.name = detail.data.name + ' ' + detail.data.surname
@@ -101,7 +101,7 @@ const SampleGrid = ({ match }, ...props) => {
             })
             return { ...std, ...objTemp }
         })
-        console.log(temp)
+        // console.log(temp)
         setStudentData(temp)
         // setLoading(false)
     }
@@ -111,7 +111,7 @@ const SampleGrid = ({ match }, ...props) => {
             .then((res) => {
                 setTransac(res.data)
                 setLoading(false)
-                console.log(res.data)
+                // console.log(res.data)
             })
             .catch((err) => console.log(err))
     }
@@ -141,13 +141,13 @@ const SampleGrid = ({ match }, ...props) => {
                                                 uniqueID: '',
                                                 endTime: ''
                                             }
-                                            console.log(tempTransaction)
+                                            // console.log(tempTransaction)
                                             API.post('createTempTransaction/', tempTransaction)
                                                 .then((res) => console.log(res))
 
                                         } else {
                                             // update transaction
-                                            console.log(oldData[`sch${i}ID`])
+                                            // console.log(oldData[`sch${i}ID`])
                                             API.post('updateStatusTransaction/', { id: oldData[`sch${i}ID`], status: newData[`sch${i}`].toLowerCase() })
                                                 .then((res) => console.log(res))
                                         }

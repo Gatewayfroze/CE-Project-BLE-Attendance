@@ -51,7 +51,7 @@ const CreateSubPage = props => {
             const temp = res.data.map((data) => {
                 return { value: data.mac, label: data.boardName }
             })
-            console.log(temp)
+            // console.log(temp)
             setBoardData(temp)
             setLoading(false)
         })
@@ -59,7 +59,7 @@ const CreateSubPage = props => {
     // hadle submiting data
     const handleSubmit = () => {
         const subjectData = { teacherUID: curUser, ...subjectDetail, schedule }
-        console.log(subjectData)
+        // console.log(subjectData)
         setLoading(true)
         API.post('createSubject/', subjectData)
             .then(function (response) {
@@ -100,7 +100,7 @@ const CreateSubPage = props => {
                 const dateTemp = new Date(temp[temp.length - 1].date)
                 dateTemp.setDate(temp[temp.length - 1].date.getDate() + 7)
 
-                console.log(dateTemp)
+                // console.log(dateTemp)
                 period.date = dateTemp
                 period.start = temp[temp.length - 1].start
                 period.end = temp[temp.length - 1].end
@@ -124,7 +124,7 @@ const CreateSubPage = props => {
             tempEnd.setFullYear(data.date.getFullYear())
             return { ...data, start: tempStart, end: tempEnd }
         })
-        console.log(temp)
+        // console.log(temp)
         setSchedule(temp)
     }
     const setDate = (date, mode, i) => {
@@ -152,7 +152,7 @@ const CreateSubPage = props => {
         if(diff_minutes(temp[i].end,temp[i].start)>=30){
             setSchedule([...temp])
         }
-        console.log(schedule)
+        // console.log(schedule)
     }
     const diff_minutes = (dt2, dt1) => {
         var diff = (dt2.getTime() - dt1.getTime()) / 1000;
@@ -165,7 +165,7 @@ const CreateSubPage = props => {
         schTemp.forEach((sch, i) => {
             sch.schIndex = i
         })
-        console.log(schTemp)
+        // console.log(schTemp)
         setSchedule(schTemp)
     }
     const hadleMACadrr = (i, val) => {

@@ -19,11 +19,13 @@ const ManagePage = () => {
     useEffect(() => {
         if (searchData != '') {
             const search = data.filter(user => {
-                if (genRole == 'student')
-                    return user.id.includes(searchData) || user.name.includes(searchData) || user.surname.includes(searchData)
-                else
+                if (genRole == 'Student') {
+                    return user.id.includes(searchData) || user.name.includes(searchData) || user.surname.includes(searchData) ||
+                        user.faculty.includes(searchData) || user.year.includes(searchData)
+                }
+                else {
                     return user.email.includes(searchData) || user.name.includes(searchData) || user.surname.includes(searchData)
-
+                }
             })
             setDataSearch(search)
         } else {
@@ -113,7 +115,7 @@ const ManagePage = () => {
                     <input class='input is-primary' value={searchData} onChange={handleSearch} placeholder='ID,name' />
                 </div>
             </div>
-            <DataTable columns={columnDefault} data={dataSearch} extraHeader={['Delete']} extraCol={tableExtend} />
+            <DataTable columns={columnDefault} data={dataSearch} extraHeader={['Delete']} extraCol={tableExtend} maxHeight={400} />
         </Layout>
     )
 }

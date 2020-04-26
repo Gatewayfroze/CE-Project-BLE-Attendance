@@ -57,11 +57,11 @@ const ViewSubjectPage = ({ match }, ...props) => {
         { id: 'subjectName', label: 'Name', minWidth: 100 },
     ]
     const deleteSubject = (subjectID) => {
-        if(window.confirm(`Do you want to delete ${subjects[subjectID].subjectName}`)){
+        if(window.confirm(`Do you want to delete id: ${subjects[subjectID].subjectID} name: ${subjects[subjectID].subjectName}`)){
         setLoading(true)
         API.delete('deleteSubject/', { data: { subjectID: subjects[subjectID].subjectID } })
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 setLoading(false)
                 fetchSubject()
             })
@@ -71,11 +71,11 @@ const ViewSubjectPage = ({ match }, ...props) => {
         }
     }
     const getLink = (subjectID) => {
-        console.log(subjectID)
+        // console.log(subjectID)
         return subjects[subjectID].subjectID
     }
     const tableExtend = []
-    tableExtend.push({ text: 'View', class: 'is-warning', link: getLink, function: () => console.log('ssss') })
+    tableExtend.push({ text: 'View', class: 'is-warning', link: getLink, function: () => console.log('') })
     tableExtend.push({ text: 'Delete', class: 'is-danger', function: deleteSubject })
     return (
         <Layout loading={loading && <Loader />} size='lg'>
@@ -86,7 +86,7 @@ const ViewSubjectPage = ({ match }, ...props) => {
                     <input class='input is-primary' value={searchData} onChange={handleSearch}  placeholder='ID,name' />
                 </div>
             </div>
-            <DataTable maxHeight={350} columns={columnDefault} data={dataSearch} extraHeader={['View', 'Delete']} extraCol={tableExtend} />
+            <DataTable maxHeight={350} columns={columnDefault} data={dataSearch} extraHeader={['View', 'Delete']} extraCol={tableExtend} maxHeight={350} />
         </Layout>
     )
 }

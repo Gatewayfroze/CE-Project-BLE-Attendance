@@ -27,6 +27,8 @@ const GenPage = () => {
         setTimeout(() => {
             setLoading(false)
             window.alert('generate successfully')
+            setJson([])
+            setFileNamed(<p>Click here to upload .CSV file</p>)
         }, 1000 * data.length);
     }
     const createAccount = (dataUser) => {
@@ -45,9 +47,8 @@ const GenPage = () => {
             user.faculty = NaN
             user.role = genRole.toLowerCase()
         }
-        console.log(user)
         API.post('createAccount/', user).then(function (response) {
-            console.log(response)
+            console.log('complete')
         })
             .catch(function (error) {
                 console.log(error)
@@ -57,7 +58,6 @@ const GenPage = () => {
         setRole(role)
         setJson([])
         setFileNamed(<p>Click here to upload .CSV file</p>)
-        console.log(genRole)
     }
     const deleteUser = userIndex => {
         const userTemp = [...data];
