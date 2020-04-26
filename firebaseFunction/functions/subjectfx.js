@@ -177,15 +177,15 @@ Array.prototype.diff = function(arr2) {
 
  
 
-app.post('/enroll',(req,res)=>{ 
+app.post('/enroll',async (req,res)=>{ 
   studentsOld = req.body.studentsID
 
   studentIDOld = studentsOld .map(data => data + "@kmitl.ac.th")
 
-  db.collection("users")
+  await db.collection("users")
   .where("role", "==", "student")
   .get()
-  .then(snapshot => {
+  .then(async snapshot => {
     allstu = snapshot.docs.map(doc => doc.data().email)
     students = allstu.diff(studentIDOld).map(temp => temp.slice(0,8))
     studentID = students.map(data => data + "@kmitl.ac.th") 
@@ -197,7 +197,7 @@ app.post('/enroll',(req,res)=>{
       res.send(400, { error: difference });
     }
     
-    studentID.forEach(async data => {
+    await studentID.forEach(async data => {
       await db
         .collection("users")
         .where("email", "==", data)
