@@ -19,10 +19,8 @@ const Enrollpage = () => {
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         if (subjectDetail.replace(/ /g, "").length === 8) {
-            console.log('ready!!')
             setLoading(true)
             // prepare to fetch data
-            console.log(subjectDetail)
             API.post('getSubject/', { subjectID: subjectDetail })
                 .then(function (response) {
                     setSubjectName(response.data.subjectName)
@@ -39,7 +37,7 @@ const Enrollpage = () => {
         const userTemp = [...data];
         userTemp.splice(userIndex, 1);
         setJson(userTemp)
-        console.log(data)
+        // console.log(data)
     };
     const handleSubjectDetail = (e) => {
         setSubjectDetail(e.target.value)
@@ -52,12 +50,19 @@ const Enrollpage = () => {
         API.post('enroll/', { subjectID: subjectDetail, studentsID: studentsID })
             .then(function (response) {
                 setLoading(false)
-                console.log(response.data)
+                // console.log(response.data)
                 window.alert('enroll successfully')
             })
             .catch(function (error) {
                 setLoading(false)
-                console.log(error)
+                if (error.response.status === 400) {
+                    if (error.response.data.error !== 'Unlisted student') {
+                        window.alert(`Student does not exist (${error.response.data.error})`)
+                    } else {
+                        window.alert(error.response.data.error)
+                    }
+                }
+
             })
     }
     // set element extend table in Datatable
@@ -133,7 +138,7 @@ const Enrollpage = () => {
             </div>
             <DataTable columns={columnsStd} data={data} extraHeader={['Delete']} extraCol={tableExtend} />
             <div style={{ marginTop: 10 }}>
-                <Button class='button is-primary' onClick={enrollStudent} disabled={subjectName===undefined||subjectName === '' || data.length === 0 ? true : false}>Enroll</Button>
+                <Button class='button is-primary' onClick={enrollStudent} disabled={subjectName === undefined || subjectName === '' || data.length === 0 ? true : false}>Enroll</Button>
             </div>
         </Layout>
     )
