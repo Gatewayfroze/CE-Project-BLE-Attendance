@@ -16,7 +16,7 @@ import { showMessage } from "react-native-flash-message";
 import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 import Color from '../constants/Colors'
-import API from '../assets/API'
+import API from '../constants/API'
 const CheckInScreen = props => {
   const [currentUser, setCurrentUser] = useState('');
   const [subjectsID, setSubjectsID] = useState([])
@@ -152,10 +152,12 @@ const CheckInScreen = props => {
         });
       })
       .catch((err) => {
-        showMessage({
-          message: `${err.message}`,
-          type: "error",
-        });
+        if (err.response.status == 500) {
+          showMessage({
+            message: `Check In device duplicated`,
+            type: "error",
+          });
+        }
       })
   }
   const checkOut = () => {

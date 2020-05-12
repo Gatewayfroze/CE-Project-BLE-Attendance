@@ -7,7 +7,7 @@ import {
     ScrollView,
     RefreshControl
 } from 'react-native'
-import API from '../assets/API'
+import API from '../constants/API'
 import Colors from '../constants/Colors'
 import { AntDesign } from '@expo/vector-icons';
 

@@ -12,7 +12,7 @@ import Button from '../components/button'
 import Colors from '../constants/Colors'
 import * as firebase from 'firebase';
 import { config } from '../firebase';
-import API from '../assets/API'
+import API from '../constants/API'
 import { showMessage } from "react-native-flash-message";
 
 firebase.initializeApp(config)

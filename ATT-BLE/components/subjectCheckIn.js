@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { View, Text, TouchableHighlight, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../constants/Colors'
-import API from '../assets/API'
+import API from '../constants/API'
 const SubjectCheckIn = props => {
     let tempName = props.title
     tempName = tempName.length > 20 ? `${tempName.slice(0, 20)}...` : tempName

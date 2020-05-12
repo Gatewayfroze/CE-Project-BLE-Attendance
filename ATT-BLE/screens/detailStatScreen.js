@@ -4,7 +4,7 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 import Colors from '../constants/Colors'
 import { } from 'react-native-gesture-handler';
 import { PieChart } from "react-native-chart-kit"
-import API from '../assets/API'
+import API from '../constants/API'
 
 
 

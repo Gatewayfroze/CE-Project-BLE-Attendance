@@ -8,7 +8,7 @@ import {
     StyleSheet,
 } from 'react-native'
 import Button from '../components/button'
-import API from '../assets/API'
+import API from '../constants/API'
 import { showMessage } from "react-native-flash-message";
 
 const RegisterPage = (props) => {

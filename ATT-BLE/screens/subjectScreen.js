@@ -3,7 +3,7 @@ import { View, Text, Button, TextInput, StyleSheet, AsyncStorage, ActivityIndica
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../constants/Colors';
 import Select from 'react-native-picker-select';
-import API from '../assets/API'
+import API from '../constants/API'
 import { Entypo } from '@expo/vector-icons';
 import { showMessage, hideMessage } from "react-native-flash-message";
 const SubjectScreen = props => {

@@ -11,7 +11,7 @@ import CheckBox from 'react-native-check-box'
 import Select from 'react-native-picker-select';
 import Colors from '../constants/Colors'
 import Button from '../components/button'
-import API from '../assets/API'
+import API from '../constants/API'
 import { showMessage } from "react-native-flash-message";
 
 const settingScreen = ({ navigation }, ...props) => {

@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import SubjectStat from '../components/subjectStat'
 import Colors from '../constants/Colors'
-import API from '../assets/API'
+import API from '../constants/API'
 
 const StatScreen = ({ navigation }, ...props) => {
     const [currentUser, setCurrentUser] = useState('');

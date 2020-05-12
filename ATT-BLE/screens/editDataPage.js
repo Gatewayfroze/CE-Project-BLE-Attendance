@@ -6,7 +6,7 @@ import {
     TextInput,
 } from 'react-native'
 import Colors from '../constants/Colors'
-import API from '../assets/API'
+import API from '../constants/API'
 import Color from '../constants/Colors'
 import Button from '../components/button'
 

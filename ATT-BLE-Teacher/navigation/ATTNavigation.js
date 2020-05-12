@@ -6,11 +6,9 @@ import { View, Text, StyleSheet } from 'react-native'
 import Colors from '../constants/Colors';
 import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import StartSessionScreen from '../screens/startSessionScreen'
-import LeaveScreen from '../screens/leaveScreen'
+import StartSessionScreen from '../screens/roomSelection'
 import StatScreen from '../screens/statScreen'
 import ProfileScreen from '../screens/profileScreen'
-import DetailLeaveScreen from '../screens/detailLeaveScreen'
 import LoginScreen from '../screens/loginScreen'
 import SettingScreen from '../screens/settingBLEScreen'
 
@@ -35,11 +33,6 @@ const checkInNavigator = createStackNavigator({
 }, { defaultNavigationOptions: defaultStackNavOptions }
 )
 
-const leaveNavigator = createStackNavigator({
-    checkIn: LeaveScreen,
-    detailLeave: DetailLeaveScreen
-}, { defaultNavigationOptions: defaultStackNavOptions }
-)
 
 const statNavigator = createStackNavigator({
     checkIn: StatScreen,

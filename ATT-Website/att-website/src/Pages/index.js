@@ -1,6 +1,6 @@
 /*index.jsx*/
 import React, { useCallback, useContext } from "react";
-import "../Styles/styles.css";
+import "../Styles/index.css";
 import { withRouter, Redirect } from "react-router";
 import app from "../firebase.js";
 import 'react-bulma-components/dist/react-bulma-components.min.css';

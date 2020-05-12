@@ -12,7 +12,7 @@ import SubjectCheckIn from '../components/subjectCheckIn'
 import CurrentSubject from '../components/currentSubject'
 import { Entypo } from '@expo/vector-icons';
 import Colors from '../constants/Colors'
-import API from '../assets/API'
+import API from '../constants/API'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 const StartSessionScreen = props => {
   const [currentUser, setCurrentUser] = useState('');

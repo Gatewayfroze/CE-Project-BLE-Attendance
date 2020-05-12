@@ -53,7 +53,7 @@ const profileNavigator = createStackNavigator({
 )
 // =======================tab navigator ===================
 const tabScreenConfig = {
-    Homes: {
+    Home: {
         screen: checkInNavigator,
         navigationOptions: {
             tabBarIcon: tabInfo => {

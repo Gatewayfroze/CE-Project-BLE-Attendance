@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from './Components/ui/Theme'
 
@@ -17,8 +16,6 @@ import LeavePage from "./Pages/leavePage";
 import CreateSubPage from "./Pages/createSubPage";
 import SubjectDetailPage from './Pages/SubjectDetailPage'
 import ScheduleTable from './Pages/ScheduleTable'
-
-
 import { AuthProvider } from "./auth";
 import PrivateRoute from './privateRoute.js'
 

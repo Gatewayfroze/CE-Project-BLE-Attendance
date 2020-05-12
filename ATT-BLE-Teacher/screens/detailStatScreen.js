@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import Colors from '../constants/Colors'
 import { PieChart } from "react-native-chart-kit"
-import API from '../assets/API'
+import API from '../constants/API'
 import Select from 'react-native-picker-select';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { ScrollView } from 'react-native-gesture-handler'
